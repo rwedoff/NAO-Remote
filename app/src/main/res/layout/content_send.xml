@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.ryanwedoff.senor.naoservercontroller.SendActivity"
+    tools:showIn="@layout/activity_send"
+    android:id="@+id/root_view">
+
+
+
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Text, send a message"
+        android:id="@+id/title"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sendMessageEdit"
+        android:layout_below="@+id/title"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/SendButton"
+        android:layout_toStartOf="@+id/SendButton"
+        android:inputType="text"
+        android:hint="@string/MessageText"
+        android:focusable="true"
+        android:imeOptions="actionDone"/>
+
+    <Button
+        android:name="android:colorButtonNormal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SendButton"
+        android:text="@string/Send"
+        android:onClick="onSend"
+        android:drawableLeft="@drawable/ic_sync_black_24dp"
+        android:layout_alignBottom="@+id/sendMessageEdit"
+        android:layout_alignRight="@+id/swipeContainer"
+        android:layout_alignEnd="@+id/swipeContainer" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Response"
+        android:textStyle="bold"
+        android:id="@+id/ResponseHeader"
+        android:layout_below="@id/sendMessageEdit"/>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ResponseHeader">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ResponseHeader"
+            android:id="@+id/ReceiveMessage"  />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</RelativeLayout>
