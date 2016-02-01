@@ -1,18 +1,13 @@
 package com.ryanwedoff.senor.naoservercontroller;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
-
 import android.preference.PreferenceManager;
 import android.util.Log;
-
-import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -22,11 +17,8 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-
 public class SocketService extends Service {
 
-
-    public static final int SERVERPORT = 5000;
     PrintWriter out;
     Socket socket;
     InetAddress serverAddr;
@@ -35,8 +27,6 @@ public class SocketService extends Service {
 
     final static String MY_ACTION = "MY_ACTION";
     public final static String EXTRA_MESSAGE = "com.ryanwedoff.senor.naoservercontroller.SocketService.MESSAGE";
-
-    //TCPClient mTcpClient = new TCPClient();
 
     public class LocalBinder extends Binder {
         public SocketService getService(){
@@ -49,7 +39,6 @@ public class SocketService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         System.out.println("This is the onBind Methond");
         return myBinder;
     }
@@ -114,10 +103,6 @@ public class SocketService extends Service {
             Intent intent = new Intent();
             intent.setAction(MY_ACTION);
             intent.putExtra(EXTRA_MESSAGE, result);
-
-            //TODO make it receive more than once!
-            //TODO make a nice UI
-            //TODO be able to change settings
             sendBroadcast(intent);
         }
 
@@ -171,7 +156,7 @@ public class SocketService extends Service {
             } catch (Exception e) {
                 Intent intent = new Intent();
                 intent.setAction(MY_ACTION);
-                intent.putExtra(EXTRA_MESSAGE, "Cannot connect to Socket");
+                intent.putExtra(EXTRA_MESSAGE, "Cannot connect to Server");
                 sendBroadcast(intent);
                 Log.e("TCP", "C: Error", e);
             }
@@ -184,7 +169,6 @@ public class SocketService extends Service {
             socket.close();
             Log.e("Socket has been closed", "Closed");
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         socket = null;

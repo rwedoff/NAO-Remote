@@ -36,9 +36,7 @@ public class SendActivity extends AppCompatActivity {
     MyReceiver myReceiver;
     private SwipeRefreshLayout swipeContainer;
 
-    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private List<String> myDataset;
 
     @Override
@@ -47,20 +45,20 @@ public class SendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_send);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        myDataset = new ArrayList<String>();
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        myDataset = new ArrayList<>();
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
         mAdapter = new MyAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
-        /*swipeContainer = (SwipeRefreshLayout)findViewById(R.id.swipeContainer);
+        swipeContainer = (SwipeRefreshLayout)findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -73,7 +71,7 @@ public class SendActivity extends AppCompatActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-*/
+
 
         myReceiver = new MyReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -135,7 +133,7 @@ public class SendActivity extends AppCompatActivity {
 
     };
     private void doBindService() {
-//        swipeContainer.setRefreshing(false);
+        swipeContainer.setRefreshing(false);
         bindService(new Intent(SendActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){
@@ -189,7 +187,7 @@ public class SendActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra(SocketService.EXTRA_MESSAGE);
-            myDataset.add(0,message);
+            myDataset.add(0, message);
             mAdapter.notifyDataSetChanged();
 
         }
