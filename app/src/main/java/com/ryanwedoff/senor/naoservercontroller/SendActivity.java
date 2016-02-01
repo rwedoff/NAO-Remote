@@ -6,15 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
+
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
+
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -22,9 +24,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SendActivity extends AppCompatActivity {
@@ -34,14 +36,31 @@ public class SendActivity extends AppCompatActivity {
     MyReceiver myReceiver;
     private SwipeRefreshLayout swipeContainer;
 
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private List<String> myDataset;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        myDataset = new ArrayList<String>();
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
 
-        swipeContainer = (SwipeRefreshLayout)findViewById(R.id.swipeContainer);
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new MyAdapter(myDataset);
+        mRecyclerView.setAdapter(mAdapter);
+        /*swipeContainer = (SwipeRefreshLayout)findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -54,7 +73,7 @@ public class SendActivity extends AppCompatActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
+*/
 
         myReceiver = new MyReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -116,7 +135,7 @@ public class SendActivity extends AppCompatActivity {
 
     };
     private void doBindService() {
-        swipeContainer.setRefreshing(false);
+//        swipeContainer.setRefreshing(false);
         bindService(new Intent(SendActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){
@@ -161,7 +180,7 @@ public class SendActivity extends AppCompatActivity {
                 (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         editText.setText("");
-        //unregisterReceiver(myReceiver);//TODO
+
     }
 
 
@@ -170,8 +189,9 @@ public class SendActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra(SocketService.EXTRA_MESSAGE);
-            TextView textview = (TextView) findViewById(R.id.ReceiveMessage);
-            textview.setText(message);
+            myDataset.add(0,message);
+            mAdapter.notifyDataSetChanged();
+
         }
 
     }
