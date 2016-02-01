@@ -57,7 +57,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mTextView.setText(mDataset.get(position));
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -66,17 +66,23 @@ public class SocketService extends Service {
         BufferedReader in;
         @Override
         protected String doInBackground(BufferedReader... params) {
-            String response = null;
-
+            String response = "";
                 try {
-                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    //            Log.e("HERE", in.toString());
+                    try{
+                        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    }catch (NullPointerException n){
+                        Log.e("ERROR","NULL Pointer in Receive");
+                    }
+
+                        //            Log.e("HERE", in.toString())
+
 
                     try {
                         response = in.readLine()+ "\n";
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         Log.e("Error", "Error");
                         e.printStackTrace();
+                        response = "ERROR: Connection error\n";
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
