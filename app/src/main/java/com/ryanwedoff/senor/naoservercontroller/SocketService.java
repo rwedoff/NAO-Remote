@@ -58,8 +58,6 @@ public class SocketService extends Service {
             out.println(message);
             out.flush();
         }
-
-
     }
 
     private class ReceiveMessage extends AsyncTask<BufferedReader, Void, String> {
@@ -73,12 +71,8 @@ public class SocketService extends Service {
                     }catch (NullPointerException n){
                         Log.e("ERROR","NULL Pointer in Receive");
                     }
-
-                        //            Log.e("HERE", in.toString())
-
-
                     try {
-                        response = in.readLine()+ "\n";
+                            response = in.readLine();
                     } catch (Exception e) {
                         Log.e("Error", "Error");
                         e.printStackTrace();
@@ -88,14 +82,10 @@ public class SocketService extends Service {
                     e.printStackTrace();
                 }
 
-
-
             if(response!=null){
                 Log.e("Response", response);
                 return response;
-
             }
-
             else
                 return "";
         }

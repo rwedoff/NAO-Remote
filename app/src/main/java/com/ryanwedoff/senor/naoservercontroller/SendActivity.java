@@ -62,9 +62,8 @@ public class SendActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                stopService(new Intent(SendActivity.this, SocketService.class));
-                startService(new Intent(SendActivity.this, SocketService.class));
-                doBindService();
+                mBoundService.recvMess();
+                swipeContainer.setRefreshing(false);
             }
         });
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -91,8 +90,6 @@ public class SendActivity extends AppCompatActivity {
             View view = findViewById(R.id.root_view);
             Snackbar.make( view,"No Internet Connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
-
-
     }
 
     @Override
@@ -114,6 +111,18 @@ public class SendActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
+        } else if(id == R.id.RefreshConnection){
+            unregisterReceiver(myReceiver);
+            stopService(new Intent(SendActivity.this, SocketService.class));
+            startService(new Intent(SendActivity.this, SocketService.class));
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(SocketService.MY_ACTION);
+            registerReceiver(myReceiver, intentFilter);
+
+            myDataset.clear();
+            mAdapter.notifyDataSetChanged();
+            mBoundService.recvMess();
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -133,7 +142,7 @@ public class SendActivity extends AppCompatActivity {
 
     };
     private void doBindService() {
-        swipeContainer.setRefreshing(false);
+        //swipeContainer.setRefreshing(false);
         bindService(new Intent(SendActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){
@@ -164,11 +173,11 @@ public class SendActivity extends AppCompatActivity {
             }  catch (Exception  e){
                 Snackbar.make(view, "Socket Connection Error", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
-            try{
+            /*try{
                 mBoundService.recvMess();
             }catch (Exception e2){
                 Snackbar.make(view, "Socket Connection Error", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
+            }*/
 
         } else{
             Log.e("Socket Connection Error", "Socket Error");
@@ -189,9 +198,7 @@ public class SendActivity extends AppCompatActivity {
             String message = intent.getStringExtra(SocketService.EXTRA_MESSAGE);
             myDataset.add(0, message);
             mAdapter.notifyDataSetChanged();
-
         }
-
     }
 
     @Override
@@ -210,7 +217,4 @@ public class SendActivity extends AppCompatActivity {
         stopService(new Intent(SendActivity.this, SocketService.class));
     }
 
-
 }
-
-
