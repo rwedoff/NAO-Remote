@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SendActivity extends AppCompatActivity {
+public class SocketSendActivity extends AppCompatActivity {
 
     SocketService mBoundService;
     private boolean mIsBound;
@@ -45,6 +45,7 @@ public class SendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_send);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         myDataset = new ArrayList<>();
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         // use this setting to improve performance if you know that changes
@@ -84,12 +85,15 @@ public class SendActivity extends AppCompatActivity {
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         if(isConnected){
-            startService(new Intent(SendActivity.this, SocketService.class));
+            startService(new Intent(SocketSendActivity.this, SocketService.class));
             doBindService();
         } else {
             View view = findViewById(R.id.root_view);
             Snackbar.make( view,"No Internet Connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
+        //noinspection ConstantConditions
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
@@ -113,8 +117,8 @@ public class SendActivity extends AppCompatActivity {
             return true;
         } else if(id == R.id.RefreshConnection){
             unregisterReceiver(myReceiver);
-            stopService(new Intent(SendActivity.this, SocketService.class));
-            startService(new Intent(SendActivity.this, SocketService.class));
+            stopService(new Intent(SocketSendActivity.this, SocketService.class));
+            startService(new Intent(SocketSendActivity.this, SocketService.class));
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(SocketService.MY_ACTION);
             registerReceiver(myReceiver, intentFilter);
@@ -122,7 +126,15 @@ public class SendActivity extends AppCompatActivity {
             myDataset.clear();
             mAdapter.notifyDataSetChanged();
             mBoundService.recvMess();
-
+        } else {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    // app icon in action bar clicked; goto parent activity.
+                    this.finish();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -143,7 +155,7 @@ public class SendActivity extends AppCompatActivity {
     };
     private void doBindService() {
         //swipeContainer.setRefreshing(false);
-        bindService(new Intent(SendActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(SocketSendActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){
             mBoundService.IsBoundable();
@@ -185,7 +197,8 @@ public class SendActivity extends AppCompatActivity {
         }
         InputMethodManager inputManager =
                 (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        //noinspection ConstantConditions
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         editText.setText("");
 
     }
@@ -196,6 +209,7 @@ public class SendActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra(SocketService.EXTRA_MESSAGE);
+            mBoundService.recvMess();
             myDataset.add(0, message);
             mAdapter.notifyDataSetChanged();
         }
@@ -204,7 +218,7 @@ public class SendActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        startService(new Intent(SendActivity.this, SocketService.class));
+        startService(new Intent(SocketSendActivity.this, SocketService.class));
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SocketService.MY_ACTION);
         registerReceiver(myReceiver, intentFilter);
@@ -214,7 +228,7 @@ public class SendActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         unregisterReceiver(myReceiver);
-        stopService(new Intent(SendActivity.this, SocketService.class));
+        stopService(new Intent(SocketSendActivity.this, SocketService.class));
     }
 
 }

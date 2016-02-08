@@ -74,4 +74,9 @@
     <string name="pref_port_key">port</string>
     <string name="EnterText">Enter Text, send a message</string>
     <string name="RefreshConnection">Refresh Connection</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="SeverConnection">Server Connection</string>
 </resources>

@@ -74,7 +74,7 @@ public class SocketService extends Service {
                     try {
                             response = in.readLine();
                     } catch (Exception e) {
-                        Log.e("Error", "Error");
+                        Log.e("Error", e.toString());
                         e.printStackTrace();
                         response = "ERROR: Connection error\n";
                     }
@@ -83,7 +83,7 @@ public class SocketService extends Service {
                 }
 
             if(response!=null){
-                Log.e("Response", response);
+                Log.i("Response", response);
                 return response;
             }
             else
@@ -92,7 +92,7 @@ public class SocketService extends Service {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.e("Post", "Post");
+            Log.i("Post", "Post");
             if(result == null){
                 result = "No response from server";
             }
@@ -136,14 +136,14 @@ public class SocketService extends Service {
 
                 String serverport = preferences.getString(getString(R.string.pref_port_key),getString(R.string.pref_port_default));
                 int serverPortInt = Integer.parseInt(serverport);
-                Log.e("TCP Client", "C: Connecting...");
+                Log.i("TCP Client", "C: Connecting...");
                 //create a socket to make the connection with the server
                 socket = new Socket(serverAddr, serverPortInt);
                 try {
                     //send the message to the server
                     out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                    Log.e("TCP Client", "C: Sent.");
-                    Log.e("TCP Client", "C: Done.");
+                    Log.i("TCP Client", "C: Sent.");
+                    Log.i("TCP Client", "C: Done.");
                     new ReceiveMessage().execute();
                 }
                 catch (Exception e) {
@@ -163,7 +163,7 @@ public class SocketService extends Service {
         super.onDestroy();
         try {
             socket.close();
-            Log.e("Socket has been closed", "Closed");
+            Log.i("Socket has been closed", "Closed");
         } catch (Exception e) {
             e.printStackTrace();
         }
