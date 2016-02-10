@@ -15,8 +15,8 @@
 
     <string name="pref_ip_address">IP Address</string>
     <string name="pref_port">Port</string>
-    <string name="pref_ipAddress_default">192.168.1.95</string>
-    <string name="pref_port_default">5000</string>
+    <string name="pref_ipAddress_default">127.0.0.1</string>
+    <string name="pref_port_default">9559</string>
     <string name="pref_ipAddress_key">ipAddress</string>
     <string name="pref_port_key">port</string>
     <string name="EnterText">Enter Text</string>
@@ -26,4 +26,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="SeverConnection">Server Connection</string>
+    <string name="CurrSettings">Current Robot Settings:</string>
+    <string name="Begin">Begin Remote Control</string>
 </resources>

@@ -8,10 +8,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by senor on 1/31/2016.
- */
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+
+public class ReceiveSocketAdapter extends RecyclerView.Adapter<ReceiveSocketAdapter.ViewHolder> {
     //private String[] mDataset;
     private  List<String> mDataset;
 
@@ -33,21 +31,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<String> myDataset) {
+    public ReceiveSocketAdapter(List<String> myDataset) {
         mDataset = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public ReceiveSocketAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.my_text_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
-
-        ViewHolder vh = new ViewHolder((TextView) v);
-        return vh;
+        return new ViewHolder((TextView) v);
     }
 
 

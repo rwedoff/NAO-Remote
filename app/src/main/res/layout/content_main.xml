@@ -10,6 +10,40 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.ryanwedoff.senor.naoservercontroller.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:id="@+id/mainLayout">
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/CurrSettings"
+        android:id="@+id/mainTitle"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/ipQuick"
+        android:layout_below="@id/mainTitle"
+        android:inputType="phone"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ipQuick"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/portQuick"
+        android:inputType="number"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Begin"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/portQuick"
+        android:id="@+id/BeginConnect"
+        android:background="@color/colorAccent"
+        android:onClick="onInitConnect"/>
 </RelativeLayout>
