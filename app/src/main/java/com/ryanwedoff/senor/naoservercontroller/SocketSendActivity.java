@@ -209,7 +209,7 @@ public class SocketSendActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra(SocketService.EXTRA_MESSAGE);
-            mBoundService.recvMess();
+            //mBoundService.recvMess();
             myDataset.add(0, message);
             mAdapter.notifyDataSetChanged();
         }

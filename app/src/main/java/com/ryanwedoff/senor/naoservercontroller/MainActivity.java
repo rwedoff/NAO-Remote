@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private String port;
     private String ipAddress;
+    public final static String EXTRA_IP = "com.ryanwedoff.senor.naoServerController.IP";
+    public final static String EXTRA_PORT = "com.ryanwedoff.senor.naoServerController.Port";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,14 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_send) {
             Intent intent = new Intent(this, SocketSendActivity.class);
             startActivity(intent);
+        } else if(id == R.id.nav_remote){
+            Intent intent = new Intent(this, ControllerActivity.class);
+            intent.putExtra(EXTRA_IP, ipAddress);
+            intent.putExtra(EXTRA_PORT,port);
+            startActivity(intent);
+        }else if(id == R.id.nav_settings){
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -119,12 +129,19 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(getString(R.string.pref_ipAddress_key), editIp);
             editor.apply();
+            ipAddress = editIp;
         }
         if(!editPort.equals(port)){
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(getString(R.string.pref_port_key), editPort);
             editor.apply();
+            port = editPort;
         }
+        Intent intent = new Intent(this, ControllerActivity.class);
+        intent.putExtra(EXTRA_IP, ipAddress);
+        intent.putExtra(EXTRA_PORT,port);
+        startActivity(intent);
+
     }
 }

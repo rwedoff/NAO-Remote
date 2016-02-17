@@ -96,10 +96,10 @@ public class SocketService extends Service {
             if(result == null){
                 result = "No response from server";
             }
-            Intent intent = new Intent();
-            intent.setAction(MY_ACTION);
-            intent.putExtra(EXTRA_MESSAGE, result);
-            sendBroadcast(intent);
+                Intent intent = new Intent();
+                intent.setAction(MY_ACTION);
+                intent.putExtra(EXTRA_MESSAGE, result);
+                sendBroadcast(intent);
         }
 
         @Override
@@ -133,22 +133,18 @@ public class SocketService extends Service {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String ipAddress = preferences.getString(getString(R.string.pref_ipAddress_key), getString(R.string.pref_ipAddress_default));
                 serverAddr = InetAddress.getByName(ipAddress);
-
-                String serverport = preferences.getString(getString(R.string.pref_port_key),getString(R.string.pref_port_default));
-                int serverPortInt = Integer.parseInt(serverport);
+                String serverPort = preferences.getString(getString(R.string.pref_port_key),getString(R.string.pref_port_default));
+                int serverPortInt = Integer.parseInt(serverPort);
                 Log.i("TCP Client", "C: Connecting...");
                 //create a socket to make the connection with the server
                 socket = new Socket(serverAddr, serverPortInt);
-                try {
                     //send the message to the server
                     out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
                     Log.i("TCP Client", "C: Sent.");
                     Log.i("TCP Client", "C: Done.");
+                if(socket.getRemoteSocketAddress() != null)
                     new ReceiveMessage().execute();
-                }
-                catch (Exception e) {
-                    Log.e("TCP", "S: Error", e);
-                }
+
             } catch (Exception e) {
                 Intent intent = new Intent();
                 intent.setAction(MY_ACTION);

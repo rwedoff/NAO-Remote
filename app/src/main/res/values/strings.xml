@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NAO Controller 1.14.5</string>
+    <string name="app_name">NAO Remote</string>
     <string name="action_settings">Settings</string>
     <string name="MessageText">Enter Message Here</string>
     <string name="Send">Send</string>
@@ -10,7 +10,6 @@
 
     <!--General settings -->
     <string name="pref_header_general">General</string>
-
 
 
     <string name="pref_ip_address">IP Address</string>
@@ -28,4 +27,12 @@
     <string name="SeverConnection">Server Connection</string>
     <string name="CurrSettings">Current Robot Settings:</string>
     <string name="Begin">Begin Remote Control</string>
+    <string name="title_activity_controller">ControllerActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="Remote">Remote Control</string>
+    <string name="Settings">Settings</string>
+    <string name="SendNav">Socket Connection</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
