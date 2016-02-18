@@ -35,4 +35,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pref_title_add_friends_to_messages">Add Robot Name</string>
+    <string name="pref_header_robot_name">Robot Names</string>
+    <string name="EnterName">Enter Robot Name</string>
+    <string name="AddNamesTxt">Add Robot Names</string>
+    <string name="BackToIP">Edit Ip and Port</string>
+    <string name="Next">Next</string>
+    <string name="Large">Large</string>
 </resources>

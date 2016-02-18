@@ -10,6 +10,10 @@
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/Settings" />
+        <item
+            android:id="@+id/nav_robot_names"
+            android:icon="@drawable/ic_info_black_24dp"
+            android:title="Robot Names" />
     </group>
 
     <item android:title="@string/SeverConnection">

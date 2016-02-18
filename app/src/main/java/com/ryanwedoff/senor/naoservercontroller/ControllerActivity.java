@@ -27,10 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.aldebaran.proxy.ALTextToSpeechProxy;
-import com.aldebaran.qi.Application;
-import com.aldebaran.qi.CallError;
-import com.aldebaran.qi.helper.proxies.ALTextToSpeech;
 import com.ryanwedoff.senor.naoservercontroller.SendTextFragment.OnFragmentInteractionListener;
 
 import java.net.URL;
@@ -105,7 +101,6 @@ public class ControllerActivity extends AppCompatActivity implements OnFragmentI
     //Fragment 1 onSendText
     public void onSendText(View view) {
         Log.e("HERE;", "HREE");
-        new SendTextTask().execute();
 
     }
 
@@ -188,37 +183,6 @@ public class ControllerActivity extends AppCompatActivity implements OnFragmentI
                     return "SECTION 3";
             }
             return null;
-        }
-    }
-    public class SendTextTask extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            String robotUrl = "tcp:///192.168.1.136:9559";
-            // Create a new application
-            String [] args = {" "};
-            Application application = new Application(args,robotUrl);
-            // Start your application
-            application.start();
-            // Create an ALTextToSpeech object and link it to your current session
-            ALTextToSpeech tts = null;
-            try {
-                tts = new ALTextToSpeech(application.session());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // Make your robot say something
-            try {
-                tts.say("Hello World!");
-            } catch (CallError callError) {
-                callError.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return "";
-        }
-
-        protected void onPostExecute(Long result) {
-            showDialog(Integer.parseInt("Sent " + result + " not really sure..."));
         }
     }
 }

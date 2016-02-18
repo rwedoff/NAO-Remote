@@ -108,6 +108,9 @@ public class MainActivity extends AppCompatActivity
         }else if(id == R.id.nav_settings){
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
+        } else if(id == R.id.nav_robot_names){
+            Intent intent = new Intent(this, RobotName.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -138,10 +141,14 @@ public class MainActivity extends AppCompatActivity
             editor.apply();
             port = editPort;
         }
+        Intent intent = new Intent(this, RobotName.class);
+        startActivity(intent);
+        //TODO pass the ip and port or use shared prefs
+        /*
         Intent intent = new Intent(this, ControllerActivity.class);
         intent.putExtra(EXTRA_IP, ipAddress);
         intent.putExtra(EXTRA_PORT,port);
-        startActivity(intent);
+        startActivity(intent);*/
 
     }
 }
