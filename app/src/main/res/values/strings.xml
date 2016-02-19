@@ -42,4 +42,6 @@
     <string name="BackToIP">Edit Ip and Port</string>
     <string name="Next">Next</string>
     <string name="Large">Large</string>
+    <string name="robot_names" />
+    <string name="AddName">Add Name</string>
 </resources>

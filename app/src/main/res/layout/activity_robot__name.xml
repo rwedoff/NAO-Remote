@@ -17,8 +17,7 @@
         android:hint="@string/EnterName"
         android:inputType="text"
         android:layout_toStartOf="@+id/AddRobotBut"
-        android:layout_toLeftOf="@+id/AddRobotBut"
-        />
+        android:layout_toLeftOf="@+id/AddRobotBut" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,12 +30,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
+        android:text="@string/AddName"
         android:id="@+id/AddRobotBut"
         android:layout_alignTop="@+id/addRobotEdit"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="onAddRobot"/>
+        android:onClick="onAddRobot"
+        android:background="@color/accent_material_dark_3" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RobotNamesListView"
@@ -50,24 +50,28 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/BackToIP"
-        android:id="@+id/EditIPButton"
+        android:text="@string/Next"
+        android:id="@+id/GoToControllerButton"
+        android:background="@color/accent_material_dark_3"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/GoToControllerButton"
-        android:layout_toEndOf="@+id/GoToControllerButton" />
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView"
+        android:onClick="onNextBut"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Next"
-        android:id="@+id/GoToControllerButton"
-        android:layout_alignParentBottom="true"
+        android:text="@string/BackToIP"
+        android:id="@+id/EditIPButton"
+        android:background="@color/accent_material_dark_3"
+        android:layout_alignTop="@+id/GoToControllerButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/textView"
-        android:layout_alignEnd="@+id/textView" />
+        android:layout_toLeftOf="@+id/GoToControllerButton"
+        android:layout_toStartOf="@+id/GoToControllerButton"
+        android:onClick="onEditIp"/>
 
 
 </RelativeLayout>
