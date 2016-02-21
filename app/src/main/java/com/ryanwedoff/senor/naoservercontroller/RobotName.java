@@ -1,5 +1,6 @@
 package com.ryanwedoff.senor.naoservercontroller;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -25,18 +28,25 @@ public class RobotName extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_robot__name);
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.RobotNamesListView);
         mRecyclerView.setHasFixedSize(false);
         // use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        robotNames = new ArrayList<>();
 
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        String defaultValue = getResources().getString(R.string.robot_names);
+
+        Context context = getActivity();
+        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.pref_file_key), Context.MODE_PRIVATE);
+        String defaultValue = getString(R.string.robot_names);
         String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
         Gson gson = new Gson();
         robotNames = gson.fromJson(namesObj, ArrayList.class);
+        //Log.e("Screen 1", robotNames.toString());
+        if(robotNames == null){
+            robotNames = new ArrayList<>();
+        }
         mAdapter = new ReceiveSocketAdapter(robotNames);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -72,7 +82,8 @@ public class RobotName extends AppCompatActivity {
     }
     private void updateRobotNamesPref(){
         //Save robotNames into sharedprefs
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        Context context = getActivity();
+        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.pref_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         Gson gson = new Gson();
         String json = gson.toJson(robotNames);
@@ -90,9 +101,12 @@ public class RobotName extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onEditIp(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivityForResult(myIntent, 0);
+        return true;
+
     }
 }
 

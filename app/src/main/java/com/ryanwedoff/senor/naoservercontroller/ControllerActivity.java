@@ -1,13 +1,9 @@
 package com.ryanwedoff.senor.naoservercontroller;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Looper;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -23,59 +19,77 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.ryanwedoff.senor.naoservercontroller.SendTextFragment.OnFragmentInteractionListener;
+import com.google.gson.Gson;
 
-import java.net.URL;
 
-public class ControllerActivity extends AppCompatActivity implements OnFragmentInteractionListener{
+import java.util.ArrayList;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+public class ControllerActivity extends AppCompatActivity {
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-    public static String ipAddress;
-    public static String port;
+    public String ipAddress;
+    public int port;
+    public static ArrayList robotNames;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_controller);
 
-        Intent intent = getIntent();
-        ipAddress = intent.getStringExtra(MainActivity.EXTRA_IP);
-        port = intent.getStringExtra(MainActivity.EXTRA_PORT);
+        Context context = getActivity();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String ipAddress = preferences.getString(getString(R.string.pref_ipAddress_key), getString(R.string.pref_ipAddress_default));
+        String serverPort = preferences.getString(getString(R.string.pref_port_key), getString(R.string.pref_port_default));
 
+        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.pref_file_key), Context.MODE_PRIVATE);
+        String defaultValue = getString(R.string.robot_names);
+        String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
+        Gson gson = new Gson();
+        robotNames = gson.fromJson(namesObj, ArrayList.class);
+        //Log.e("Screen 1", robotNames.toString());
+        if(robotNames == null){
+            robotNames = new ArrayList<>();
+        }
+
+
+        Log.e("SAVED IP: " , ipAddress);
+        Log.e("SAVED PORT: ", serverPort);
+        Log.e("SAVED NAMES: ",robotNames.toString());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        /*
+      The {@link android.support.v4.view.PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentPagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        /*
+      The {@link ViewPager} that will host the section contents.
+     */
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+
     }
 
-
+    //TODO fix menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -89,7 +103,7 @@ public class ControllerActivity extends AppCompatActivity implements OnFragmentI
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        //TODO probably the fix is here
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -98,34 +112,45 @@ public class ControllerActivity extends AppCompatActivity implements OnFragmentI
         return super.onOptionsItemSelected(item);
     }
 
-    //Fragment 1 onSendText
-    public void onSendText(View view) {
-        Log.e("HERE;", "HREE");
 
+    public Context getActivity() {
+        return this;
+    }
+
+    public void onCrouch(View view) {
+        Log.e("Crouch","Crouch");
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+
+    }
+
+    public void onStand(View view) {
+        Log.e("Stand","Stand");
     }
 
 
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class RemoteFragment extends Fragment implements View.OnClickListener {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
+        private static final String ARG_SECTION_NAME = "section_name";
+        private static final String ARG_ROBOT_NAME = "robot_name";
+        private String rn = "Joe?";
+        public RemoteFragment() {
         }
 
         /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        //TODO
+        public static RemoteFragment newInstance(String robotName) {
+            RemoteFragment fragment = new RemoteFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putString(ARG_ROBOT_NAME, robotName);
             fragment.setArguments(args);
             return fragment;
         }
@@ -133,11 +158,20 @@ public class ControllerActivity extends AppCompatActivity implements OnFragmentI
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_controller, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
+            RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.fragment_remote, container, false);
+            //Sets onClick listeners for each fragment, not done in XML to get robot name
+            Button mButton = (Button) rl.findViewById(R.id.stand_button);
+            mButton.setOnClickListener(this);
+            return rl;
         }
+
+        @Override
+        public void onClick(View v) {
+            Bundle bundle = this.getArguments();
+            String myName = bundle.getString(ARG_ROBOT_NAME, "Robot Name Error");
+            Toast.makeText(getActivity(), myName, Toast.LENGTH_LONG).show();
+        }
+
     }
 
     /**
@@ -153,36 +187,29 @@ public class ControllerActivity extends AppCompatActivity implements OnFragmentI
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            switch (position) {
-                case 0: // Fragment # 0 - This will show FirstFragment
-                {
-                    return SendTextFragment.newInstance("","");
-                }
-
-                default:
-                    return PlaceholderFragment.newInstance(position + 1);
-            }
-
+            // Return a RemoteFragment (defined as a static inner class below).
+            return RemoteFragment.newInstance(numToRobot(position));
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 4;
+            return robotNames.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
+
+            if(position < robotNames.size()){
+                return (CharSequence) robotNames.get(position);
+            } else {
+                return null;
             }
-            return null;
         }
+    }
+    protected static String numToRobot(int position){
+        if(position < robotNames.size())
+            return (String) robotNames.get(position);
+        else
+            return null;
     }
 }

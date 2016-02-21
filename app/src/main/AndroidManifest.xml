@@ -42,13 +42,18 @@
         <activity
             android:name=".ControllerActivity"
             android:label="@string/title_activity_controller"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".RobotName"
             android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ryanwedoff.senor.naoservercontroller.RobotName" />
+        </activity>
+        <activity android:name=".RobotName"
+            android:label="Robot Names">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ryanwedoff.senor.naoservercontroller.MainActivity" />
         </activity>
-        <activity android:name=".RobotName"></activity>
     </application>
 
 </manifest>

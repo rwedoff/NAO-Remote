@@ -44,34 +44,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/AddRobotBut"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/EditIPButton"/>
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/Next"
         android:id="@+id/GoToControllerButton"
         android:background="@color/accent_material_dark_3"
+        android:onClick="onNextBut"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView"
-        android:onClick="onNextBut"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/BackToIP"
-        android:id="@+id/EditIPButton"
-        android:background="@color/accent_material_dark_3"
-        android:layout_alignTop="@+id/GoToControllerButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/GoToControllerButton"
-        android:layout_toStartOf="@+id/GoToControllerButton"
-        android:onClick="onEditIp"/>
+        android:layout_toStartOf="@+id/AddRobotBut"
+        android:layout_alignRight="@+id/RobotNamesListView"
+        android:layout_alignEnd="@+id/RobotNamesListView" />
 
 
 </RelativeLayout>
