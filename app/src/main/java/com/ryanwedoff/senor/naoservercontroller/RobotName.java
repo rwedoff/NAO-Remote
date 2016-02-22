@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class RobotName extends AppCompatActivity {
-    private RecyclerView.Adapter<ReceiveSocketAdapter.ViewHolder> mAdapter;
+    private RecyclerView.Adapter<RobotNameAdapter.ViewHolder> mAdapter;
     private ArrayList robotNames;
 
     @Override
@@ -47,7 +47,7 @@ public class RobotName extends AppCompatActivity {
         if(robotNames == null){
             robotNames = new ArrayList<>();
         }
-        mAdapter = new ReceiveSocketAdapter(robotNames);
+        mAdapter = new RobotNameAdapter(robotNames);
         mRecyclerView.setAdapter(mAdapter);
 
 

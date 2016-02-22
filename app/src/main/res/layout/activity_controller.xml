@@ -2,11 +2,12 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
+    android:id="@+id/controller_root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.ryanwedoff.senor.naoservercontroller.ControllerActivity">
+    tools:context="com.ryanwedoff.senor.naoservercontroller.ControllerActivity"
+    >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

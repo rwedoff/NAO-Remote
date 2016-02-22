@@ -8,7 +8,7 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
-        android:id="@+id/RefreshConnection"
+        android:id="@+id/refresh_connection"
         android:orderInCategory="100"
         android:title="@string/RefreshConnection"
         app:showAsAction="never" />

@@ -10,7 +10,6 @@ import java.util.List;
 
 
 public class ReceiveSocketAdapter extends RecyclerView.Adapter<ReceiveSocketAdapter.ViewHolder> {
-    //private String[] mDataset;
     private  List<String> mDataset;
 
     public void addMessage(String message) {
@@ -41,7 +40,7 @@ public class ReceiveSocketAdapter extends RecyclerView.Adapter<ReceiveSocketAdap
                                                    int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.my_text_view, parent, false);
+                .inflate(R.layout.robot_name_text_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
         return new ViewHolder((TextView) v);
     }

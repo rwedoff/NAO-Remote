@@ -115,7 +115,7 @@ public class SocketSendActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
-        } else if(id == R.id.RefreshConnection){
+        } else if(id == R.id.refresh_connection){
             unregisterReceiver(myReceiver);
             stopService(new Intent(SocketSendActivity.this, SocketService.class));
             startService(new Intent(SocketSendActivity.this, SocketService.class));

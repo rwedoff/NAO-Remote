@@ -1,10 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.ryanwedoff.senor.naoservercontroller.ControllerActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/refresh_connection"
+        android:orderInCategory="100"
+        android:title="@string/RefreshConnection"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/robot_names_menu"
+        android:orderInCategory="100"
+        android:title="@string/changeName"
         app:showAsAction="never" />
 </menu>

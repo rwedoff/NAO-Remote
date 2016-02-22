@@ -48,4 +48,5 @@
     <string name="Crouch">Crouch</string>
     <string name="Wave">Wave</string>
     <string name="SayText">Say Text</string>
+    <string name="changeName">Change Robot Names</string>
 </resources>

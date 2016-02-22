@@ -9,13 +9,7 @@ import java.util.List;
 
 
 public class RobotNameAdapter extends RecyclerView.Adapter<RobotNameAdapter.ViewHolder> {
-    //private String[] mDataset;
     private List<String> mDataset;
-
-    public void addMessage(String message) {
-        mDataset.add(message);
-        notifyDataSetChanged();
-    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -29,18 +23,20 @@ public class RobotNameAdapter extends RecyclerView.Adapter<RobotNameAdapter.View
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
+    //Constructor
     public RobotNameAdapter(List<String> myDataset) {
         mDataset = myDataset;
     }
-
+    //Todo Let's change this to a card or something more visually appealing.
+    //Todo drag and drop to reorder
+    //Todo Continue working on actions, JOY STICK
     // Create new views (invoked by the layout manager)
     @Override
     public RobotNameAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                               int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.my_text_view, parent, false);
+                .inflate(R.layout.robot_name_text_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
         return new ViewHolder((TextView) v);
     }
