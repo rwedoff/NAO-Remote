@@ -46,4 +46,6 @@
     <string name="AddName">Add Name</string>
     <string name="Stand">Stand</string>
     <string name="Crouch">Crouch</string>
+    <string name="Wave">Wave</string>
+    <string name="SayText">Say Text</string>
 </resources>

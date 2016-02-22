@@ -56,7 +56,7 @@ public class SocketSendActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
+        // specify an adapter for Swipe to Refresh
         mAdapter = new ReceiveSocketAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
         swipeContainer = (SwipeRefreshLayout)findViewById(R.id.swipeContainer);

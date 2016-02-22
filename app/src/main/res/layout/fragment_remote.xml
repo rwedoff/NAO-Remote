@@ -1,27 +1,74 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/SendTextFragment">
+    android:id="@+id/SendTextFragment"
+    style="?android:attr/buttonBarStyle"
+    android:orientation="vertical">
 
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Stand"
-        android:id="@+id/stand_button"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        />
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/buttonBar"
+        >
+        <Button
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:text="@string/Stand"
+            android:id="@+id/stand_button"
+            style="?android:attr/buttonBarStyle"
+            android:layout_weight="1"
+            android:background="@color/my_accent"
 
-    <Button
-        android:layout_width="wrap_content"
+            />
+
+        <Button
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:text="@string/Crouch"
+            android:id="@+id/crouch_button"
+            style="?android:attr/buttonBarStyle"
+            android:layout_weight="1"
+            android:background="@color/my_accent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            />
+
+        <Button
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:text="@string/Wave"
+            android:id="@+id/wave_button"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarStyle"
+            android:background="@color/my_accent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+           />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Crouch"
-        android:id="@+id/crouch_button"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        />
-</RelativeLayout>
+        android:layout_gravity="center_horizontal">
+        <EditText
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:hint="@string/SayText"
+            android:id="@+id/say_text_edit"
+            android:layout_weight="3"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/Send"
+            android:id="@+id/sendFragButton"/>
+        </LinearLayout>
+
+
+</LinearLayout>

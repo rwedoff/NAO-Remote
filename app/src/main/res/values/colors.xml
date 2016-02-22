@@ -7,4 +7,5 @@
     <color name="accent_material_dark">#ffcf40</color>
     <color name="accent_material_dark_2">#ffcf40</color>
     <color name="accent_material_dark_3">#ffcf40</color>
+    <color name="my_accent">#ffcf40</color>
 </resources>
