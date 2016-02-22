@@ -1,8 +1,16 @@
 package com.ryanwedoff.senor.naoservercontroller;
 
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,11 +38,15 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class ControllerActivity extends AppCompatActivity {
+public class ControllerActivity extends AppCompatActivity implements RemoteFragment.OnSendMessageListener {
 
     public String ipAddress;
     public int port;
     public static ArrayList robotNames;
+    SocketService mBoundService;
+    private boolean mIsBound;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +98,60 @@ public class ControllerActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if(isConnected){
+            startService(new Intent(ControllerActivity.this, SocketService.class));
+            doBindService();
+        } else {
+            View view = findViewById(R.id.root_view);
+            Snackbar.make(view, "No Internet Connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+        //noinspection ConstantConditions
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
     }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        //EDITED PART
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBoundService = ((SocketService.LocalBinder)service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBoundService = null;
+        }
+
+    };
+    private void doBindService() {
+        //swipeContainer.setRefreshing(false);
+        bindService(new Intent(ControllerActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+        if(mBoundService!=null){
+            mBoundService.IsBoundable();
+        }
+    }
+    private void doUnbindService() {
+        if (mIsBound) {
+            // Detach our existing connection.
+            unbindService(mConnection);
+            mIsBound = false;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        doUnbindService();
+    }
+
 
     //TODO fix menu
     @Override
@@ -117,62 +181,25 @@ public class ControllerActivity extends AppCompatActivity {
         return this;
     }
 
-    public void onCrouch(View view) {
-        Log.e("Crouch","Crouch");
-        android.app.FragmentManager fragmentManager = getFragmentManager();
+    @Override
+    public void onSendMessage(String message) {
+        Log.i("SEND A MESSAGE: ", message);
+        if(mBoundService != null){
+            try{
+                mBoundService.sendMessage(message);
+            }  catch (Exception  e){
+                //TODO Make errors popup in fragment
+                Log.e("Socket Connection Error", "Socket Connection Error");
+                //Snackbar.make(view, "Socket Connection Error", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
 
+        } else{
+            Log.e("Socket Connection Error", "Socket Error");
+
+        }
     }
 
-    public void onStand(View view) {
-        Log.e("Stand","Stand");
-    }
 
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class RemoteFragment extends Fragment implements View.OnClickListener {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NAME = "section_name";
-        private static final String ARG_ROBOT_NAME = "robot_name";
-        private String rn = "Joe?";
-        public RemoteFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        //TODO
-        public static RemoteFragment newInstance(String robotName) {
-            RemoteFragment fragment = new RemoteFragment();
-            Bundle args = new Bundle();
-            args.putString(ARG_ROBOT_NAME, robotName);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            RelativeLayout rl = (RelativeLayout) inflater.inflate(R.layout.fragment_remote, container, false);
-            //Sets onClick listeners for each fragment, not done in XML to get robot name
-            Button mButton = (Button) rl.findViewById(R.id.stand_button);
-            mButton.setOnClickListener(this);
-            return rl;
-        }
-
-        @Override
-        public void onClick(View v) {
-            Bundle bundle = this.getArguments();
-            String myName = bundle.getString(ARG_ROBOT_NAME, "Robot Name Error");
-            Toast.makeText(getActivity(), myName, Toast.LENGTH_LONG).show();
-        }
-
-    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
