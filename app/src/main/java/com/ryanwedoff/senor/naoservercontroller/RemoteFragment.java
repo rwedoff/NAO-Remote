@@ -1,15 +1,15 @@
 package com.ryanwedoff.senor.naoservercontroller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -56,7 +56,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
         crouchButton.setOnClickListener(this);
         Button waveButton = (Button) rootLayout.findViewById(R.id.wave_button);
         waveButton.setOnClickListener(this);
-        Button sendTextButton = (Button) rootLayout.findViewById(R.id.sendFragButton);
+        Button sendTextButton = (Button) rootLayout.findViewById(R.id.send_text_button);
         sendTextButton.setOnClickListener(this);
         return rootLayout;
     }
@@ -77,16 +77,18 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
             case R.id.wave_button:
                 mListener.onSendMessage(robotName + "ButtonX;");
                 break;
-            case R.id.sendFragButton:
-               /* View rootView = v.getRootView();
+            case R.id.send_text_button:
+               View rootView = v.getRootView();
                 EditText editText = (EditText) rootView.findViewById(R.id.say_text_edit);
                 if(editText!= null){
                     String text = editText.getText().toString();
                     String textMinusSemis = text.replace(';',':');
-                    mListener.onSendMessage(robotName + textMinusSemis);
-                }*/
-                //TODO change server parse to handle custom messages, in the mean time, just say 'hello'
-                mListener.onSendMessage(robotName + "ButtonY;");
+                    mListener.onSendMessage(robotName + "Speech;" + textMinusSemis + ";");
+                    editText.setText("");
+                    TextView textView = (TextView) rootView.findViewById(R.id.prev_sent_text_view);
+                    String prevMessage = robotName.substring(0,robotName.length()-1) + " said: " + textMinusSemis;
+                    textView.setText(prevMessage);
+                }
                 break;
         }
 

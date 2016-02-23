@@ -1,10 +1,12 @@
 package com.ryanwedoff.senor.naoservercontroller;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import java.util.List;
 
 
@@ -16,10 +18,10 @@ public class RobotNameAdapter extends RecyclerView.Adapter<RobotNameAdapter.View
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView mTextView;
-        public ViewHolder(TextView v) {
+        public CardView mCardView;
+        public ViewHolder(CardView v) {
             super(v);
-            mTextView = v;
+            mCardView = v;
         }
     }
 
@@ -27,7 +29,7 @@ public class RobotNameAdapter extends RecyclerView.Adapter<RobotNameAdapter.View
     public RobotNameAdapter(List<String> myDataset) {
         mDataset = myDataset;
     }
-    //Todo Let's change this to a card or something more visually appealing.
+    //Todo Let's change this to a card or something more visually appealing
     //Todo drag and drop to reorder
     //Todo Continue working on actions, JOY STICK
     // Create new views (invoked by the layout manager)
@@ -38,12 +40,15 @@ public class RobotNameAdapter extends RecyclerView.Adapter<RobotNameAdapter.View
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.robot_name_text_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        return new ViewHolder((TextView) v);
+        return new ViewHolder((CardView) v);
     }
 
     @Override
     public void onBindViewHolder(RobotNameAdapter.ViewHolder holder, int position) {
-        holder.mTextView.setText(mDataset.get(position));
+        //holder.mCardView.setText(mDataset.get(position));
+        View view = holder.mCardView.getRootView();
+        TextView textView = (TextView)view.findViewById(R.id.robot_name_text_view);
+        textView.setText(mDataset.get(position));
     }
 
 

@@ -21,6 +21,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.Gson;
 
@@ -39,7 +41,7 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
         setContentView(R.layout.activity_controller);
 
         Context context = getActivity();
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.pref_file_key), Context.MODE_PRIVATE);
         String defaultValue = getString(R.string.robot_names);
         String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
@@ -129,8 +131,32 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
         doUnbindService();
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+        doUnbindService();
+    }
 
-    //TODO fix menu
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if(isConnected){
+            startService(new Intent(ControllerActivity.this, SocketService.class));
+            doBindService();
+        } else {
+            View view = findViewById(R.id.controller_root_view);
+            Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+    }
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -171,6 +197,8 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
     @Override
     public void onSendMessage(String message) {
         Log.i("SEND A MESSAGE: ", message);
+
+
         if(mBoundService != null){
             try{
                 mBoundService.sendMessage(message);
@@ -182,8 +210,10 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
         } else{
             View view = findViewById(R.id.controller_root_view);
             Snackbar.make(view, "Socket Connection Refused", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-
         }
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert getCurrentFocus() != null;
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
 

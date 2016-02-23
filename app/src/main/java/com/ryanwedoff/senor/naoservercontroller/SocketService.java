@@ -8,6 +8,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -25,9 +26,9 @@ public class SocketService extends Service {
     private final IBinder myBinder = new LocalBinder();
 
 
-    final static String MY_ACTION = "MY_ACTION";
-    public final static String EXTRA_MESSAGE = "com.ryanwedoff.senor.naoservercontroller.SocketService.MESSAGE";
-
+    final static String ACTION = "ACTION";
+    public final static String SERVER_RESPONSE = "com.ryanwedoff.senor.naoservercontroller.SocketService.MESSAGE";
+    public final static String SERVER_CONNECTION = "com.ryanwedoff.senor.naoservercontroller.SocketService.CONNECTION";
     public class LocalBinder extends Binder {
         public SocketService getService(){
             System.out.println("I am a local binder");
@@ -97,8 +98,8 @@ public class SocketService extends Service {
                 result = "No response from server";
             }
                 Intent intent = new Intent();
-                intent.setAction(MY_ACTION);
-                intent.putExtra(EXTRA_MESSAGE, result);
+                intent.setAction(ACTION);
+                intent.putExtra(SERVER_RESPONSE, result);
                 sendBroadcast(intent);
         }
 
@@ -147,10 +148,11 @@ public class SocketService extends Service {
 
             } catch (Exception e) {
                 Intent intent = new Intent();
-                intent.setAction(MY_ACTION);
-                intent.putExtra(EXTRA_MESSAGE, "Cannot connect to Server");
+                intent.setAction(ACTION);
+                intent.putExtra(SERVER_CONNECTION, "Cannot connect to Server");
                 sendBroadcast(intent);
                 Log.e("TCP", "C: Error", e);
+
             }
         }
     }

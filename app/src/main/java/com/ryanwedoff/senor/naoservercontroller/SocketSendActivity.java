@@ -75,7 +75,7 @@ public class SocketSendActivity extends AppCompatActivity {
 
         myReceiver = new MyReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(SocketService.MY_ACTION);
+        intentFilter.addAction(SocketService.ACTION);
         registerReceiver(myReceiver, intentFilter);
 
         ConnectivityManager cm =
@@ -120,7 +120,7 @@ public class SocketSendActivity extends AppCompatActivity {
             stopService(new Intent(SocketSendActivity.this, SocketService.class));
             startService(new Intent(SocketSendActivity.this, SocketService.class));
             IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(SocketService.MY_ACTION);
+            intentFilter.addAction(SocketService.ACTION);
             registerReceiver(myReceiver, intentFilter);
 
             myDataset.clear();
@@ -208,7 +208,7 @@ public class SocketSendActivity extends AppCompatActivity {
     private class MyReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-            String message = intent.getStringExtra(SocketService.EXTRA_MESSAGE);
+            String message = intent.getStringExtra(SocketService.SERVER_RESPONSE);
             //mBoundService.recvMess();
             myDataset.add(0, message);
             mAdapter.notifyDataSetChanged();
@@ -220,7 +220,7 @@ public class SocketSendActivity extends AppCompatActivity {
         super.onResume();
         startService(new Intent(SocketSendActivity.this, SocketService.class));
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(SocketService.MY_ACTION);
+        intentFilter.addAction(SocketService.ACTION);
         registerReceiver(myReceiver, intentFilter);
     }
 

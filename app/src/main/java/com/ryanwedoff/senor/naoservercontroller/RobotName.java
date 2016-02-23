@@ -1,11 +1,18 @@
 package com.ryanwedoff.senor.naoservercontroller;
 
-import android.app.ActionBar;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +30,9 @@ import java.util.ArrayList;
 public class RobotName extends AppCompatActivity {
     private RecyclerView.Adapter<RobotNameAdapter.ViewHolder> mAdapter;
     private ArrayList robotNames;
+    SocketService mBoundService;
+    private boolean mIsBound;
+    MyReceiver myReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +60,91 @@ public class RobotName extends AppCompatActivity {
         mAdapter = new RobotNameAdapter(robotNames);
         mRecyclerView.setAdapter(mAdapter);
 
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if(isConnected){
+            startService(new Intent(RobotName.this, SocketService.class));
+            doBindService();
+        } else {
+            View view = findViewById(R.id.controller_root_view);
+            Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+
+        myReceiver = new MyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SocketService.ACTION);
+        registerReceiver(myReceiver, intentFilter);
 
     }
+
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBoundService = ((SocketService.LocalBinder)service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBoundService = null;
+        }
+
+    };
+    private void doBindService() {
+        //swipeContainer.setRefreshing(false);
+        bindService(new Intent(RobotName.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+        if(mBoundService!=null){
+            mBoundService.IsBoundable();
+        }
+    }
+    private void doUnbindService() {
+        if (mIsBound) {
+            // Detach our existing connection.
+            unbindService(mConnection);
+            mIsBound = false;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        doUnbindService();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        doUnbindService();
+        unregisterReceiver(myReceiver);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ConnectivityManager cm =
+                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if(isConnected){
+            startService(new Intent(RobotName.this, SocketService.class));
+            doBindService();
+        } else {
+            View view = findViewById(R.id.controller_root_view);
+            Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SocketService.ACTION);
+        registerReceiver(myReceiver, intentFilter);
+    }
+
+
 
     public void onAddRobot(View view) {
         EditText editText = (EditText) findViewById(R.id.addRobotEdit);
@@ -59,11 +152,23 @@ public class RobotName extends AppCompatActivity {
         robotNames.add(0, name);
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
-        //noinspection ConstantConditions
+        assert getCurrentFocus() != null;
         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         editText.setText("");
         mAdapter.notifyDataSetChanged();
         updateRobotNamesPref();
+
+        if(mBoundService != null){
+            try{
+                mBoundService.sendMessage(name + ";" + "Check;");
+                Log.i("Sent Check","Send Check");
+            } catch (Exception e) {
+                Log.e("Socket Connection Error", "Socket Connection Error");
+                Snackbar.make(view, "Service Binding Error", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
+        } else{
+            Snackbar.make(view, "Socket Connection Refused", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
     }
 
     public void onTextViewDelete(View view) {
@@ -97,8 +202,12 @@ public class RobotName extends AppCompatActivity {
     }
 
     public void onNextBut(View view) {
-        Intent intent = new Intent(this, ControllerActivity.class);
-        startActivity(intent);
+        if(robotNames.isEmpty()){
+            Snackbar.make(view,"No Robots Added", Snackbar.LENGTH_LONG).show();
+        } else{
+            Intent intent = new Intent(this, ControllerActivity.class);
+            startActivity(intent);
+        }
     }
 
 
@@ -107,6 +216,15 @@ public class RobotName extends AppCompatActivity {
         startActivityForResult(myIntent, 0);
         return true;
 
+    }
+
+    private class MyReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String message = intent.getStringExtra(SocketService.SERVER_CONNECTION);
+            View view = findViewById(R.id.robot_name_layout);
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
     }
 }
 

@@ -9,7 +9,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".RobotName"
     android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:id="@+id/robot_name_layout">
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +37,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick="onAddRobot"
-        android:background="@color/accent_material_dark_3" />
+        android:background="@color/colorAccent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RobotNamesListView"
@@ -51,7 +52,7 @@
         android:layout_height="wrap_content"
         android:text="@string/Next"
         android:id="@+id/GoToControllerButton"
-        android:background="@color/accent_material_dark_3"
+        android:background="@color/colorAccent"
         android:onClick="onNextBut"
         android:layout_alignParentBottom="true"
         android:layout_toStartOf="@+id/AddRobotBut"

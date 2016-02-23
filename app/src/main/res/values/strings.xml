@@ -26,7 +26,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="SeverConnection">Server Connection</string>
     <string name="CurrSettings">Current Robot Settings:</string>
-    <string name="Begin">Begin Remote Control</string>
+    <string name="Begin">Connect</string>
     <string name="title_activity_controller">Remote</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="Remote">Remote Control</string>
