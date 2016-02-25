@@ -29,9 +29,9 @@ public class RobotNameAdapter extends RecyclerView.Adapter<RobotNameAdapter.View
     public RobotNameAdapter(List<String> myDataset) {
         mDataset = myDataset;
     }
-    //Todo Let's change this to a card or something more visually appealing
     //Todo drag and drop to reorder
     //Todo Continue working on actions, JOY STICK
+    //TODO Work on mobile vs.tablet view and rotation problems
     // Create new views (invoked by the layout manager)
     @Override
     public RobotNameAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
@@ -45,7 +45,6 @@ public class RobotNameAdapter extends RecyclerView.Adapter<RobotNameAdapter.View
 
     @Override
     public void onBindViewHolder(RobotNameAdapter.ViewHolder holder, int position) {
-        //holder.mCardView.setText(mDataset.get(position));
         View view = holder.mCardView.getRootView();
         TextView textView = (TextView)view.findViewById(R.id.robot_name_text_view);
         textView.setText(mDataset.get(position));

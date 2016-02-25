@@ -63,8 +63,7 @@ public class MainActivity extends AppCompatActivity
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if(!isConnected) {
-            View view = findViewById(R.id.drawer_layout);
-            Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            Snackbar.make(drawer, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }
 
@@ -156,12 +155,7 @@ public class MainActivity extends AppCompatActivity
         }
         Intent intent = new Intent(this, RobotName.class);
         startActivity(intent);
-        //TODO pass the ip and port or use shared prefs
-        /*
-        Intent intent = new Intent(this, ControllerActivity.class);
-        intent.putExtra(EXTRA_IP, ipAddress);
-        intent.putExtra(EXTRA_PORT,port);
-        startActivity(intent);*/
+
 
     }
 }

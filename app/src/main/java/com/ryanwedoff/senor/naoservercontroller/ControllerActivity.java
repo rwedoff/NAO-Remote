@@ -110,7 +110,6 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
 
     };
     private void doBindService() {
-        //swipeContainer.setRefreshing(false);
         bindService(new Intent(ControllerActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){

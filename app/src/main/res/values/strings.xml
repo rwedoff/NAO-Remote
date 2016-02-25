@@ -49,4 +49,12 @@
     <string name="Wave">Wave</string>
     <string name="SayText">Say Text</string>
     <string name="changeName">Change Robot Names</string>
+    <string name="walk_control">Walk Control: </string>
+    <string name="head_control">Head Control: </string>
+    <string name="Right">Right</string>
+    <string name="Left">Left</string>
+    <string name="Up">Up</string>
+    <string name="Down">Down</string>
+    <string name="Forward">Forward</string>
+    <string name="Backward">Backward</string>
 </resources>

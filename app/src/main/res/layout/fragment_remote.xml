@@ -79,6 +79,64 @@
             android:layout_height="wrap_content"
             android:id="@+id/prev_sent_text_view"/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/head_walk_text_view"
+             />
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/head_walk_toggle"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="20"
+        android:rowCount="20"
+        android:orientation="vertical">
+        <com.ryanwedoff.senor.naoservercontroller.EditedJoyStickView
+            android:id="@+id/joystickView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Left"
+            android:id="@+id/left_info_text_view"
+            android:layout_centerVertical="true"
+            android:layout_alignStart="@id/joystickView"
+            android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Up"
+            android:layout_alignTop="@id/joystickView"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/up_info_text_view"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Down"
+            android:layout_centerHorizontal="true"
+            android:layout_alignBottom="@id/joystickView"
+            android:id="@+id/down_info_text_view"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Right"
+            android:layout_centerVertical="true"
+            android:layout_alignEnd="@id/joystickView"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/right_info_text_view" />
+    </RelativeLayout>
 
 
 </LinearLayout>
