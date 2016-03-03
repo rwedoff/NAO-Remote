@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +27,9 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
      */
     OnSendMessageListener mListener;
     private static final String ARG_ROBOT_NAME = "robot_name";
-    private TextView angleTextView;
-    private TextView powerTextView;
-    private TextView directionTextView;
     private boolean headWalkToggle; //True = walk-mode, false = head-mode
-
+    private int oldAngle = 0;
+    private int oldPower = 0;
 
     public RemoteFragment() {
     }
@@ -81,10 +80,12 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                     headWalkTextview.setText(R.string.walk_control);
                     upTextView.setText(R.string.Forward);
                     downTextView.setText(R.string.Backward);
+                    headWalkToggle = true;
                 } else {
                     headWalkTextview.setText(R.string.head_control);
                     upTextView.setText(R.string.Up);
                     downTextView.setText(R.string.Down);
+                    headWalkToggle = false;
                 }
             }
         });
@@ -96,41 +97,76 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
 //        directionTextView = (TextView) findViewById(R.id.directionTextView);
         //Referencing also other views
         EditedJoyStickView joystick = (EditedJoyStickView) rootLayout.findViewById(R.id.joystickView);
-
+        final Fragment thisFrag = this;
         //Event listener that always returns the variation of the angle in degrees, motion power in percentage and direction of movement
         joystick.setOnJoystickMoveListener(new EditedJoyStickView.OnJoystickMoveListener() {
             @Override
-            public void onValueChanged(int angle, int power, int direction) {
-
+            public void onValueChanged(int newAngle, int newPower, int direction) {
+                Bundle bundle = thisFrag.getArguments();
+                String robotName = bundle.getString(ARG_ROBOT_NAME, "Robot Name Error") + ";";
                 //angleTextView.setText(" " + String.valueOf(angle) + "°");
                 //powerTextView.setText(" " + String.valueOf(power) + "%");
-                switch (direction) {
-                 /*   case JoystickView.FRONT:
-                        directionTextView.setText(R.string.front_lab);
-                        break;
-                    case JoystickView.FRONT_RIGHT:
-                        directionTextView.setText(R.string.front_right_lab);
-                        break;
-                    case JoystickView.RIGHT:
-                        directionTextView.setText(R.string.right_lab);
-                        break;
-                    case JoystickView.RIGHT_BOTTOM:
-                        directionTextView.setText(R.string.right_bottom_lab);
-                        break;
-                    case JoystickView.BOTTOM:
-                        directionTextView.setText(R.string.bottom_lab);
-                        break;
-                    case JoystickView.BOTTOM_LEFT:
-                        directionTextView.setText(R.string.bottom_left_lab);
-                        break;
-                    case JoystickView.LEFT:
-                        directionTextView.setText(R.string.left_lab);
-                        break;
-                    case JoystickView.LEFT_FRONT:
-                        directionTextView.setText(R.string.left_front_lab);
-                        break;
-                    default:
-                        directionTextView.setText(R.string.center_lab);*/
+                Log.i("Angle (Degrees): ",String.valueOf(newAngle));
+                Log.i("Power (%): ",String.valueOf(newPower));
+
+
+               if(Math.abs(newAngle - oldAngle) >= 0.05){ //Int values are used, probably never > 0.05
+                    //TODO
+                    //NOTES:  RIGHT means the right stick, which is the head, the units are in radians, I need to figure out the unit circle and
+                    //how it relates to my joystick circle
+                    if(newPower != 0){
+                        double radians = Math.toRadians(newAngle);
+                        if(headWalkToggle){
+                            //Angles not exact to have a margin of error with walking
+                            if((newAngle > 20 && newAngle < 160) || newAngle == 90){
+                                Log.i("Right", Double.toString(Math.cos(radians)));
+                                mListener.onSendMessage(robotName + "Theta=-1;");
+                            }
+                            if((newAngle > -160 && newAngle < -20) || newAngle == -90) {
+                                Log.i("Left", Double.toString(radians));
+                                mListener.onSendMessage(robotName + "Theta=1;");
+                            }
+                            if((newAngle > -70 && newAngle < 70) || newAngle == 0){
+                                Log.i("Up", Double.toString(radians));
+                                mListener.onSendMessage(robotName + "LeftY=" + Math.cos(radians) + ";");
+                            }
+                            if((newAngle > 110 || newAngle < -110) || newAngle == 180) {
+                                Log.i("Down", Double.toString(radians));
+                                mListener.onSendMessage(robotName + "LeftY=" + Math.cos(radians) + ";");
+                            }
+
+                        }else{
+                                double normalizedPowerX = (newPower * 2.5) /100;
+                                double normalizedPowerY = (newPower * 3 )/100;
+                                double normalizedSinY = newPower;
+                                mListener.onSendMessage(robotName + "RightX=" + Math.sin(-radians)*normalizedPowerX + ";");
+                                double rad2 = Math.toRadians(newAngle + 90);
+                                mListener.onSendMessage(robotName + "RightY=" + -Math.sin(rad2)*normalizedPowerY + ";");
+
+                            /*if((newAngle > -70 && newAngle < 70) || newAngle == 0){
+                                Log.i("Up", Double.toString(radians));  //TODO Negative pi/2 is UP and +pi/2 is down
+                                double rad2 = Math.toRadians(newAngle + 90);
+                                mListener.onSendMessage(robotName + "RightY=" + -Math.sin(rad2) + ";");
+                            }
+                            if((newAngle > 110 || newAngle < -110) || newAngle == 180) {
+                                Log.i("Down", Double.toString(radians));
+                                double rad2 = Math.toRadians(newAngle + 90);
+                                mListener.onSendMessage(robotName + "RightY=" + Math.sin(rad2) + ";");
+                            }*/
+                                Log.e(Double.toString(normalizedSinY), Double.toString(normalizedSinY));
+                            //mListener.onSendMessage(robotName + "RightY=" + normalizedSinY + ";");
+                        }
+
+                    } else{
+                        if(headWalkToggle){
+                            Log.i("Stop","Stop");
+                            mListener.onSendMessage(robotName + "Theta=0;");
+                            mListener.onSendMessage(robotName + "LeftY=0;");
+                        }
+                    }
+
+
+                    oldAngle = newAngle;
                 }
             }
         }, JoystickView.DEFAULT_LOOP_INTERVAL);
@@ -170,6 +206,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
         }
 
     }
+
 
 
     public interface OnSendMessageListener {

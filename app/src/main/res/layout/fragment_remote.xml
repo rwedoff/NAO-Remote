@@ -5,8 +5,6 @@
     android:id="@+id/remote_fragment"
     style="?android:attr/buttonBarStyle"
     android:orientation="vertical">
-
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
