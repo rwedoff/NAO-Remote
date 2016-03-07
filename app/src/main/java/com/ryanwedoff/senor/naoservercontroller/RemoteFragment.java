@@ -137,10 +137,9 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
 
                         }else{
                                 double normalizedPowerX = (newPower * 2.5) /100;
-                                double normalizedPowerY = (newPower * 3 )/100;
                                 mListener.onSendMessage(robotName + "RightX=" + Math.sin(-radians)*normalizedPowerX + ";");
-                                double rad2 = Math.toRadians(newAngle + 90);
-                                mListener.onSendMessage(robotName + "RightY=" + -Math.sin(rad2)*normalizedPowerY + ";");
+                                mListener.onSendMessage(robotName + "RightY=" + -Math.cos(radians) + ";");
+
                         }
 
                     } else{

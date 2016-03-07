@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -224,6 +225,9 @@ public class EditedJoyStickView extends View implements Runnable {
                 * (xPosition - centerX) + (yPosition - centerY)
                 * (yPosition - centerY)) / joystickRadius);
     }
+
+
+
 
     private int getDirection() {
         //int lastPower = 0;
