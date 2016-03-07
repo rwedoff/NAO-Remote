@@ -111,7 +111,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
 
 
                if(Math.abs(newAngle - oldAngle) >= 0.05){ //Int values are used, probably never > 0.05
-                    //TODO
+
                     //NOTES:  RIGHT means the right stick, which is the head, the units are in radians, I need to figure out the unit circle and
                     //how it relates to my joystick circle
                     if(newPower != 0){
@@ -138,23 +138,9 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                         }else{
                                 double normalizedPowerX = (newPower * 2.5) /100;
                                 double normalizedPowerY = (newPower * 3 )/100;
-                                double normalizedSinY = newPower;
                                 mListener.onSendMessage(robotName + "RightX=" + Math.sin(-radians)*normalizedPowerX + ";");
                                 double rad2 = Math.toRadians(newAngle + 90);
                                 mListener.onSendMessage(robotName + "RightY=" + -Math.sin(rad2)*normalizedPowerY + ";");
-
-                            /*if((newAngle > -70 && newAngle < 70) || newAngle == 0){
-                                Log.i("Up", Double.toString(radians));  //TODO Negative pi/2 is UP and +pi/2 is down
-                                double rad2 = Math.toRadians(newAngle + 90);
-                                mListener.onSendMessage(robotName + "RightY=" + -Math.sin(rad2) + ";");
-                            }
-                            if((newAngle > 110 || newAngle < -110) || newAngle == 180) {
-                                Log.i("Down", Double.toString(radians));
-                                double rad2 = Math.toRadians(newAngle + 90);
-                                mListener.onSendMessage(robotName + "RightY=" + Math.sin(rad2) + ";");
-                            }*/
-                                Log.e(Double.toString(normalizedSinY), Double.toString(normalizedSinY));
-                            //mListener.onSendMessage(robotName + "RightY=" + normalizedSinY + ";");
                         }
 
                     } else{
@@ -164,8 +150,6 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                             mListener.onSendMessage(robotName + "LeftY=0;");
                         }
                     }
-
-
                     oldAngle = newAngle;
                 }
             }
