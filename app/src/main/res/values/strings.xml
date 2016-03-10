@@ -61,12 +61,14 @@
     <string name="mood_remote">Mood Remote</string>
     <string name="center">Center</string>
     <string name="MoodControl">Mood Control</string>
+    <string name="pref_header_help">Help</string>
+    <string name="Help">Help/Troubleshoot</string>
 
     <string-array name="mood_array">
-            <item>Neutral</item>
-            <item>Happy</item>
-            <item>Sad</item>
-            <item>Angry</item>
-        </string-array>
+        <item>Neutral</item>
+        <item>Happy</item>
+        <item>Sad</item>
+        <item>Angry</item>
+    </string-array>
 
 </resources>

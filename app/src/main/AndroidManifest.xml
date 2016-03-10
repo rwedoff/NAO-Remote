@@ -7,11 +7,11 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:fullBackupContent="true">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".SocketSendActivity"
             android:label="@string/app_name"
@@ -36,8 +36,8 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -57,12 +57,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ryanwedoff.senor.naoservercontroller.MainActivity" />
         </activity>
-        <activity android:name=".MoodActivity"
+        <activity
+            android:name=".MoodActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ryanwedoff.senor.naoservercontroller.MainActivity" />
         </activity>
+        <activity android:name=".HelpScreen"></activity>
     </application>
 
 </manifest>

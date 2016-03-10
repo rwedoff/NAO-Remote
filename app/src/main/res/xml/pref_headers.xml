@@ -2,7 +2,15 @@
     <!-- These settings headers are only used on tablets. -->
     <header
     android:fragment="com.ryanwedoff.senor.naoservercontroller.SettingsActivity$GeneralPreferenceFragment"
-    android:icon="@drawable/ic_info_black_24dp"
+    android:icon="@drawable/ic_label_black_24dp"
     android:title="@string/pref_header_general"
     />
+    <header
+
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="@string/pref_header_help"
+        >
+        <intent android:targetPackage="com.ryanwedoff.senor.naoservercontroller"
+            android:targetClass="com.ryanwedoff.senor.naoservercontroller.HelpScreen" />
+    </header>
 </preference-headers>
