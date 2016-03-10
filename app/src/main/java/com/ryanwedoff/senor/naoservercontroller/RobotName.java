@@ -218,6 +218,15 @@ public class RobotName extends AppCompatActivity {
 
     }
 
+    public void onGoToMood(View view) {
+        if(robotNames.isEmpty()){
+            Snackbar.make(view,"No Robots Added", Snackbar.LENGTH_LONG).show();
+        } else{
+            Intent intent = new Intent(this, MoodActivity.class);
+            startActivity(intent);
+        }
+    }
+
     private class MyReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {

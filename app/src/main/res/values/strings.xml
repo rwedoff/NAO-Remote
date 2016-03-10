@@ -24,7 +24,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="SeverConnection">Server Connection</string>
+    <string name="SeverConnection">Send Custom Message</string>
     <string name="CurrSettings">Current Robot Settings:</string>
     <string name="Begin">Connect</string>
     <string name="title_activity_controller">Remote</string>
@@ -57,4 +57,16 @@
     <string name="Down">Down</string>
     <string name="Forward">Forward</string>
     <string name="Backward">Backward</string>
+    <string name="RobotNames">Robot Names</string>
+    <string name="mood_remote">Mood Remote</string>
+    <string name="center">Center</string>
+    <string name="MoodControl">Mood Control</string>
+
+    <string-array name="mood_array">
+            <item>Neutral</item>
+            <item>Happy</item>
+            <item>Sad</item>
+            <item>Angry</item>
+        </string-array>
+
 </resources>

@@ -40,7 +40,7 @@ public class ReceiveSocketAdapter extends RecyclerView.Adapter<ReceiveSocketAdap
                                                    int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.robot_name_text_view, parent, false);
+                .inflate(R.layout.receive_text_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
         return new ViewHolder((TextView) v);
     }

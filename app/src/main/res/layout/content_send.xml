@@ -39,7 +39,7 @@
         android:id="@+id/SendButton"
         android:text="@string/Send"
         android:onClick="onSend"
-        android:drawableLeft="@drawable/ic_sync_black_24dp"
+        android:drawableStart="@drawable/ic_menu_send"
         android:layout_below="@+id/title"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/ResponseHeader">
-    <!-- A RecyclerView with some commonly used attributes -->
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"
         android:scrollbars="vertical"

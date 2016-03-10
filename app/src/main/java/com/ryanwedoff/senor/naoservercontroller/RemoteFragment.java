@@ -3,7 +3,6 @@ package com.ryanwedoff.senor.naoservercontroller;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,6 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_ROBOT_NAME = "robot_name";
     private boolean headWalkToggle; //True = walk-mode, false = head-mode
     private int oldAngle = 0;
-    private int oldPower = 0;
 
     public RemoteFragment() {
     }
@@ -61,7 +59,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
         final LinearLayout rootLayout = (LinearLayout) inflater.inflate(R.layout.fragment_remote, container, false);
 
         //Sets onClick listeners for each fragment, not done in XML to get robot name
-        Button standButton = (Button) rootLayout.findViewById(R.id.stand_button);
+        final Button standButton = (Button) rootLayout.findViewById(R.id.stand_button);
         standButton.setOnClickListener(this);
         Button crouchButton = (Button) rootLayout.findViewById(R.id.crouch_button);
         crouchButton.setOnClickListener(this);
@@ -74,6 +72,8 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
         final TextView downTextView = (TextView) rootLayout.findViewById(R.id.down_info_text_view);
         final TextView upTextView = (TextView) rootLayout.findViewById(R.id.up_info_text_view);
         headWalkTextview.setText(R.string.head_control);
+        final Button stopButton = (Button) rootLayout.findViewById(R.id.stop_button);
+        stopButton.setOnClickListener(this);
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -81,11 +81,13 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                     upTextView.setText(R.string.Forward);
                     downTextView.setText(R.string.Backward);
                     headWalkToggle = true;
+                    stopButton.setText("STOP");
                 } else {
                     headWalkTextview.setText(R.string.head_control);
                     upTextView.setText(R.string.Up);
                     downTextView.setText(R.string.Down);
                     headWalkToggle = false;
+                    stopButton.setText("Center");
                 }
             }
         });
@@ -118,19 +120,19 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                         double radians = Math.toRadians(newAngle);
                         if(headWalkToggle){
                             //Angles not exact to have a margin of error with walking
-                            if((newAngle > 20 && newAngle < 160) || newAngle == 90){
+                            if((newAngle > 45 && newAngle < 135) || newAngle == 90){
                                 Log.i("Right", Double.toString(Math.cos(radians)));
                                 mListener.onSendMessage(robotName + "Theta=-1;");
                             }
-                            if((newAngle > -160 && newAngle < -20) || newAngle == -90) {
+                            if((newAngle > -135 && newAngle < -45) || newAngle == -90) {
                                 Log.i("Left", Double.toString(radians));
                                 mListener.onSendMessage(robotName + "Theta=1;");
                             }
-                            if((newAngle > -70 && newAngle < 70) || newAngle == 0){
+                            if((newAngle > -44 && newAngle < 44) || newAngle == 0){
                                 Log.i("Up", Double.toString(radians));
                                 mListener.onSendMessage(robotName + "LeftY=" + Math.cos(radians) + ";");
                             }
-                            if((newAngle > 110 || newAngle < -110) || newAngle == 180) {
+                            if((newAngle > 135 || newAngle < -135) || newAngle == 180) {
                                 Log.i("Down", Double.toString(radians));
                                 mListener.onSendMessage(robotName + "LeftY=" + Math.cos(radians) + ";");
                             }
@@ -139,7 +141,6 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                                 double normalizedPowerX = (newPower * 2.5) /100;
                                 mListener.onSendMessage(robotName + "RightX=" + Math.sin(-radians)*normalizedPowerX + ";");
                                 mListener.onSendMessage(robotName + "RightY=" + -Math.cos(radians) + ";");
-
                         }
 
                     } else{
@@ -186,11 +187,17 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                     textView.setText(prevMessage);
                 }
                 break;
+            case R.id.stop_button:
+                if(headWalkToggle){
+                    mListener.onSendMessage(robotName + "Theta=0;");
+                    mListener.onSendMessage(robotName + "LeftY=0;");
+                } else{
+                    mListener.onSendMessage(robotName + "RightX=0;");
+                    mListener.onSendMessage(robotName + "RightY=0;");
+                }
+                break;
         }
-
     }
-
-
 
     public interface OnSendMessageListener {
         void onSendMessage(String message);

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="4dp"
-    card_view:cardBackgroundColor="@color/colorAccent">
+    card_view:cardBackgroundColor="@color/colorAccent"
+    android:layout_margin="7dp">
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -197,7 +197,7 @@ public class SocketSendActivity extends AppCompatActivity {
         }
         InputMethodManager inputManager =
                 (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        //noinspection ConstantConditions
+        assert getCurrentFocus() != null;
         inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         editText.setText("");
 

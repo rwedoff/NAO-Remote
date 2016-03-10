@@ -81,15 +81,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/head_walk_text_view"
-             />
+            android:textStyle="bold|italic" />
         <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/head_walk_toggle"/>
+            android:id="@+id/head_walk_toggle"
+
+
+            />
+
     </LinearLayout>
 
     <RelativeLayout
@@ -133,6 +138,16 @@
             android:layout_alignEnd="@id/joystickView"
             android:layout_alignParentEnd="true"
             android:id="@+id/right_info_text_view" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#38d50000"
+            android:id="@+id/stop_button"
+            android:text="@string/center"
+            android:layout_below="@+id/up_info_text_view"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ryanwedoff.senor.naoservercontroller.MoodActivity">
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/robot_name_spinner"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:padding="12dp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mood_spinner"
+        android:padding="12dp"
+        android:layout_below="@+id/robot_name_spinner"
+        android:layout_centerHorizontal="true"
+         />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sendMessageEdit"
+        android:layout_below="@+id/mood_spinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:inputType="text"
+        android:hint="@string/MessageText"
+        android:focusable="true"
+        android:imeOptions="actionDone"
+        android:layout_toLeftOf="@+id/SendButton"
+        android:layout_toStartOf="@+id/SendButton" />
+
+
+    <Button
+        android:name="android:colorButtonNormal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SendButton"
+        android:text="@string/Send"
+        android:onClick="onSend"
+        android:drawableEnd="@drawable/ic_menu_send"
+        android:layout_below="@id/mood_spinner"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/colorAccent"/>
+
+</RelativeLayout>
