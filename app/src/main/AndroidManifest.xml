@@ -64,7 +64,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ryanwedoff.senor.naoservercontroller.MainActivity" />
         </activity>
-        <activity android:name=".HelpScreen"></activity>
+        <activity android:name=".HelpScreen"
+            android:parentActivityName=".SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ryanwedoff.senor.naoservercontroller.SettingsActivity" />
+        </activity>
     </application>
 
 </manifest>
