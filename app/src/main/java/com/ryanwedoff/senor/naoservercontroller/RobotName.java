@@ -62,7 +62,6 @@ public class RobotName extends AppCompatActivity {
 
         ConnectivityManager cm =
                 (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
@@ -70,7 +69,7 @@ public class RobotName extends AppCompatActivity {
             startService(new Intent(RobotName.this, SocketService.class));
             doBindService();
         } else {
-            View view = findViewById(R.id.controller_root_view);
+            View view = findViewById(R.id.robot_name_layout);
             Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
 
@@ -136,7 +135,7 @@ public class RobotName extends AppCompatActivity {
             startService(new Intent(RobotName.this, SocketService.class));
             doBindService();
         } else {
-            View view = findViewById(R.id.controller_root_view);
+            View view = findViewById(R.id.robot_name_layout);
             Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
         IntentFilter intentFilter = new IntentFilter();

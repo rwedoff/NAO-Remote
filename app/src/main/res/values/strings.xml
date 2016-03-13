@@ -72,4 +72,16 @@
         <item>Angry</item>
     </string-array>
 
+    <string name="title_activity_file">FileActivity</string>
+    <string name="send_file">Send File</string>
+    <string name="Sent">Sent</string>
+    <string name="Start">Start</string>
+    <string name="Stop">Stop</string>
+    <string name="Pause">Pause</string>
+    <string name="Play">Play</string>
+    <string name="restart">Restart</string>
+    <string name="Clear">Clear</string>
+    <string name="stop">STOP</string>
+    <string name="center2">Center</string>
+
 </resources>

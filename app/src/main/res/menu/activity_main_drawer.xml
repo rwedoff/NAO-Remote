@@ -11,9 +11,10 @@
             android:icon="@drawable/ic_sentiment_very_satisfied_black_24dp"
             android:title="@string/mood_remote"/>
         <item
-            android:id="@+id/nav_robot_names"
-            android:icon="@drawable/ic_account_circle_black_24dp"
-            android:title="@string/RobotNames" />
+            android:id="@+id/nav_file"
+            android:icon="@drawable/ic_insert_drive_file_black_24dp"
+            android:title="@string/send_file"/>
+
     </group>
 
     <item android:title="@string/SeverConnection">
@@ -27,6 +28,10 @@
     </item>
     <item android:title="@string/Settings">
         <menu>
+            <item
+                android:id="@+id/nav_robot_names"
+                android:icon="@drawable/ic_account_circle_black_24dp"
+                android:title="@string/RobotNames" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"

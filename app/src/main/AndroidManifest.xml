@@ -64,11 +64,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ryanwedoff.senor.naoservercontroller.MainActivity" />
         </activity>
-        <activity android:name=".HelpScreen"
+        <activity
+            android:name=".HelpScreen"
             android:parentActivityName=".SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ryanwedoff.senor.naoservercontroller.SettingsActivity" />
+        </activity>
+        <activity
+            android:name=".FileActivity"
+            android:label="Send A File"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ryanwedoff.senor.naoservercontroller.MainActivity" />
         </activity>
     </application>
 

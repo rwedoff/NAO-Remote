@@ -123,6 +123,9 @@ public class MainActivity extends AppCompatActivity
         } else if(id == R.id.nav_mood){
             Intent intent = new Intent(this, MoodActivity.class);
             startActivity(intent);
+        } else if(id == R.id.nav_file){
+            Intent intent = new Intent(this, FileActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

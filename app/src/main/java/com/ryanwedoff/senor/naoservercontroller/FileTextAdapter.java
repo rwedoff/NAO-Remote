@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 
-public class RobotNameAdapter extends RecyclerView.Adapter<RobotNameAdapter.ViewHolder> {
+public class FileTextAdapter extends RecyclerView.Adapter<FileTextAdapter.ViewHolder> {
     private List<String> mDataset;
 
     // Provide a reference to the views for each data item
@@ -26,27 +26,24 @@ public class RobotNameAdapter extends RecyclerView.Adapter<RobotNameAdapter.View
     }
 
     //Constructor
-    public RobotNameAdapter(List<String> myDataset) {
+    public FileTextAdapter(List<String> myDataset) {
         mDataset = myDataset;
     }
-    //Todo drag and drop to reorder
-    //Todo Continue working on actions, JOY STICK
-    //TODO Work on mobile vs.tablet view and rotation problems
     // Create new views (invoked by the layout manager)
     @Override
-    public RobotNameAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                              int viewType) {
+    public FileTextAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                          int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.robot_name_card_view, parent, false);
+                .inflate(R.layout.file_input_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
         return new ViewHolder((CardView) v);
     }
 
     @Override
-    public void onBindViewHolder(RobotNameAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(FileTextAdapter.ViewHolder holder, int position) {
         View view = holder.mCardView.getRootView();
-        TextView textView = (TextView)view.findViewById(R.id.robot_name_text_view);
+        TextView textView = (TextView)view.findViewById(R.id.file_text_view);
         textView.setText(mDataset.get(position));
     }
 

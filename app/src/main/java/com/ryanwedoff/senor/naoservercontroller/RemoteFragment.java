@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.zerokol.views.JoystickView;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -81,13 +81,13 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                     upTextView.setText(R.string.Forward);
                     downTextView.setText(R.string.Backward);
                     headWalkToggle = true;
-                    stopButton.setText("STOP");
+                    stopButton.setText(R.string.stop);
                 } else {
                     headWalkTextview.setText(R.string.head_control);
                     upTextView.setText(R.string.Up);
                     downTextView.setText(R.string.Down);
                     headWalkToggle = false;
-                    stopButton.setText("Center");
+                    stopButton.setText(R.string.center2);
                 }
             }
         });
@@ -153,7 +153,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                     oldAngle = newAngle;
                 }
             }
-        }, JoystickView.DEFAULT_LOOP_INTERVAL);
+        }, EditedJoyStickView.DEFAULT_LOOP_INTERVAL);
 
         return rootLayout;
     }
