@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.zerokol.views.JoystickView;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -153,7 +153,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                     oldAngle = newAngle;
                 }
             }
-        }, JoystickView.DEFAULT_LOOP_INTERVAL);
+        }, EditedJoyStickView.DEFAULT_LOOP_INTERVAL);
 
         return rootLayout;
     }

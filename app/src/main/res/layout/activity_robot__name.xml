@@ -26,7 +26,6 @@
         android:text="@string/AddNamesTxt"
         android:id="@+id/textView"
         android:layout_above="@+id/addRobotEdit"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
     <Button
         android:layout_width="wrap_content"
@@ -34,7 +33,6 @@
         android:text="@string/AddName"
         android:id="@+id/AddRobotBut"
         android:layout_alignTop="@+id/addRobotEdit"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick="onAddRobot"
         android:background="@color/colorAccent"
@@ -57,9 +55,7 @@
         android:background="@color/colorAccent"
         android:onClick="onNextBut"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/textView"
         android:layout_alignEnd="@+id/textView"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_margin="10dp" />
     <Button
@@ -70,10 +66,8 @@
         android:background="@color/colorAccent"
         android:onClick="onGoToMood"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/GoToControllerButton"
-        android:layout_toEndOf="@+id/GoToControllerButton"
+        android:layout_toEndOf="@id/GoToControllerButton"
         android:layout_margin="10dp" />
 
 
