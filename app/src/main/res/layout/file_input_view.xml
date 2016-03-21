@@ -14,6 +14,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/file_text_view"
+<<<<<<< HEAD
+=======
+            android:text="Christopher;Speech;Hello, my name is Christopher!"
+>>>>>>> origin/master
             android:paddingTop="5dp"
             android:paddingBottom="5dp">
         </TextView>
