@@ -54,4 +54,6 @@ public class FileTextAdapter extends RecyclerView.Adapter<FileTextAdapter.ViewHo
     public int getItemCount() {
         return mDataset.size();
     }
+
 }
+

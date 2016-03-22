@@ -81,13 +81,13 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                     upTextView.setText(R.string.Forward);
                     downTextView.setText(R.string.Backward);
                     headWalkToggle = true;
-                    stopButton.setText(R.string.stop);
+                    stopButton.setText(R.string.Stop);
                 } else {
                     headWalkTextview.setText(R.string.head_control);
                     upTextView.setText(R.string.Up);
                     downTextView.setText(R.string.Down);
                     headWalkToggle = false;
-                    stopButton.setText(R.string.center2);
+                    stopButton.setText(R.string.Center2);
                 }
             }
         });

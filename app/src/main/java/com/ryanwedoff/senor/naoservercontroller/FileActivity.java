@@ -13,7 +13,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,6 +21,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
@@ -35,23 +36,22 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 
-public class FileActivity extends AppCompatActivity {
+public class FileActivity extends AppCompatActivity  {
 
     private static final int READ_REQUEST_CODE = 1;
     private RecyclerView.Adapter<FileTextAdapter.ViewHolder> mAdapter;
-    private ArrayList<String> fileLines;
+    private ArrayList fileLines;
     SocketService mBoundService;
     private boolean mIsBound;
     MyReceiver myReceiver;
     private NaoFileParse fileParse;
     public static ArrayList robotNames;
     private static boolean fConnect = true;
-
+    private static int runningPos = 0;
+    private static boolean canSend = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class FileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_file);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        fileLines = new ArrayList<>();
+        fileLines = new ArrayList<String>();
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.file_list_view);
         mRecyclerView.setHasFixedSize(false);
@@ -104,14 +104,41 @@ public class FileActivity extends AppCompatActivity {
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    // The toggle is Paused
+                    // The toggle is running
+                    Log.e("Lines: ",Integer.toString(fileLines.size()));
+                    while(runningPos < fileLines.size() && canSend){
+                        Log.e("Running","Running");
+                        mBoundService.sendMessage((String) fileLines.get(runningPos));
+                        runningPos++;
+                    }
                 } else {
-                    // The toggle is Play
+                   //Is paused
                 }
             }
         });
 
+       /* if(SocketService.isServiceRunning){
+            connectSocketService();
+        }*/
+
     }
+
+
+
+
+  /*  @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("my_array", fileLines);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Serializable s = savedInstanceState.getSerializable("my_array");
+        fileLines = (ArrayList) s;
+        super.onRestoreInstanceState(savedInstanceState);
+    }*/
+
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -161,8 +188,6 @@ public class FileActivity extends AppCompatActivity {
    @Override
     protected void onResume(){
         super.onResume();
-
-
            ConnectivityManager cm =
                    (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -174,7 +199,7 @@ public class FileActivity extends AppCompatActivity {
                doBindService();
            } else {
                View view = findViewById(R.id.file_relative_view);
-               //TODO
+               //TODO  uncomment this
                //Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
            }
            IntentFilter intentFilter = new IntentFilter();
@@ -195,19 +220,15 @@ public class FileActivity extends AppCompatActivity {
                 uri = resultData.getData();
                 Log.i("URI", "Uri: " + uri.toString());
                 new GetRobotFile().execute(uri);
-
             }
         }
-
-
     }
 
-    public void onRestart(View view) {
-    }
 
     public void onReSend(View view) {
-        TextView textView = (TextView) findViewById(R.id.file_text_view);
+        TextView textView = (TextView) view.findViewById(R.id.file_text_view);
         String message = textView.getText().toString();
+
         if(mBoundService != null){
             try{
                 int lineNum = fileLines.indexOf(message);
@@ -224,11 +245,28 @@ public class FileActivity extends AppCompatActivity {
 
     }
 
-    public void onClear(View view) {
-        fileLines.clear();
-        mAdapter.notifyDataSetChanged();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.file_menu, menu);
+        return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.clear_button:
+                fileLines.clear();
+                runningPos = 0;
+                mAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.restart_button:
+                runningPos = 0;
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+//FIXME:  ON rotate the array list clears
     private class GetRobotFile extends AsyncTask<Uri, Void, Void> {
         /**
          * This is done under async to ensure that network sources can pull in files
@@ -250,16 +288,18 @@ public class FileActivity extends AppCompatActivity {
                         fileLines.add(line);
                         //Log.e(line,line);
                     }
-                    if(!fileParse.firstCheckLine(fileLines.get(0))){
+                    if(!fileParse.firstCheckLine((String) fileLines.get(0))){
                         View view = findViewById(R.id.file_relative_view);
-                        Snackbar.make(view, "'--NAO-START' needed at line 0", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        Snackbar.make(view, "'--NAOSTART' needed at line 0", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        canSend = false;
                         Log.i("--NAO-START", "needed at line 0");
                     }
 
-                    if(!fileParse.lastCheckLine(fileLines.get(fileLines.size()-1))){
+                    if(!fileParse.lastCheckLine((String) fileLines.get(fileLines.size()-1))){
                         View view = findViewById(R.id.file_relative_view);
-                        Snackbar.make(view, "'--NAO-STOP' needed at last line", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                        Log.i("--NAO-STOP","needed at last line");
+                        Snackbar.make(view, "'--NAOSTOP' needed at last line", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        Log.i("--NAO-STOP", "needed at last line");
+                        canSend = false;
                     }
 
                 } catch (IOException e) {
@@ -276,17 +316,17 @@ public class FileActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            firstConnect();
+            connectSocketService();
         }
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
+            mBoundService.stopSelf();
         }
 
 
     }
-    private void firstConnect(){
+    private void connectSocketService(){
         ConnectivityManager cm =
                 (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();

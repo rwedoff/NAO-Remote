@@ -19,10 +19,10 @@ public class NaoFileParse {
 
         //Todo strip semicolons in mood text edit
         public boolean firstCheckLine(String line){
-            return line.equals("--NAO-START");
+            return line.equals("--NAOSTART");
         }
         public boolean lastCheckLine(String line){
-            return line.equals("--NAO-STOP");
+            return line.equals("--NAOSTOP");
         }
         public boolean checkLine(String line, int lineNum){
             /**

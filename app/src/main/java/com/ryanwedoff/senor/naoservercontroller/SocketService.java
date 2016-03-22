@@ -24,7 +24,7 @@ public class SocketService extends Service {
     Socket socket;
     InetAddress serverAddr;
     private final IBinder myBinder = new LocalBinder();
-
+    public static boolean isServiceRunning = false;
 
     final static String ACTION = "ACTION";
     public final static String SERVER_RESPONSE = "com.ryanwedoff.senor.naoservercontroller.SocketService.MESSAGE";
@@ -143,6 +143,7 @@ public class SocketService extends Service {
                     out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
                     Log.i("TCP Client", "C: Sent.");
                     Log.i("TCP Client", "C: Done.");
+                isServiceRunning = true;
                 if(socket.getRemoteSocketAddress() != null)
                     new ReceiveMessage().execute();
 
@@ -156,10 +157,12 @@ public class SocketService extends Service {
             }
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         try {
+            isServiceRunning = false;
             socket.close();
             Log.i("Socket has been closed", "Closed");
         } catch (Exception e) {
