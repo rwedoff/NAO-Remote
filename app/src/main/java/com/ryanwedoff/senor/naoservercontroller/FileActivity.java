@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -52,6 +53,7 @@ public class FileActivity extends AppCompatActivity  {
     private static boolean fConnect = true;
     private static int runningPos = 0;
     private static boolean canSend = true;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,6 @@ public class FileActivity extends AppCompatActivity  {
                 intent.setType("text/plain");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 startActivityForResult(intent, READ_REQUEST_CODE);
-
             }
         });
 
@@ -105,22 +106,19 @@ public class FileActivity extends AppCompatActivity  {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // The toggle is running
-                    Log.e("Lines: ",Integer.toString(fileLines.size()));
-                    while(runningPos < fileLines.size() && canSend){
-                        Log.e("Running","Running");
-                        mBoundService.sendMessage((String) fileLines.get(runningPos));
-                        runningPos++;
-                    }
+                    //Log.e("Lines: ",Integer.toString(fileLines.size()));
+                    runFile();
                 } else {
                    //Is paused
+                    canSend = false;
                 }
             }
         });
 
-       /* if(SocketService.isServiceRunning){
-            connectSocketService();
-        }*/
-
+        myReceiver = new MyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SocketService.ACTION);
+        registerReceiver(myReceiver, intentFilter);
     }
 
 
@@ -139,6 +137,32 @@ public class FileActivity extends AppCompatActivity  {
         super.onRestoreInstanceState(savedInstanceState);
     }*/
 
+    private void runFile(){
+        if(!SocketService.isServiceRunning)
+            connectSocketService();
+        if(runningPos < fileLines.size() && canSend){
+            Log.e("Running", "Running");
+            mBoundService.sendMessage((String) fileLines.get(runningPos));
+            runningPos++;
+            canSend = false;
+            mBoundService.recvMess();
+        }
+        if(!canSend){
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e("Timed Out", "After 10sec");
+                    if(!canSend){
+                        canSend = true;
+                        runFile();
+                    }
+                }
+            }, 10000);
+        }
+
+    }
+
+
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -152,8 +176,8 @@ public class FileActivity extends AppCompatActivity  {
         }
 
     };
+
     private void doBindService() {
-        //swipeContainer.setRefreshing(false);
         bindService(new Intent(FileActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){
@@ -188,26 +212,10 @@ public class FileActivity extends AppCompatActivity  {
    @Override
     protected void onResume(){
         super.onResume();
-           ConnectivityManager cm =
-                   (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-           NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-           boolean isConnected = activeNetwork != null &&
-                   activeNetwork.isConnectedOrConnecting();
-           if(isConnected){
-               startService(new Intent(FileActivity.this, SocketService.class));
-               doBindService();
-           } else {
-               View view = findViewById(R.id.file_relative_view);
-               //TODO  uncomment this
-               //Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-           }
-           IntentFilter intentFilter = new IntentFilter();
-           intentFilter.addAction(SocketService.ACTION);
-           registerReceiver(myReceiver, intentFilter);
-
-
-    }
+       IntentFilter intentFilter = new IntentFilter();
+       intentFilter.addAction(SocketService.ACTION);
+       registerReceiver(myReceiver, intentFilter);
+   }
 
 
     @Override
@@ -321,12 +329,15 @@ public class FileActivity extends AppCompatActivity  {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mBoundService.stopSelf();
+            if(mBoundService != null)
+                mBoundService.stopSelf();
         }
-
 
     }
     private void connectSocketService(){
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SocketService.ACTION);
+        registerReceiver(myReceiver, intentFilter);
         ConnectivityManager cm =
                 (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -346,17 +357,27 @@ public class FileActivity extends AppCompatActivity  {
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String message = intent.getStringExtra(SocketService.SERVER_CONNECTION);
-
-            //TODO
-            View view = findViewById(R.id.robot_name_layout);
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            String connectionMess = intent.getStringExtra(SocketService.SERVER_CONNECTION);
+            String serverResponse = intent.getStringExtra(SocketService.SERVER_RESPONSE);
+            Log.e("Response: ", serverResponse);
+            if(connectionMess != null){
+                View view = findViewById(R.id.file_relative_view);
+                Snackbar.make(view, connectionMess, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
+            if (serverResponse != null) {
+                if(serverResponse.contains("@@@@")){
+                    Log.e("TRUE","TRUE");
+                    canSend = true;
+                    runFile();
+                }
+            }
         }
     }
 
     public Context getActivity() {
         return this;
     }
+
 
 
 

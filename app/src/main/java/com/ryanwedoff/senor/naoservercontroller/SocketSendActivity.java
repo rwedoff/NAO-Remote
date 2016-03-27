@@ -63,7 +63,7 @@ public class SocketSendActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mBoundService.recvMess();
+                //mBoundService.recvMess();
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -125,7 +125,7 @@ public class SocketSendActivity extends AppCompatActivity {
 
             myDataset.clear();
             mAdapter.notifyDataSetChanged();
-            mBoundService.recvMess();
+            //mBoundService.recvMess();
         } else {
             switch (item.getItemId()) {
                 case android.R.id.home:
@@ -185,12 +185,6 @@ public class SocketSendActivity extends AppCompatActivity {
             }  catch (Exception  e){
                 Snackbar.make(view, "Socket Connection Error", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
-            /*try{
-                mBoundService.recvMess();
-            }catch (Exception e2){
-                Snackbar.make(view, "Socket Connection Error", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }*/
-
         } else{
             Log.e("Socket Connection Error", "Socket Error");
 
@@ -209,7 +203,6 @@ public class SocketSendActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra(SocketService.SERVER_RESPONSE);
-            //mBoundService.recvMess();
             myDataset.add(0, message);
             mAdapter.notifyDataSetChanged();
         }
@@ -229,6 +222,9 @@ public class SocketSendActivity extends AppCompatActivity {
         super.onPause();
         unregisterReceiver(myReceiver);
         stopService(new Intent(SocketSendActivity.this, SocketService.class));
+
     }
 
 }
+
+//TODO fix the recieving of this activity

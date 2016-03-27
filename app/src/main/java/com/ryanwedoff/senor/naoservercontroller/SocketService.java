@@ -66,22 +66,22 @@ public class SocketService extends Service {
         @Override
         protected String doInBackground(BufferedReader... params) {
             String response = "";
-                try {
-                    try{
-                        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    }catch (NullPointerException n){
-                        Log.e("ERROR","NULL Pointer in Receive");
-                    }
-                    try {
-                            response = in.readLine();
-                    } catch (Exception e) {
-                        Log.e("Error", e.toString());
-                        e.printStackTrace();
-                        response = "ERROR: Connection error\n";
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+            try {
+                try{
+                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                }catch (NullPointerException n){
+                    Log.e("ERROR","NULL Pointer in Receive");
                 }
+                try {
+                    response = in.readLine();
+                } catch (Exception e) {
+                    Log.e("Error", e.toString());
+                    e.printStackTrace();
+                    response = "ERROR: Connection error\n";
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             if(response!=null){
                 Log.i("Response", response);
@@ -97,10 +97,10 @@ public class SocketService extends Service {
             if(result == null){
                 result = "No response from server";
             }
-                Intent intent = new Intent();
-                intent.setAction(ACTION);
-                intent.putExtra(SERVER_RESPONSE, result);
-                sendBroadcast(intent);
+            Intent intent = new Intent();
+            intent.setAction(ACTION);
+            intent.putExtra(SERVER_RESPONSE, result);
+            sendBroadcast(intent);
         }
 
         @Override
@@ -139,10 +139,10 @@ public class SocketService extends Service {
                 Log.i("TCP Client", "C: Connecting...");
                 //create a socket to make the connection with the server
                 socket = new Socket(serverAddr, serverPortInt);
-                    //send the message to the server
-                    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                    Log.i("TCP Client", "C: Sent.");
-                    Log.i("TCP Client", "C: Done.");
+                //send the message to the server
+                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                Log.i("TCP Client", "C: Sent.");
+                Log.i("TCP Client", "C: Done.");
                 isServiceRunning = true;
                 if(socket.getRemoteSocketAddress() != null)
                     new ReceiveMessage().execute();
