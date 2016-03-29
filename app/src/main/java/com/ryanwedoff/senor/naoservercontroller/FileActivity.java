@@ -37,13 +37,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FileActivity extends AppCompatActivity  {
 
     private static final int READ_REQUEST_CODE = 1;
-    private RecyclerView.Adapter<FileTextAdapter.ViewHolder> mAdapter;
+    private FileTextAdapter mAdapter;
     private ArrayList fileLines;
     SocketService mBoundService;
     private boolean mIsBound;
@@ -54,6 +54,8 @@ public class FileActivity extends AppCompatActivity  {
     private static int runningPos = 0;
     private static boolean canSend = true;
     private Handler mHandler = new Handler();
+    private static boolean isPaused = true;
+    private static int fileLinesSize = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +87,6 @@ public class FileActivity extends AppCompatActivity  {
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         Context context = getActivity();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.pref_file_key), Context.MODE_PRIVATE);
@@ -106,11 +107,12 @@ public class FileActivity extends AppCompatActivity  {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // The toggle is running
-                    //Log.e("Lines: ",Integer.toString(fileLines.size()));
+                    isPaused = false;
                     runFile();
+
                 } else {
                    //Is paused
-                    canSend = false;
+                  isPaused = true;
                 }
             }
         });
@@ -119,6 +121,7 @@ public class FileActivity extends AppCompatActivity  {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(SocketService.ACTION);
         registerReceiver(myReceiver, intentFilter);
+
     }
 
 
@@ -140,30 +143,41 @@ public class FileActivity extends AppCompatActivity  {
     private void runFile(){
         if(!SocketService.isServiceRunning)
             connectSocketService();
-        if(runningPos < fileLines.size() && canSend){
-            Log.e("Running", "Running");
-            mBoundService.sendMessage((String) fileLines.get(runningPos));
-            runningPos++;
-            canSend = false;
-            mBoundService.recvMess();
-        }
-        if(!canSend){
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Log.e("Timed Out", "After 10sec");
-                    if(!canSend){
-                        canSend = true;
-                        runFile();
-                    }
-                }
-            }, 10000);
-        }
+        if(runningPos < fileLinesSize && !isPaused){
+            if (canSend) {
+                Log.i("Running", "File");
+                mBoundService.sendMessage((String) fileLines.get(runningPos));
+                canSend = false;
+                mBoundService.recvMess();
+            }
 
+            mHandler.postDelayed(new Runnable() {
+                int oldPos = runningPos;
+                    public void run() {
+                        if (oldPos == runningPos) {
+                            runningPos++;
+                            checkRunDone();
+                            canSend = true;
+                            runFile();
+                        }
+                    }
+                }, 10000);
+        }
     }
 
+    private void checkRunDone(){
+        if(runningPos >= fileLinesSize){
+            ToggleButton toggle = (ToggleButton) findViewById(R.id.run_pause_button);
+            toggle.setChecked(false);
+            Log.i("File: ", "Done");
+            restartFile();
+        }
+    }
 
-
+    private void restartFile(){
+        runningPos = 0;
+        canSend = true;
+    }
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -237,6 +251,7 @@ public class FileActivity extends AppCompatActivity  {
         TextView textView = (TextView) view.findViewById(R.id.file_text_view);
         String message = textView.getText().toString();
 
+        //textView.setTextColor(0);
         if(mBoundService != null){
             try{
                 int lineNum = fileLines.indexOf(message);
@@ -265,10 +280,11 @@ public class FileActivity extends AppCompatActivity  {
             case R.id.clear_button:
                 fileLines.clear();
                 runningPos = 0;
+                canSend = true;
                 mAdapter.notifyDataSetChanged();
                 return true;
             case R.id.restart_button:
-                runningPos = 0;
+                restartFile();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -324,6 +340,7 @@ public class FileActivity extends AppCompatActivity  {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            fileLinesSize = fileLines.size();
             connectSocketService();
         }
         @Override
@@ -359,15 +376,19 @@ public class FileActivity extends AppCompatActivity  {
         public void onReceive(Context context, Intent intent) {
             String connectionMess = intent.getStringExtra(SocketService.SERVER_CONNECTION);
             String serverResponse = intent.getStringExtra(SocketService.SERVER_RESPONSE);
-            Log.e("Response: ", serverResponse);
+
+
             if(connectionMess != null){
                 View view = findViewById(R.id.file_relative_view);
                 Snackbar.make(view, connectionMess, Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
             if (serverResponse != null) {
+                Log.i("Response: ", serverResponse);
                 if(serverResponse.contains("@@@@")){
                     Log.e("TRUE","TRUE");
                     canSend = true;
+                    runningPos++;
+                    checkRunDone();
                     runFile();
                 }
             }

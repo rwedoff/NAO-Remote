@@ -7,12 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class FileTextAdapter extends RecyclerView.Adapter<FileTextAdapter.ViewHolder> {
     private List<String> mDataset;
+    private static List<Integer> mIds = new ArrayList<>();
 
+    public FileTextAdapter(){
+        mIds = new ArrayList<>();
+    }
+    public List<Integer> getIds(){
+        return mIds;
+    }
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -37,7 +45,11 @@ public class FileTextAdapter extends RecyclerView.Adapter<FileTextAdapter.ViewHo
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.file_input_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        return new ViewHolder((CardView) v);
+        ViewHolder viewHolder = new ViewHolder((CardView) v);
+
+        v.setId((int) (Math.random() * 1000));
+        mIds.add(v.getId());
+        return viewHolder;
     }
 
     @Override
