@@ -81,4 +81,5 @@
     <string name="restart">Restart</string>
     <string name="Clear">Clear</string>
     <string name="Center2">Center</string>
+    <string name="LogInit">Status: Paused\nLine: 0</string>
 </resources>

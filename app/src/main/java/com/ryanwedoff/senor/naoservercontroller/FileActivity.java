@@ -37,6 +37,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class FileActivity extends AppCompatActivity  {
     private Handler mHandler = new Handler();
     private static boolean isPaused = true;
     private static int fileLinesSize = 0;
-
+    private static TextView logTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +113,7 @@ public class FileActivity extends AppCompatActivity  {
 
                 } else {
                    //Is paused
+                    logTextView.setText(String.format("Status: Paused\nLine: %d", runningPos));
                   isPaused = true;
                 }
             }
@@ -122,12 +124,16 @@ public class FileActivity extends AppCompatActivity  {
         intentFilter.addAction(SocketService.ACTION);
         registerReceiver(myReceiver, intentFilter);
 
+        logTextView= (TextView) findViewById(R.id.file_run_log);
+        runningPos = 0;
+        logTextView.setText(R.string.LogInit);
+
     }
 
 
 
-
-  /*  @Override
+/*
+   @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable("my_array", fileLines);
         super.onSaveInstanceState(outState);
@@ -141,20 +147,39 @@ public class FileActivity extends AppCompatActivity  {
     }*/
 
     private void runFile(){
-        if(!SocketService.isServiceRunning)
-            connectSocketService();
-        if(runningPos < fileLinesSize && !isPaused){
-            if (canSend) {
-                Log.i("Running", "File");
-                mBoundService.sendMessage((String) fileLines.get(runningPos));
-                canSend = false;
-                mBoundService.recvMess();
+        if(fileLinesSize == 0){
+            View view = findViewById(R.id.file_relative_view);
+            Snackbar.make(view, "No file loaded", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+        } else{
+            final String message = (String) fileLines.get(runningPos);
+            if(!isPaused){
+                String log = "Status: Running\nLine: " + runningPos;
+                logTextView.setText(log);
             }
 
-            mHandler.postDelayed(new Runnable() {
-                int oldPos = runningPos;
+
+            if(!SocketService.isServiceRunning)
+                connectSocketService();
+            if(runningPos < fileLinesSize && !isPaused){
+                if (canSend) {
+                    Log.i("Running", "File");
+                    if(!fileParse.checkLine(message,runningPos) && runningPos!=0 && runningPos!=fileLinesSize-1) {
+                        View view = findViewById(R.id.file_relative_view);
+                        String errorMess = "Syntax Error at line  " + runningPos + " (" + message + ")";
+                        Snackbar.make(view, errorMess, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                    }
+                    mBoundService.sendMessage(message);
+                    canSend = false;
+                    mBoundService.recvMess();
+                }
+                //Timer, if message doesn't get a response run next line
+                mHandler.postDelayed(new Runnable() {
+                    int oldPos = runningPos;
                     public void run() {
                         if (oldPos == runningPos) {
+                            View view = findViewById(R.id.file_relative_view);
+                            String errorMess = "No reponse received at line  " + runningPos + " (" + message + ")";
+                            Snackbar.make(view, errorMess, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                             runningPos++;
                             checkRunDone();
                             canSend = true;
@@ -162,21 +187,25 @@ public class FileActivity extends AppCompatActivity  {
                         }
                     }
                 }, 10000);
+            }
         }
+
     }
 
     private void checkRunDone(){
         if(runningPos >= fileLinesSize){
-            ToggleButton toggle = (ToggleButton) findViewById(R.id.run_pause_button);
-            toggle.setChecked(false);
             Log.i("File: ", "Done");
             restartFile();
         }
     }
 
     private void restartFile(){
+        ToggleButton toggle = (ToggleButton) findViewById(R.id.run_pause_button);
+        toggle.setChecked(false);
         runningPos = 0;
         canSend = true;
+        isPaused = true;
+        logTextView.setText(R.string.LogInit);
     }
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override

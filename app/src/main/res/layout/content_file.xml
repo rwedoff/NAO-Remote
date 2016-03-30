@@ -20,10 +20,17 @@
         android:id="@+id/run_pause_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:textOff="PAUSED "
-        android:textOn="RUNNING "
+        android:textOff="Run"
+        android:textOn="@string/Stop"
         android:background="@color/colorAccent"
         android:layout_margin="1dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/file_run_log"
+        android:layout_above="@id/run_pause_button"
+        android:textStyle="italic"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:layout_centerHorizontal="true"
@@ -31,7 +38,6 @@
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/run_pause_button" />
+        android:layout_alignParentTop="true"/>
 
 </RelativeLayout>

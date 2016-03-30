@@ -10,7 +10,6 @@
     android:layout_margin="1dp"
     android:onClick="onReSend">
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:drawableStart="@drawable/ic_autorenew_black_24dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/file_text_view"
