@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +33,6 @@ public class SocketSendActivity extends AppCompatActivity {
     SocketService mBoundService;
     private boolean mIsBound;
     MyReceiver myReceiver;
-    private SwipeRefreshLayout swipeContainer;
 
     private RecyclerView.Adapter mAdapter;
     private List<String> myDataset;
@@ -59,18 +57,6 @@ public class SocketSendActivity extends AppCompatActivity {
         // specify an adapter for Swipe to Refresh
         mAdapter = new ReceiveSocketAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
-        swipeContainer = (SwipeRefreshLayout)findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //mBoundService.recvMess();
-                swipeContainer.setRefreshing(false);
-            }
-        });
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
 
 
         myReceiver = new MyReceiver();
@@ -154,7 +140,6 @@ public class SocketSendActivity extends AppCompatActivity {
 
     };
     private void doBindService() {
-        //swipeContainer.setRefreshing(false);
         bindService(new Intent(SocketSendActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){
@@ -226,5 +211,3 @@ public class SocketSendActivity extends AppCompatActivity {
     }
 
 }
-
-//TODO fix the recieving of this activity

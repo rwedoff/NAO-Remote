@@ -148,6 +148,7 @@ public class MoodActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onSend(View view) {
         EditText editText = (EditText) findViewById(R.id.sendMessageEdit);
         String message = editText.getText().toString();
+        message = message.replace(';',':');
         //Sends the message
         if(mBoundService != null){
             try{

@@ -17,7 +17,6 @@ public class NaoFileParse {
             moods = new HashSet<String>(Arrays.asList(moodFromArray));
         }
 
-        //Todo strip semicolons in mood text edit
         public boolean firstCheckLine(String line){
             return line.equals("--NAOSTART");
         }

@@ -37,9 +37,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FileActivity extends AppCompatActivity  {
 
@@ -51,20 +49,28 @@ public class FileActivity extends AppCompatActivity  {
     MyReceiver myReceiver;
     private NaoFileParse fileParse;
     public static ArrayList robotNames;
-    private static boolean fConnect = true;
+
+
     private static int runningPos = 0;
     private static boolean canSend = true;
     private Handler mHandler = new Handler();
     private static boolean isPaused = true;
     private static int fileLinesSize = 0;
     private static TextView logTextView;
+    static final String STATE_File_LINES = "file_lines";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        fileLines = new ArrayList<String>();
+        fileLines = new ArrayList<>();
+
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            fileLines = savedInstanceState.getCharSequenceArrayList(STATE_File_LINES);
+        }
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.file_list_view);
         mRecyclerView.setHasFixedSize(false);
@@ -77,7 +83,7 @@ public class FileActivity extends AppCompatActivity  {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fConnect = true;
+                stopService(new Intent(FileActivity.this,SocketService.class));
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("text/plain");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -94,15 +100,17 @@ public class FileActivity extends AppCompatActivity  {
         String defaultValue = getString(R.string.robot_names);
         String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
         Gson gson = new Gson();
-        robotNames = gson.fromJson(namesObj, ArrayList.class);
+
+       robotNames = gson.fromJson(namesObj, ArrayList.class);
+
         if(robotNames == null){
             robotNames = new ArrayList<String>();
         }
 
         String [] moods = getResources().getStringArray(R.array.mood_array);
+
         fileParse = new NaoFileParse(robotNames,moods);
 
-        //TODO this code can move to method
         ToggleButton toggle = (ToggleButton) findViewById(R.id.run_pause_button);
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -112,9 +120,9 @@ public class FileActivity extends AppCompatActivity  {
                     runFile();
 
                 } else {
-                   //Is paused
+                    //Is paused
                     logTextView.setText(String.format("Status: Paused\nLine: %d", runningPos));
-                  isPaused = true;
+                    isPaused = true;
                 }
             }
         });
@@ -131,20 +139,14 @@ public class FileActivity extends AppCompatActivity  {
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
 
-/*
-   @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable("my_array", fileLines);
-        super.onSaveInstanceState(outState);
+        savedInstanceState.putCharSequenceArrayList(STATE_File_LINES, fileLines);
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        Serializable s = savedInstanceState.getSerializable("my_array");
-        fileLines = (ArrayList) s;
-        super.onRestoreInstanceState(savedInstanceState);
-    }*/
 
     private void runFile(){
         if(fileLinesSize == 0){
@@ -156,7 +158,6 @@ public class FileActivity extends AppCompatActivity  {
                 String log = "Status: Running\nLine: " + runningPos;
                 logTextView.setText(log);
             }
-
 
             if(!SocketService.isServiceRunning)
                 connectSocketService();
@@ -170,7 +171,6 @@ public class FileActivity extends AppCompatActivity  {
                     }
                     mBoundService.sendMessage(message);
                     canSend = false;
-                    mBoundService.recvMess();
                 }
                 //Timer, if message doesn't get a response run next line
                 mHandler.postDelayed(new Runnable() {
@@ -221,7 +221,7 @@ public class FileActivity extends AppCompatActivity  {
     };
 
     private void doBindService() {
-        bindService(new Intent(FileActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(FileActivity.this,SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){
             mBoundService.IsBoundable();
@@ -239,6 +239,7 @@ public class FileActivity extends AppCompatActivity  {
     protected void onDestroy() {
         super.onDestroy();
         doUnbindService();
+
     }
 
     @Override
@@ -319,7 +320,7 @@ public class FileActivity extends AppCompatActivity  {
                 return super.onOptionsItemSelected(item);
         }
     }
-//FIXME:  ON rotate the array list clears
+    //TODO fix when socket service is running you can't pull in file
     private class GetRobotFile extends AsyncTask<Uri, Void, Void> {
         /**
          * This is done under async to ensure that network sources can pull in files
@@ -339,7 +340,6 @@ public class FileActivity extends AppCompatActivity  {
                 try {
                     while ((line = br.readLine()) != null) {
                         fileLines.add(line);
-                        //Log.e(line,line);
                     }
                     if(!fileParse.firstCheckLine((String) fileLines.get(0))){
                         View view = findViewById(R.id.file_relative_view);
@@ -362,7 +362,6 @@ public class FileActivity extends AppCompatActivity  {
             }else{
                 Log.e("Null URI Error","Null URI Error");
             }
-
             return null;
         }
 
@@ -390,14 +389,13 @@ public class FileActivity extends AppCompatActivity  {
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         if(isConnected){
-            startService(new Intent(FileActivity.this, SocketService.class));
+            startService(new Intent(FileActivity.this,SocketService.class));
             doBindService();
         } else {
             View view = findViewById(R.id.file_relative_view);
             Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
         mAdapter.notifyDataSetChanged();
-        fConnect = false;
     }
 
     private class MyReceiver extends BroadcastReceiver {
@@ -427,8 +425,5 @@ public class FileActivity extends AppCompatActivity  {
     public Context getActivity() {
         return this;
     }
-
-
-
 
 }

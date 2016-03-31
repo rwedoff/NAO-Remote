@@ -29,8 +29,7 @@ public class RobotNameAdapter extends RecyclerView.Adapter<RobotNameAdapter.View
     public RobotNameAdapter(List<String> myDataset) {
         mDataset = myDataset;
     }
-    //Todo drag and drop to reorder
-    //TODO Work on mobile vs.tablet view and rotation problems
+
     // Create new views (invoked by the layout manager)
     @Override
     public RobotNameAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,

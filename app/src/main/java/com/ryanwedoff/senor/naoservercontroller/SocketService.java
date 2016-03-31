@@ -23,6 +23,7 @@ public class SocketService extends Service {
     PrintWriter out;
     Socket socket;
     InetAddress serverAddr;
+    ReceiveMessage receiveMessage;
     private final IBinder myBinder = new LocalBinder();
     public static boolean isServiceRunning = false;
 
@@ -60,47 +61,43 @@ public class SocketService extends Service {
             out.flush();
         }
     }
-
+    private boolean mRun = false;
     private class ReceiveMessage extends AsyncTask<BufferedReader, Void, String> {
         BufferedReader in;
+        String incomingMessage;
         @Override
         protected String doInBackground(BufferedReader... params) {
             String response = "";
             try {
-                try{
-                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                }catch (NullPointerException n){
-                    Log.e("ERROR","NULL Pointer in Receive");
-                }
-                try {
-                    response = in.readLine();
-                } catch (Exception e) {
-                    Log.e("Error", e.toString());
-                    e.printStackTrace();
-                    response = "ERROR: Connection error\n";
-                }
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            mRun = true;
+            while (mRun) {
+                if(isCancelled())
+                    break;
+                try {
+                    incomingMessage = in.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (incomingMessage != null) {
+                    Intent intent = new Intent();
+                    intent.setAction(ACTION);
+                    intent.putExtra(SERVER_RESPONSE, incomingMessage);
+                    sendBroadcast(intent);
+                }
+                incomingMessage = null;
 
-            if(response!=null){
-                Log.i("Response", response);
-                return response;
             }
-            else
-                return "";
+            Log.i("Response", response);
+            return response;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("Post", "Post");
-            if(result == null){
-                result = "No response from server";
-            }
-            Intent intent = new Intent();
-            intent.setAction(ACTION);
-            intent.putExtra(SERVER_RESPONSE, result);
-            sendBroadcast(intent);
+            mRun = false;
         }
 
         @Override
@@ -121,11 +118,6 @@ public class SocketService extends Service {
         return START_STICKY;
     }
 
-    public void recvMess(){
-        new ReceiveMessage().execute();
-    }
-
-
     class connectSocket implements Runnable {
         @Override
         public void run() {
@@ -144,8 +136,10 @@ public class SocketService extends Service {
                 Log.i("TCP Client", "C: Sent.");
                 Log.i("TCP Client", "C: Done.");
                 isServiceRunning = true;
-                if(socket.getRemoteSocketAddress() != null)
-                    new ReceiveMessage().execute();
+                if(socket.getRemoteSocketAddress() != null){
+                    receiveMessage = new ReceiveMessage();
+                    receiveMessage.execute();
+                }
 
             } catch (Exception e) {
                 Intent intent = new Intent();
@@ -168,6 +162,10 @@ public class SocketService extends Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        mRun = false;
+        receiveMessage.isCancelled();
+        out.flush();
+        out.close();
         socket = null;
     }
 
