@@ -3,7 +3,6 @@ package com.ryanwedoff.senor.naoservercontroller;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -26,6 +25,7 @@ public class SocketService extends Service {
     ReceiveMessage receiveMessage;
     private final IBinder myBinder = new LocalBinder();
     public static boolean isServiceRunning = false;
+    private boolean mRun = false;
 
     final static String ACTION = "ACTION";
     public final static String SERVER_RESPONSE = "com.ryanwedoff.senor.naoservercontroller.SocketService.MESSAGE";
@@ -61,13 +61,13 @@ public class SocketService extends Service {
             out.flush();
         }
     }
-    private boolean mRun = false;
-    private class ReceiveMessage extends AsyncTask<BufferedReader, Void, String> {
+
+
+   private class ReceiveMessage  {
         BufferedReader in;
         String incomingMessage;
-        @Override
-        protected String doInBackground(BufferedReader... params) {
-            String response = "";
+        protected void exe() {
+            incomingMessage = null;
             try {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             } catch (IOException e) {
@@ -75,8 +75,6 @@ public class SocketService extends Service {
             }
             mRun = true;
             while (mRun) {
-                if(isCancelled())
-                    break;
                 try {
                     incomingMessage = in.readLine();
                 } catch (IOException e) {
@@ -87,24 +85,12 @@ public class SocketService extends Service {
                     intent.setAction(ACTION);
                     intent.putExtra(SERVER_RESPONSE, incomingMessage);
                     sendBroadcast(intent);
+                    Log.i("Response", incomingMessage);
+                    incomingMessage = null;
                 }
-                incomingMessage = null;
-
             }
-            Log.i("Response", response);
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
             mRun = false;
         }
-
-        @Override
-        protected void onPreExecute() {}
-
-        @Override
-        protected void onProgressUpdate(Void... values) {}
     }
 
 
@@ -138,7 +124,7 @@ public class SocketService extends Service {
                 isServiceRunning = true;
                 if(socket.getRemoteSocketAddress() != null){
                     receiveMessage = new ReceiveMessage();
-                    receiveMessage.execute();
+                    receiveMessage.exe();
                 }
 
             } catch (Exception e) {
@@ -147,7 +133,6 @@ public class SocketService extends Service {
                 intent.putExtra(SERVER_CONNECTION, "Cannot connect to Server");
                 sendBroadcast(intent);
                 Log.e("TCP", "C: Error", e);
-
             }
         }
     }
@@ -163,7 +148,6 @@ public class SocketService extends Service {
             e.printStackTrace();
         }
         mRun = false;
-        receiveMessage.isCancelled();
         out.flush();
         out.close();
         socket = null;

@@ -18,14 +18,7 @@ import android.view.View;
 
 public class EditedJoyStickView extends View implements Runnable {
     public final static long DEFAULT_LOOP_INTERVAL = 100; // 100 ms
-    public final static int FRONT = 3;
-    public final static int FRONT_RIGHT = 4;
-    public final static int RIGHT = 5;
-    public final static int RIGHT_BOTTOM = 6;
-    public final static int BOTTOM = 7;
-    public final static int BOTTOM_LEFT = 8;
-    public final static int LEFT = 1;
-    public final static int LEFT_FRONT = 2;
+
     // Variables
     private OnJoystickMoveListener onJoystickMoveListener; // Listener
     private Thread thread = new Thread(this);

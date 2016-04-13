@@ -38,24 +38,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FileActivity extends AppCompatActivity  {
 
     private static final int READ_REQUEST_CODE = 1;
     private FileTextAdapter mAdapter;
-    private ArrayList fileLines;
+    private static ArrayList<CharSequence> fileLines;
     SocketService mBoundService;
     private boolean mIsBound;
     MyReceiver myReceiver;
     private NaoFileParse fileParse;
-    public static ArrayList robotNames;
+    public static ArrayList<String> robotNames;
 
 
     private static int runningPos = 0;
     private static boolean canSend = true;
     private Handler mHandler = new Handler();
     private static boolean isPaused = true;
-    private static int fileLinesSize = 0;
+
     private static TextView logTextView;
     static final String STATE_File_LINES = "file_lines";
 
@@ -69,13 +70,14 @@ public class FileActivity extends AppCompatActivity  {
 
         if (savedInstanceState != null) {
             // Restore value of members from saved state
-            fileLines = savedInstanceState.getCharSequenceArrayList(STATE_File_LINES);
+           fileLines = savedInstanceState.getCharSequenceArrayList(STATE_File_LINES);
         }
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.file_list_view);
         mRecyclerView.setHasFixedSize(false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
         mAdapter = new FileTextAdapter(fileLines);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -83,7 +85,6 @@ public class FileActivity extends AppCompatActivity  {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stopService(new Intent(FileActivity.this,SocketService.class));
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("text/plain");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -101,14 +102,9 @@ public class FileActivity extends AppCompatActivity  {
         String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
         Gson gson = new Gson();
 
-       robotNames = gson.fromJson(namesObj, ArrayList.class);
-
-        if(robotNames == null){
-            robotNames = new ArrayList<String>();
-        }
-
+        String [] rn = gson.fromJson(namesObj, String[].class); //Pull in the robot names
+        robotNames = new ArrayList<>(Arrays.asList(rn));
         String [] moods = getResources().getStringArray(R.array.mood_array);
-
         fileParse = new NaoFileParse(robotNames,moods);
 
         ToggleButton toggle = (ToggleButton) findViewById(R.id.run_pause_button);
@@ -118,7 +114,6 @@ public class FileActivity extends AppCompatActivity  {
                     // The toggle is running
                     isPaused = false;
                     runFile();
-
                 } else {
                     //Is paused
                     logTextView.setText(String.format("Status: Paused\nLine: %d", runningPos));
@@ -149,7 +144,8 @@ public class FileActivity extends AppCompatActivity  {
 
 
     private void runFile(){
-        if(fileLinesSize == 0){
+
+        if(fileLines.size() == 0){
             View view = findViewById(R.id.file_relative_view);
             Snackbar.make(view, "No file loaded", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
         } else{
@@ -161,24 +157,26 @@ public class FileActivity extends AppCompatActivity  {
 
             if(!SocketService.isServiceRunning)
                 connectSocketService();
-            if(runningPos < fileLinesSize && !isPaused){
+
+            if(runningPos < fileLines.size() && !isPaused){
                 if (canSend) {
                     Log.i("Running", "File");
-                    if(!fileParse.checkLine(message,runningPos) && runningPos!=0 && runningPos!=fileLinesSize-1) {
+                    if(!fileParse.checkLine(message,runningPos) && runningPos!=0 && runningPos!=fileLines.size()-1) {
                         View view = findViewById(R.id.file_relative_view);
                         String errorMess = "Syntax Error at line  " + runningPos + " (" + message + ")";
                         Snackbar.make(view, errorMess, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                     }
                     mBoundService.sendMessage(message);
+                    checkRunDone();
                     canSend = false;
                 }
                 //Timer, if message doesn't get a response run next line
                 mHandler.postDelayed(new Runnable() {
                     int oldPos = runningPos;
                     public void run() {
-                        if (oldPos == runningPos) {
+                        if (oldPos == runningPos && runningPos!=fileLines.size()-1) {
                             View view = findViewById(R.id.file_relative_view);
-                            String errorMess = "No reponse received at line  " + runningPos + " (" + message + ")";
+                            String errorMess = "No response received at line  " + runningPos + " (" + message + ")";
                             Snackbar.make(view, errorMess, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                             runningPos++;
                             checkRunDone();
@@ -193,8 +191,9 @@ public class FileActivity extends AppCompatActivity  {
     }
 
     private void checkRunDone(){
-        if(runningPos >= fileLinesSize){
-            Log.i("File: ", "Done");
+        if(runningPos >= fileLines.size()-1){
+            Log.i("File", "Done");
+            logTextView.setText(R.string.LogEnd);
             restartFile();
         }
     }
@@ -207,6 +206,7 @@ public class FileActivity extends AppCompatActivity  {
         isPaused = true;
         logTextView.setText(R.string.LogInit);
     }
+
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -248,8 +248,7 @@ public class FileActivity extends AppCompatActivity  {
         doUnbindService();
         if(myReceiver != null)
             unregisterReceiver(myReceiver);
-        if(mBoundService!=null)
-            mBoundService.stopSelf();
+
     }
 
 
@@ -265,7 +264,6 @@ public class FileActivity extends AppCompatActivity  {
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
-
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             Uri uri;
             if (resultData != null) {
@@ -280,14 +278,11 @@ public class FileActivity extends AppCompatActivity  {
     public void onReSend(View view) {
         TextView textView = (TextView) view.findViewById(R.id.file_text_view);
         String message = textView.getText().toString();
-
-        //textView.setTextColor(0);
         if(mBoundService != null){
             try{
                 int lineNum = fileLines.indexOf(message);
                 if(fileParse.checkLine(message,lineNum))
                     mBoundService.sendMessage(message);
-
             } catch (Exception e) {
                 Log.e("Socket Connection Error", "Socket Connection Error");
                 Snackbar.make(view, "Service Binding Error", Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -309,6 +304,7 @@ public class FileActivity extends AppCompatActivity  {
         switch (item.getItemId()) {
             case R.id.clear_button:
                 fileLines.clear();
+
                 runningPos = 0;
                 canSend = true;
                 mAdapter.notifyDataSetChanged();
@@ -320,13 +316,13 @@ public class FileActivity extends AppCompatActivity  {
                 return super.onOptionsItemSelected(item);
         }
     }
-    //TODO fix when socket service is running you can't pull in file
+
     private class GetRobotFile extends AsyncTask<Uri, Void, Void> {
         /**
          * This is done under async to ensure that network sources can pull in files
          */
         protected Void doInBackground(Uri... uri){
-            Log.e("HERE","HERE");
+            Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
             InputStream inputStream = null;
             try {
                 inputStream = getContentResolver().openInputStream(uri[0]);
@@ -368,7 +364,7 @@ public class FileActivity extends AppCompatActivity  {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            fileLinesSize = fileLines.size();
+            mAdapter.notifyDataSetChanged();
             connectSocketService();
         }
         @Override
@@ -404,13 +400,12 @@ public class FileActivity extends AppCompatActivity  {
             String connectionMess = intent.getStringExtra(SocketService.SERVER_CONNECTION);
             String serverResponse = intent.getStringExtra(SocketService.SERVER_RESPONSE);
 
-
             if(connectionMess != null){
                 View view = findViewById(R.id.file_relative_view);
                 Snackbar.make(view, connectionMess, Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
             if (serverResponse != null) {
-                Log.i("Response: ", serverResponse);
+                //Log.i("Response: ", serverResponse);
                 if(serverResponse.contains("@@@@")){
                     Log.e("TRUE","TRUE");
                     canSend = true;

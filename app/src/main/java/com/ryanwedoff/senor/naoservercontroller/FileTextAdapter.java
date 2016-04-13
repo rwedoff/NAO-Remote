@@ -14,7 +14,7 @@ import java.util.List;
 
 
 public class FileTextAdapter extends RecyclerView.Adapter<FileTextAdapter.ViewHolder> {
-    private List<String> mDataset;
+    private ArrayList<CharSequence> mDataset;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -29,7 +29,7 @@ public class FileTextAdapter extends RecyclerView.Adapter<FileTextAdapter.ViewHo
     }
 
     //Constructor
-    public FileTextAdapter(List<String> myDataset) {
+    public FileTextAdapter(ArrayList<CharSequence> myDataset) {
         mDataset = myDataset;
     }
     // Create new views (invoked by the layout manager)
