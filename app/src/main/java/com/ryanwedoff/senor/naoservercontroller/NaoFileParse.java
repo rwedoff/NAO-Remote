@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public class NaoFileParse {
-        private final String[] SET_VALUES = new String[] {"ButtonA","ButtonB","ButtonX","Theta=","LeftY=","LeftX=","RightY=","RightX=","Speech","Mood"};
+        private final String[] SET_VALUES = new String[] {"Wave","Crouch","StandUp","Theta=","LeftY=","LeftX=","RightY=","RightX=","Speech","Mood"};
         private HashSet<String> commands = new HashSet<String>(Arrays.asList(SET_VALUES));
         private HashSet<String> moods;
         private HashSet<String> robotNames;

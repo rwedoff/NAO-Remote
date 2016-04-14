@@ -4,8 +4,6 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 
@@ -19,7 +17,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         super(Application.class);
     }
 
-    @Test
     public void testFileParse(){
         /**
          *Tests that check the NaoFileParsee

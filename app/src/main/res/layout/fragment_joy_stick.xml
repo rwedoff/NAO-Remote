@@ -1,0 +1,49 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.JoyStickFrag"
+    android:id="@+id/frame_layout">
+
+    <com.ryanwedoff.senor.naoservercontroller.EditedJoyStickView
+    android:id="@+id/joystickView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical|center_horizontal"
+    />
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/Left"
+    android:id="@+id/left_info_text_view"
+    android:layout_gravity="center_vertical|start"/>
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/Up"
+    android:layout_gravity="top|center_horizontal"
+    android:id="@+id/up_info_text_view"/>
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/Down"
+    android:layout_gravity="bottom|center_horizontal"
+    android:id="@+id/down_info_text_view"/>
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/Right"
+    android:layout_gravity="center_vertical|end"
+    android:id="@+id/right_info_text_view" />
+
+    <Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#38d50000"
+    android:id="@+id/stop_button"
+    android:text="@string/center"
+    android:layout_gravity="top|end" />
+
+
+
+</FrameLayout>

@@ -3,6 +3,8 @@ package com.ryanwedoff.senor.naoservercontroller;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import layout.JoyStickFrag;
 
 
 /**
@@ -27,7 +30,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
     OnSendMessageListener mListener;
     private static final String ARG_ROBOT_NAME = "robot_name";
     private boolean headWalkToggle; //True = walk-mode, false = head-mode
-    private int oldAngle = 0;
+
 
     public RemoteFragment() {
     }
@@ -56,6 +59,16 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final Fragment thisFrag = this;
+
+        FragmentManager controlFragMan = getChildFragmentManager();
+        FragmentTransaction childFragTrans = controlFragMan.beginTransaction();
+        Bundle bundle = thisFrag.getArguments();
+        JoyStickFrag joyStickFrag = JoyStickFrag.newInstance(bundle.getString(ARG_ROBOT_NAME, "Robot Name Error"));
+        childFragTrans.add(R.id.remote_fragment_container, joyStickFrag);
+        childFragTrans.addToBackStack(null);
+        childFragTrans.commit();
+
         final LinearLayout rootLayout = (LinearLayout) inflater.inflate(R.layout.fragment_remote, container, false);
 
         //Sets onClick listeners for each fragment, not done in XML to get robot name
@@ -69,91 +82,45 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
         sendTextButton.setOnClickListener(this);
         Switch switchButton = (Switch) rootLayout.findViewById(R.id.head_walk_toggle);
         final TextView headWalkTextview = (TextView) rootLayout.findViewById(R.id.head_walk_text_view);
-        final TextView downTextView = (TextView) rootLayout.findViewById(R.id.down_info_text_view);
-        final TextView upTextView = (TextView) rootLayout.findViewById(R.id.up_info_text_view);
         headWalkTextview.setText(R.string.head_control);
-        final Button stopButton = (Button) rootLayout.findViewById(R.id.stop_button);
-        stopButton.setOnClickListener(this);
+
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     headWalkTextview.setText(R.string.walk_control);
-                    upTextView.setText(R.string.Forward);
-                    downTextView.setText(R.string.Backward);
+                    FragmentManager controlFragMan = getChildFragmentManager();
+                    FragmentTransaction childFragTrans = controlFragMan.beginTransaction();
+                    Bundle bundle = thisFrag.getArguments();
+                    WalkFragment walkFragment = WalkFragment.newInstance(bundle.getString(ARG_ROBOT_NAME, "Robot Name Error"));
+                    childFragTrans.replace(R.id.remote_fragment_container, walkFragment);
+                    childFragTrans.addToBackStack(null);
+                    childFragTrans.commit();
                     headWalkToggle = true;
-                    stopButton.setText(R.string.Stop);
+
                 } else {
                     headWalkTextview.setText(R.string.head_control);
-                    upTextView.setText(R.string.Up);
-                    downTextView.setText(R.string.Down);
+                    FragmentManager controlFragMan = getChildFragmentManager();
+                    FragmentTransaction childFragTrans = controlFragMan.beginTransaction();
+                    Bundle bundle = thisFrag.getArguments();
+                    JoyStickFrag joyStickFrag = JoyStickFrag.newInstance(bundle.getString(ARG_ROBOT_NAME, "Robot Name Error"));
+                    childFragTrans.replace(R.id.remote_fragment_container, joyStickFrag);
+                    childFragTrans.addToBackStack(null);
+                    childFragTrans.commit();
                     headWalkToggle = false;
-                    stopButton.setText(R.string.Center2);
                 }
             }
         });
 
+//TODO
 
-        //JOYSTICK CODE TEST
+        //JOYSTICK TEST CODE
 //        angleTextView = (TextView) findViewById(R.id.angleTextView);
 //        powerTextView = (TextView) findViewById(R.id.powerTextView);
 //        directionTextView = (TextView) findViewById(R.id.directionTextView);
         //Referencing also other views
-        EditedJoyStickView joystick = (EditedJoyStickView) rootLayout.findViewById(R.id.joystickView);
-        final Fragment thisFrag = this;
         //Event listener that always returns the variation of the angle in degrees, motion power in percentage and direction of movement
-        joystick.setOnJoystickMoveListener(new EditedJoyStickView.OnJoystickMoveListener() {
-            @Override
-            public void onValueChanged(int newAngle, int newPower, int direction) {
-                Bundle bundle = thisFrag.getArguments();
-                String robotName = bundle.getString(ARG_ROBOT_NAME, "Robot Name Error") + ";";
-                //angleTextView.setText(" " + String.valueOf(angle) + "°");
-                //powerTextView.setText(" " + String.valueOf(power) + "%");
-                Log.i("Angle (Degrees): ",String.valueOf(newAngle));
-                Log.i("Power (%): ",String.valueOf(newPower));
+//// TODO: 4/13/2016
 
-
-               if(Math.abs(newAngle - oldAngle) >= 0.05){ //Int values are used, probably never > 0.05
-
-                    //NOTES:  RIGHT means the right stick, which is the head, the units are in radians, I need to figure out the unit circle and
-                    //how it relates to my joystick circle
-                    if(newPower != 0){
-                        double radians = Math.toRadians(newAngle);
-                        if(headWalkToggle){
-                            //Angles not exact to have a margin of error with walking
-                            if((newAngle > 45 && newAngle < 135) || newAngle == 90){
-                                Log.i("Right", Double.toString(Math.cos(radians)));
-                                mListener.onSendMessage(robotName + "Theta=-1;");
-                            }
-                            if((newAngle > -135 && newAngle < -45) || newAngle == -90) {
-                                Log.i("Left", Double.toString(radians));
-                                mListener.onSendMessage(robotName + "Theta=1;");
-                            }
-                            if((newAngle > -44 && newAngle < 44) || newAngle == 0){
-                                Log.i("Up", Double.toString(radians));
-                                mListener.onSendMessage(robotName + "LeftY=" + Math.cos(radians) + ";");
-                            }
-                            if((newAngle > 135 || newAngle < -135) || newAngle == 180) {
-                                Log.i("Down", Double.toString(radians));
-                                mListener.onSendMessage(robotName + "LeftY=" + Math.cos(radians) + ";");
-                            }
-
-                        }else{
-                                double normalizedPowerX = (newPower * 2.5) /100;
-                                mListener.onSendMessage(robotName + "RightX=" + Math.sin(-radians)*normalizedPowerX + ";");
-                                mListener.onSendMessage(robotName + "RightY=" + -Math.cos(radians) + ";");
-                        }
-
-                    } else{
-                        if(headWalkToggle){
-                            Log.i("Stop","Stop");
-                            mListener.onSendMessage(robotName + "Theta=0;");
-                            mListener.onSendMessage(robotName + "LeftY=0;");
-                        }
-                    }
-                    oldAngle = newAngle;
-                }
-            }
-        }, EditedJoyStickView.DEFAULT_LOOP_INTERVAL);
 
         return rootLayout;
     }
@@ -166,13 +133,13 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
             case R.id.stand_button:
                 //Toast.makeText(getActivity(), robotName, Toast.LENGTH_LONG).show();
                 // Send message to the host activity(ConrollerActivity)
-                mListener.onSendMessage(robotName + "ButtonA;");
+                mListener.onSendMessage(robotName + "StandUp;");
                 break;
             case R.id.crouch_button:
-                mListener.onSendMessage(robotName + "ButtonB;");
+                mListener.onSendMessage(robotName + "Crouch;");
                 break;
             case R.id.wave_button:
-                mListener.onSendMessage(robotName + "ButtonX;");
+                mListener.onSendMessage(robotName + "Wave;");
                 break;
             case R.id.send_text_button:
                View rootView = v.getRootView();

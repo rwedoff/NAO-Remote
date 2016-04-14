@@ -1,0 +1,47 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ryanwedoff.senor.naoservercontroller.WalkFragment"
+    android:id="@+id/walk_frame_layout">
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/forwardWalkButton"
+        android:layout_gravity="center_horizontal|top"
+        android:src="@drawable/ic_arrow_upward_white_24dp"
+        />
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/backWalkButton"
+        android:layout_gravity="center_horizontal|bottom"
+        android:src="@drawable/ic_arrow_downward_white_24dp"/>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:id="@+id/leftWalkButton"
+        android:src="@drawable/ic_arrow_back_white_24dp"/>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rightWalkButton"
+        android:layout_gravity="center_vertical|end"
+        android:src="@drawable/ic_arrow_forward_white_24dp"/>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:id="@+id/walkRotLeft"
+        android:src="@drawable/ic_rotate_left_white_24dp"/>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:id="@+id/walkRotRight"
+        android:src="@drawable/ic_rotate_right_white_24dp"/>
+
+
+
+</FrameLayout>

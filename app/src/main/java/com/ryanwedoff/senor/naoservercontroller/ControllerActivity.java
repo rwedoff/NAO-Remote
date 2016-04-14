@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class ControllerActivity extends AppCompatActivity implements RemoteFragment.OnSendMessageListener {
+public class ControllerActivity extends AppCompatActivity implements RemoteFragment.OnSendMessageListener{
 
     public static ArrayList robotNames;
     SocketService mBoundService;
@@ -73,9 +73,11 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
       The {@link ViewPager} that will host the section contents.
      */
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
+        assert  mViewPager!= null;
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        assert tabLayout != null;
         tabLayout.setupWithViewPager(mViewPager);
 
         ConnectivityManager cm =
@@ -89,6 +91,7 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
             doBindService();
         } else {
             View view = findViewById(R.id.controller_root_view);
+            assert view != null;
             Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
         assert getSupportActionBar() != null;
@@ -150,6 +153,7 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
             doBindService();
         } else {
             View view = findViewById(R.id.controller_root_view);
+            assert view != null;
             Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }
@@ -178,6 +182,7 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
             stopService(new Intent(ControllerActivity.this, SocketService.class));
             startService(new Intent(ControllerActivity.this, SocketService.class));
             View view = findViewById(R.id.controller_root_view);
+            assert view != null;
             Snackbar.make(view, "Reconnecting...", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         } else if(id == R.id.robot_names_menu){
             Intent intent = new Intent(this, RobotName.class);
@@ -204,17 +209,18 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
             } catch (Exception e) {
                 Log.e("Socket Connection Error", "Socket Connection Error");
                 View view = findViewById(R.id.controller_root_view);
+                assert view != null;
                 Snackbar.make(view, "Service Binding Error", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         } else{
             View view = findViewById(R.id.controller_root_view);
+            assert view != null;
             Snackbar.make(view, "Socket Connection Refused", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if(getCurrentFocus() != null)
             inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
-
 
 
     /**
