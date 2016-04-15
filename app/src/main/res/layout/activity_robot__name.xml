@@ -18,7 +18,7 @@
         android:hint="@string/EnterName"
         android:inputType="text"
         android:layout_toStartOf="@+id/AddRobotBut"
-        android:layout_toLeftOf="@+id/AddRobotBut" />
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,30 +45,46 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/AddRobotBut"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/GoToControllerButton" />
+        android:layout_above="@+id/footer" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Remote"
-        android:id="@+id/GoToControllerButton"
-        android:background="@color/colorAccent"
-        android:onClick="onNextBut"
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/textView"
-        android:layout_alignParentStart="true"
-        android:layout_margin="10dp" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/MoodControl"
-        android:id="@+id/go_to_mood_button"
-        android:background="@color/colorAccent"
-        android:onClick="onGoToMood"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@id/GoToControllerButton"
-        android:layout_margin="10dp" />
+
+    <LinearLayout android:id="@+id/footer" android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:orientation="horizontal"
+        android:layout_alignParentBottom="true"  style="?android:attr/buttonBarStyle"
+        android:background="@color/colorAccent">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/Remote"
+            android:id="@+id/GoToControllerButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="onNextBut"
+            android:layout_weight="1"
+            android:textColor="@color/cardview_dark_background"
+            />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/Mood"
+            android:id="@+id/go_to_mood_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textColor="@color/cardview_dark_background"
+            android:onClick="onGoToMood"
+            android:layout_weight="1"
+
+            />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/File"
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/SendFile"
+            android:textColor="@color/cardview_dark_background"
+            android:onClick="onGoToFile"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
 
 </RelativeLayout>

@@ -23,27 +23,64 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:id="@+id/ipQuick"
         android:layout_below="@id/mainTitle"
-        android:inputType="phone"/>
+        android:inputType="phone"
+        android:layout_toEndOf="@+id/ipLabel" />
+
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ipQuick"
-        android:layout_centerHorizontal="true"
         android:id="@+id/portQuick"
-        android:inputType="number"/>
+        android:inputType="number"
+        android:layout_toEndOf="@+id/ipLabel" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/Begin"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/portQuick"
         android:id="@+id/BeginConnect"
         android:background="@color/colorAccent"
-        android:onClick="onInitConnect"/>
+        android:onClick="onInitConnect"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/IP"
+        android:id="@+id/portLabel"
+        android:layout_below="@+id/mainTitle"
+        android:layout_alignParentStart="true"
+        android:labelFor="@id/ipQuick"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Port"
+        android:id="@+id/ipLabel"
+        android:layout_below="@+id/ipQuick"
+        android:layout_alignParentStart="true"
+        android:labelFor="@id/portQuick"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/wifiState"
+        android:layout_below="@+id/portQuick"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/quickNames"
+        android:layout_below="@+id/wifiState"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

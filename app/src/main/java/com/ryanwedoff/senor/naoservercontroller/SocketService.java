@@ -19,10 +19,10 @@ import java.net.Socket;
 
 public class SocketService extends Service {
 
-    PrintWriter out;
-    Socket socket;
-    InetAddress serverAddr;
-    ReceiveMessage receiveMessage;
+    private PrintWriter out;
+    private Socket socket;
+    private InetAddress serverAddr;
+    private ReceiveMessage receiveMessage;
     private final IBinder myBinder = new LocalBinder();
     public static boolean isServiceRunning = false;
     private boolean mRun = false;
@@ -66,7 +66,7 @@ public class SocketService extends Service {
    private class ReceiveMessage  {
         BufferedReader in;
         String incomingMessage;
-        protected void exe() {
+        void exe() {
             incomingMessage = null;
             try {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -104,7 +104,7 @@ public class SocketService extends Service {
         return START_STICKY;
     }
 
-    class connectSocket implements Runnable {
+    private class connectSocket implements Runnable {
         @Override
         public void run() {
             try {
@@ -148,8 +148,11 @@ public class SocketService extends Service {
             e.printStackTrace();
         }
         mRun = false;
-        out.flush();
-        out.close();
+        if(out != null)
+            out.flush();
+        if (out != null) {
+            out.close();
+        }
         socket = null;
     }
 

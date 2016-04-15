@@ -30,9 +30,9 @@ import java.util.List;
 
 public class SocketSendActivity extends AppCompatActivity {
 
-    SocketService mBoundService;
+    private SocketService mBoundService;
     private boolean mIsBound;
-    MyReceiver myReceiver;
+    private MyReceiver myReceiver;
 
     private RecyclerView.Adapter mAdapter;
     private List<String> myDataset;
@@ -48,6 +48,7 @@ public class SocketSendActivity extends AppCompatActivity {
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
+        assert mRecyclerView != null;
         mRecyclerView.setHasFixedSize(false);
 
         // use a linear layout manager
@@ -75,6 +76,7 @@ public class SocketSendActivity extends AppCompatActivity {
             doBindService();
         } else {
             View view = findViewById(R.id.root_view);
+            assert view != null;
             Snackbar.make( view,"No Internet Connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
         //noinspection ConstantConditions
@@ -162,6 +164,7 @@ public class SocketSendActivity extends AppCompatActivity {
 
     public void onSend(View view){
         EditText editText = (EditText) findViewById(R.id.sendMessageEdit);
+        assert editText != null;
         String message = editText.getText().toString();
         //Sends the message
         if(mBoundService != null){

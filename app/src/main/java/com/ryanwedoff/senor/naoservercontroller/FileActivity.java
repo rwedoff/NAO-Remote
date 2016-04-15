@@ -45,11 +45,10 @@ public class FileActivity extends AppCompatActivity  {
     private static final int READ_REQUEST_CODE = 1;
     private FileTextAdapter mAdapter;
     private static ArrayList<CharSequence> fileLines;
-    SocketService mBoundService;
+    private SocketService mBoundService;
     private boolean mIsBound;
-    MyReceiver myReceiver;
+    private MyReceiver myReceiver;
     private NaoFileParse fileParse;
-    public static ArrayList<String> robotNames;
 
 
     private static int runningPos = 0;
@@ -58,7 +57,7 @@ public class FileActivity extends AppCompatActivity  {
     private static boolean isPaused = true;
 
     private static TextView logTextView;
-    static final String STATE_File_LINES = "file_lines";
+    private static final String STATE_File_LINES = "file_lines";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +104,7 @@ public class FileActivity extends AppCompatActivity  {
         Gson gson = new Gson();
 
         String [] rn = gson.fromJson(namesObj, String[].class); //Pull in the robot names
-        robotNames = new ArrayList<>(Arrays.asList(rn));
+        ArrayList<String> robotNames = new ArrayList<>(Arrays.asList(rn));
         String [] moods = getResources().getStringArray(R.array.mood_array);
         fileParse = new NaoFileParse(robotNames,moods);
 
@@ -429,7 +428,7 @@ public class FileActivity extends AppCompatActivity  {
         }
     }
 
-    public Context getActivity() {
+    private Context getActivity() {
         return this;
     }
 

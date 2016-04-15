@@ -25,11 +25,11 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="SeverConnection">Send Custom Message</string>
-    <string name="CurrSettings">Current Robot Settings:</string>
+    <string name="CurrSettings">Current Settings:</string>
     <string name="Begin">Connect</string>
     <string name="title_activity_controller">Remote</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="Remote">Remote Control</string>
+    <string name="Remote">Remote</string>
     <string name="Settings">Settings</string>
     <string name="SendNav">Socket Connection</string>
 
@@ -63,7 +63,7 @@
     <string name="MoodControl">Mood Control</string>
     <string name="pref_header_help">Help</string>
     <string name="Help">Help/Troubleshoot</string>
-    <string name="HelpDirectionBlock">To use this app, you to have all the steps completed\nFirst, you need to have a NAO Robot, or use a virtual NAO using Choregraph 2.1.~. This application combines three parts, the mobile app, a socket chat, and the Choregraph file. You can find all three things on the developer\'s GitHub. The Socket chat is written in Python2. Run the socket chat, and get the IP address of the chat. Then open Choregraphe and enter the IP address in the XNAParse Block. Connect to a robot, the version of the firmware does not matter (1.14 is fine). The robot will now listen to the socket chat on Port 5000. In the app, type in the IP Adress and Port 5000. Type in the Robot\'s name, spelling must be correct and then you are free to use the app anyway you want.\nTroubleshoot:\n 1. Make sure Choregraphe has the right IP Address\n 2. Make sure the app is on the same network as the socket chat\n 3. Make sure you are running or have saved the .crg file onto the robot\n 4. Make sure the robot\'s name is spelled correctly, upon adding the name the robot will say a check.\n</string>
+    <string name="HelpDirectionBlock">To use this app, you to have all the steps completed\nFirst, you need to have a NAO Robot, or use a virtual NAO using Choregraph 2.1.~. This application combines three parts, the mobile app, a socket chat, and the Choregraph file. You can find all three things on the developer\'s GitHub. The Socket chat is written in Python2. Run the socket chat, and get the IP address of the chat. Then open Choregraphe and enter the IP address in the XNAParse Block. Connect to a robot, the version of the firmware does not matter (1.14 is fine). The robot will now listen to the socket chat on Port 5000. In the app, type in the IP Address and Port 5000. Type in the Robot\'s name, spelling must be correct and then you are free to use the app anyway you want.\nTroubleshoot:\n 1. Make sure Choregraphe has the right IP Address\n 2. Make sure the app is on the same network as the socket chat\n 3. Make sure you are running or have saved the .crg file onto the robot\n 4. Make sure the robot\'s name is spelled correctly, upon adding the name the robot will say a check.\n</string>
 
     <string-array name="mood_array">
         <item>Neutral</item>
@@ -83,4 +83,9 @@
     <string name="Center2">Center</string>
     <string name="LogInit">Status: Start\nLine: 0</string>
     <string name="LogEnd">Status: Done\nLine: 0</string>
+    <string name="SendFile">Send File</string>
+    <string name="Mood">Mood</string>
+    <string name="File">File</string>
+    <string name="IP">IP</string>
+    <string name="Port">Port</string>
 </resources>

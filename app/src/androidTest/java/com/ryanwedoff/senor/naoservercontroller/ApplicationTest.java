@@ -23,7 +23,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
          * @see NaoFileParse
          */
 
-        ArrayList<String> name = new ArrayList<String>();
+        ArrayList<String> name = new ArrayList<>();
         name.add("Ryan");
         String[]  m = {"Sad"};
         NaoFileParse fileParse = new NaoFileParse(name,m);

@@ -25,8 +25,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class MoodActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    public static ArrayList robotNames;
-    SocketService mBoundService;
+    private static ArrayList robotNames;
+    private SocketService mBoundService;
     private boolean mIsBound;
     private String mood;
     private String currentName;
@@ -59,6 +59,7 @@ public class MoodActivity extends AppCompatActivity implements AdapterView.OnIte
             doBindService();
         } else {
             View view = findViewById(R.id.controller_root_view);
+            assert view != null;
             Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
         assert getSupportActionBar() != null;
@@ -70,6 +71,7 @@ public class MoodActivity extends AppCompatActivity implements AdapterView.OnIte
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, robotNamesArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        assert robotNameSpinner != null;
         robotNameSpinner.setAdapter(spinnerArrayAdapter);
         robotNameSpinner.setOnItemSelectedListener(this);
 
@@ -80,6 +82,7 @@ public class MoodActivity extends AppCompatActivity implements AdapterView.OnIte
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
+        assert moodSpinner != null;
         moodSpinner.setAdapter(adapter);
         moodSpinner.setOnItemSelectedListener(this);
     }
@@ -136,17 +139,19 @@ public class MoodActivity extends AppCompatActivity implements AdapterView.OnIte
             doBindService();
         } else {
             View view = findViewById(R.id.controller_root_view);
+            assert view != null;
             Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }
 
 
-    public Context getActivity() {
+    private Context getActivity() {
         return this;
     }
 
     public void onSend(View view) {
         EditText editText = (EditText) findViewById(R.id.sendMessageEdit);
+        assert editText != null;
         String message = editText.getText().toString();
         message = message.replace(';',':');
         //Sends the message
@@ -179,7 +184,7 @@ public class MoodActivity extends AppCompatActivity implements AdapterView.OnIte
         setSpinnerStrings(parent.getId(), (String) parent.getItemAtPosition(0));
     }
 
-    public void setSpinnerStrings(int parentId, String string){
+    private void setSpinnerStrings(int parentId, String string){
         if(parentId == R.id.mood_spinner){
             Log.i("Mood Spinner",  string);
             mood = string;

@@ -31,9 +31,9 @@ import java.util.Arrays;
 public class RobotName extends AppCompatActivity {
     private RecyclerView.Adapter<RobotNameAdapter.ViewHolder> mAdapter;
     private ArrayList<String> robotNames;
-    SocketService mBoundService;
+    private SocketService mBoundService;
     private boolean mIsBound;
-    MyReceiver myReceiver;
+    private MyReceiver myReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,7 +204,7 @@ public class RobotName extends AppCompatActivity {
 
     }
 
-    public Activity getActivity() {
+    private Activity getActivity() {
         return this;
     }
 
@@ -230,6 +230,16 @@ public class RobotName extends AppCompatActivity {
             Snackbar.make(view,"No Robots Added", Snackbar.LENGTH_LONG).show();
         } else{
             Intent intent = new Intent(this, MoodActivity.class);
+            startActivity(intent);
+        }
+    }
+
+
+    public void onGoToFile(View view) {
+        if(robotNames.isEmpty()){
+            Snackbar.make(view,"No Robots Added", Snackbar.LENGTH_LONG).show();
+        } else{
+            Intent intent = new Intent(this, FileActivity.class);
             startActivity(intent);
         }
     }

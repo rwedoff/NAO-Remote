@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
      * The fragment argument representing the robot name for this
      * fragment.
      */
-    OnSendMessageListener mListener;
+    private OnSendMessageListener mListener;
     private static final String ARG_ROBOT_NAME = "robot_name";
     private boolean headWalkToggle; //True = walk-mode, false = head-mode
 

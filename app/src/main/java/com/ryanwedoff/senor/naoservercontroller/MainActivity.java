@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -20,13 +22,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private String port;
     private String ipAddress;
-    public final static String EXTRA_IP = "com.ryanwedoff.senor.naoServerController.IP";
-    public final static String EXTRA_PORT = "com.ryanwedoff.senor.naoServerController.Port";
+    private ArrayList<String> robotNames;
+    private final static String EXTRA_IP = "com.ryanwedoff.senor.naoServerController.IP";
+    private final static String EXTRA_PORT = "com.ryanwedoff.senor.naoServerController.Port";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +49,12 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        assert drawer != null;
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -52,7 +63,9 @@ public class MainActivity extends AppCompatActivity
 
         EditText ipEdit = (EditText) findViewById(R.id.ipQuick);
         EditText portEdit = (EditText) findViewById(R.id.portQuick);
+        assert ipEdit != null;
         ipEdit.setText(ipAddress);
+        assert portEdit != null;
         portEdit.setText(port);
         ConnectivityManager cm =
                 (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -62,11 +75,35 @@ public class MainActivity extends AppCompatActivity
         if(!isConnected) {
             Snackbar.make(drawer, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
+
+
+        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+
+
+        TextView textView = (TextView) findViewById(R.id.wifiState);
+        String wfState = "Wifi State: " + wifiInfo.getSSID();
+        assert textView != null;
+        textView.setText(wfState);
+
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.pref_file_key), Context.MODE_PRIVATE);
+        String defaultValue = getString(R.string.robot_names);
+        String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
+        Gson gson = new Gson();
+        String [] rn =  gson.fromJson(namesObj, String[].class);
+        robotNames = new ArrayList<>(Arrays.asList(rn));
+
+        TextView names = (TextView) findViewById(R.id.quickNames);
+        assert names != null;
+        String message = "Robot Names: " + robotNames.toString();
+        names.setText(message);
+
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        assert drawer != null;
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -129,6 +166,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -136,7 +174,9 @@ public class MainActivity extends AppCompatActivity
     public void onInitConnect(View view) {
         EditText ipEdit = (EditText) findViewById(R.id.ipQuick);
         EditText portEdit = (EditText) findViewById(R.id.portQuick);
+        assert ipEdit != null;
         String editIp = ipEdit.getText().toString();
+        assert portEdit != null;
         String editPort = portEdit.getText().toString();
         if(!editIp.equals(ipAddress)){
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());

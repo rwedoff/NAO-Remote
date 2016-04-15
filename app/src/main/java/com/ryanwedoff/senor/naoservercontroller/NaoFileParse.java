@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-public class NaoFileParse {
+class NaoFileParse {
         private final String[] SET_VALUES = new String[] {"Wave","Crouch","StandUp","Theta=","LeftY=","LeftX=","RightY=","RightX=","Speech","Mood"};
-        private HashSet<String> commands = new HashSet<String>(Arrays.asList(SET_VALUES));
+        private HashSet<String> commands = new HashSet<>(Arrays.asList(SET_VALUES));
         private HashSet<String> moods;
         private HashSet<String> robotNames;
 
         public NaoFileParse(ArrayList<String> names, String [] moodFromArray){
-            robotNames = new HashSet<String>(names);
-            moods = new HashSet<String>(Arrays.asList(moodFromArray));
+            robotNames = new HashSet<>(names);
+            moods = new HashSet<>(Arrays.asList(moodFromArray));
         }
 
         public boolean firstCheckLine(String line){
@@ -39,6 +39,7 @@ public class NaoFileParse {
                     String []  equalSplit = command.split("=");
                     try{
                         String num = equalSplit[1];
+                        System.out.println(num);
                     } catch (Exception e){
                         Log.e(Integer.toString(lineNum),"No number given in command");
                         return false;
@@ -52,7 +53,7 @@ public class NaoFileParse {
                 if(command.equals("Mood")){
                     try{
                         String md = splitLine[2];
-                        if(!moods.contains(splitLine[2])){
+                        if(!moods.contains(md)){
                             Log.e(Integer.toString(lineNum),"Invalid Mood");
                             return false;
                         }
