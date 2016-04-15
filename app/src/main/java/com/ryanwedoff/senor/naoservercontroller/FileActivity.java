@@ -74,6 +74,7 @@ public class FileActivity extends AppCompatActivity  {
         }
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.file_list_view);
+        assert mRecyclerView != null;
         mRecyclerView.setHasFixedSize(false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -82,6 +83,7 @@ public class FileActivity extends AppCompatActivity  {
         mRecyclerView.setAdapter(mAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_file);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,6 +110,7 @@ public class FileActivity extends AppCompatActivity  {
         fileParse = new NaoFileParse(robotNames,moods);
 
         ToggleButton toggle = (ToggleButton) findViewById(R.id.run_pause_button);
+        assert toggle != null;
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -129,6 +132,7 @@ public class FileActivity extends AppCompatActivity  {
 
         logTextView= (TextView) findViewById(R.id.file_run_log);
         runningPos = 0;
+        assert logTextView != null;
         logTextView.setText(R.string.LogInit);
 
     }
@@ -147,6 +151,7 @@ public class FileActivity extends AppCompatActivity  {
 
         if(fileLines.size() == 0){
             View view = findViewById(R.id.file_relative_view);
+            assert view != null;
             Snackbar.make(view, "No file loaded", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
         } else{
             final String message = (String) fileLines.get(runningPos);
@@ -164,6 +169,7 @@ public class FileActivity extends AppCompatActivity  {
                     if(!fileParse.checkLine(message,runningPos) && runningPos!=0 && runningPos!=fileLines.size()-1) {
                         View view = findViewById(R.id.file_relative_view);
                         String errorMess = "Syntax Error at line  " + runningPos + " (" + message + ")";
+                        assert view != null;
                         Snackbar.make(view, errorMess, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                     }
                     mBoundService.sendMessage(message);
@@ -177,6 +183,7 @@ public class FileActivity extends AppCompatActivity  {
                         if (oldPos == runningPos && runningPos!=fileLines.size()-1) {
                             View view = findViewById(R.id.file_relative_view);
                             String errorMess = "No response received at line  " + runningPos + " (" + message + ")";
+                            assert view != null;
                             Snackbar.make(view, errorMess, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                             runningPos++;
                             checkRunDone();
@@ -200,6 +207,7 @@ public class FileActivity extends AppCompatActivity  {
 
     private void restartFile(){
         ToggleButton toggle = (ToggleButton) findViewById(R.id.run_pause_button);
+        assert toggle != null;
         toggle.setChecked(false);
         runningPos = 0;
         canSend = true;
@@ -339,6 +347,7 @@ public class FileActivity extends AppCompatActivity  {
                     }
                     if(!fileParse.firstCheckLine((String) fileLines.get(0))){
                         View view = findViewById(R.id.file_relative_view);
+                        assert view != null;
                         Snackbar.make(view, "'--NAOSTART' needed at line 0", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         canSend = false;
                         Log.i("--NAO-START", "needed at line 0");
@@ -346,6 +355,7 @@ public class FileActivity extends AppCompatActivity  {
 
                     if(!fileParse.lastCheckLine((String) fileLines.get(fileLines.size()-1))){
                         View view = findViewById(R.id.file_relative_view);
+                        assert view != null;
                         Snackbar.make(view, "'--NAOSTOP' needed at last line", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         Log.i("--NAO-STOP", "needed at last line");
                         canSend = false;
@@ -389,6 +399,7 @@ public class FileActivity extends AppCompatActivity  {
             doBindService();
         } else {
             View view = findViewById(R.id.file_relative_view);
+            assert view != null;
             Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
         mAdapter.notifyDataSetChanged();
@@ -402,6 +413,7 @@ public class FileActivity extends AppCompatActivity  {
 
             if(connectionMess != null){
                 View view = findViewById(R.id.file_relative_view);
+                assert view != null;
                 Snackbar.make(view, connectionMess, Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
             if (serverResponse != null) {

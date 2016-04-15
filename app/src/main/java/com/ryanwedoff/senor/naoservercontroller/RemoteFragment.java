@@ -139,7 +139,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                 mListener.onSendMessage(robotName + "Crouch;");
                 break;
             case R.id.wave_button:
-                mListener.onSendMessage(robotName + "Wave;");
+                mListener.onSendMessage(robotName + "ButtonX;");
                 break;
             case R.id.send_text_button:
                View rootView = v.getRootView();

@@ -26,10 +26,11 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RobotName extends AppCompatActivity {
     private RecyclerView.Adapter<RobotNameAdapter.ViewHolder> mAdapter;
-    private ArrayList robotNames;
+    private ArrayList<String> robotNames;
     SocketService mBoundService;
     private boolean mIsBound;
     MyReceiver myReceiver;
@@ -41,10 +42,14 @@ public class RobotName extends AppCompatActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.RobotNamesListView);
-        mRecyclerView.setHasFixedSize(false);
+        if (mRecyclerView != null) {
+            mRecyclerView.setHasFixedSize(false);
+        }
         // use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        if (mRecyclerView != null) {
+            mRecyclerView.setLayoutManager(mLayoutManager);
+        }
 
 
         Context context = getActivity();
@@ -52,13 +57,13 @@ public class RobotName extends AppCompatActivity {
         String defaultValue = getString(R.string.robot_names);
         String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
         Gson gson = new Gson();
-        robotNames = gson.fromJson(namesObj, ArrayList.class);
+        String [] rn =  gson.fromJson(namesObj, String[].class);
+        robotNames = new ArrayList<>(Arrays.asList(rn));
         //Log.e("Screen 1", robotNames.toString());
-        if(robotNames == null){
-            robotNames = new ArrayList<>();
-        }
         mAdapter = new RobotNameAdapter(robotNames);
-        mRecyclerView.setAdapter(mAdapter);
+        if (mRecyclerView != null) {
+            mRecyclerView.setAdapter(mAdapter);
+        }
 
         ConnectivityManager cm =
                 (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -70,6 +75,7 @@ public class RobotName extends AppCompatActivity {
             doBindService();
         } else {
             View view = findViewById(R.id.robot_name_layout);
+            assert view != null;
             Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
 
@@ -136,6 +142,7 @@ public class RobotName extends AppCompatActivity {
             doBindService();
         } else {
             View view = findViewById(R.id.robot_name_layout);
+            assert view != null;
             Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
         IntentFilter intentFilter = new IntentFilter();
@@ -147,6 +154,7 @@ public class RobotName extends AppCompatActivity {
 
     public void onAddRobot(View view) {
         EditText editText = (EditText) findViewById(R.id.addRobotEdit);
+        assert editText != null;
         String name = editText.getText().toString();
         robotNames.add(0, name);
         InputMethodManager inputManager = (InputMethodManager)
@@ -231,6 +239,7 @@ public class RobotName extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra(SocketService.SERVER_CONNECTION);
             View view = findViewById(R.id.robot_name_layout);
+            assert view != null;
             Snackbar.make(view, message, Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }
