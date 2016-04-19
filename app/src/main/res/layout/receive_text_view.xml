@@ -4,5 +4,4 @@
     android:layout_height="wrap_content"
     android:textStyle="bold|italic"
     >
-
 </TextView>

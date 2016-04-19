@@ -2,7 +2,7 @@
     <!-- These settings headers are only used on tablets. -->
     <header
     android:fragment="com.ryanwedoff.senor.naoservercontroller.SettingsActivity$GeneralPreferenceFragment"
-    android:icon="@drawable/ic_label_black_24dp"
+    android:icon="@drawable/ic_menu_manage"
     android:title="@string/pref_header_general"
     />
     <header

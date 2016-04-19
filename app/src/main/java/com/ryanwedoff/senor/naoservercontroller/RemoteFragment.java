@@ -18,9 +18,7 @@ import android.widget.TextView;
 import layout.JoyStickFrag;
 
 
-/**
- * A placeholder fragment containing a simple view.
- */
+
 public class RemoteFragment extends Fragment implements View.OnClickListener {
     /**
      * The fragment argument representing the robot name for this
@@ -28,8 +26,8 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
      */
     private OnSendMessageListener mListener;
     private static final String ARG_ROBOT_NAME = "robot_name";
-    private boolean headWalkToggle; //True = walk-mode, false = head-mode
-
+    private EditText editText;
+    private TextView textView;
 
     public RemoteFragment() {
     }
@@ -45,8 +43,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * Returns a new instance of this fragment for the given section
-     * number.
+     * Returns a new instance of this fragment for the given robot name
      */
     public static RemoteFragment newInstance(String robotName) {
         RemoteFragment fragment = new RemoteFragment();
@@ -79,6 +76,10 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
         waveButton.setOnClickListener(this);
         Button sendTextButton = (Button) rootLayout.findViewById(R.id.send_text_button);
         sendTextButton.setOnClickListener(this);
+        Button sitButton = (Button) rootLayout.findViewById(R.id.sit_button);
+        sitButton.setOnClickListener(this);
+        editText = (EditText) rootLayout.findViewById(R.id.say_text_edit);
+        textView = (TextView) rootLayout.findViewById(R.id.prev_sent_text_view);
         Switch switchButton = (Switch) rootLayout.findViewById(R.id.head_walk_toggle);
         final TextView headWalkTextview = (TextView) rootLayout.findViewById(R.id.head_walk_text_view);
         headWalkTextview.setText(R.string.head_control);
@@ -94,7 +95,6 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                     childFragTrans.replace(R.id.remote_fragment_container, walkFragment);
                     childFragTrans.addToBackStack(null);
                     childFragTrans.commit();
-                    headWalkToggle = true;
 
                 } else {
                     headWalkTextview.setText(R.string.head_control);
@@ -105,21 +105,9 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                     childFragTrans.replace(R.id.remote_fragment_container, joyStickFrag);
                     childFragTrans.addToBackStack(null);
                     childFragTrans.commit();
-                    headWalkToggle = false;
                 }
             }
         });
-
-//TODO
-
-        //JOYSTICK TEST CODE
-//        angleTextView = (TextView) findViewById(R.id.angleTextView);
-//        powerTextView = (TextView) findViewById(R.id.powerTextView);
-//        directionTextView = (TextView) findViewById(R.id.directionTextView);
-        //Referencing also other views
-        //Event listener that always returns the variation of the angle in degrees, motion power in percentage and direction of movement
-//// TODO: 4/13/2016
-
 
         return rootLayout;
     }
@@ -138,29 +126,24 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                 mListener.onSendMessage(robotName + "Crouch;");
                 break;
             case R.id.wave_button:
-                mListener.onSendMessage(robotName + "ButtonX;");
+                mListener.onSendMessage(robotName + "Wave;");
                 break;
             case R.id.send_text_button:
-               View rootView = v.getRootView();
-                EditText editText = (EditText) rootView.findViewById(R.id.say_text_edit);
                 if(editText!= null){
                     String text = editText.getText().toString();
                     String textMinusSemis = text.replace(';',':');
                     mListener.onSendMessage(robotName + "Speech;" + textMinusSemis + ";");
                     editText.setText("");
-                    TextView textView = (TextView) rootView.findViewById(R.id.prev_sent_text_view);
                     String prevMessage = robotName.substring(0,robotName.length()-1) + " said: " + textMinusSemis;
                     textView.setText(prevMessage);
                 }
                 break;
             case R.id.stop_button:
-                if(headWalkToggle){
-                    mListener.onSendMessage(robotName + "Theta=0;");
-                    mListener.onSendMessage(robotName + "LeftY=0;");
-                } else{
                     mListener.onSendMessage(robotName + "RightX=0;");
                     mListener.onSendMessage(robotName + "RightY=0;");
-                }
+                break;
+            case R.id.sit_button:
+                    mListener.onSendMessage(robotName + "SitDown");
                 break;
         }
     }

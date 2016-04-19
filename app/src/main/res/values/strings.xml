@@ -88,4 +88,5 @@
     <string name="File">File</string>
     <string name="IP">IP</string>
     <string name="Port">Port</string>
+    <string name="Sit">Sit</string>
 </resources>

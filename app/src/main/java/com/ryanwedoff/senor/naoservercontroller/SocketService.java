@@ -1,3 +1,6 @@
+/**
+ * This Android Service is the network backend that connects to a running socket chat. It send and receives messages to the server.
+ */
 package com.ryanwedoff.senor.naoservercontroller;
 
 import android.app.Service;
@@ -21,11 +24,10 @@ public class SocketService extends Service {
 
     private PrintWriter out;
     private Socket socket;
-    private InetAddress serverAddr;
-    private ReceiveMessage receiveMessage;
     private final IBinder myBinder = new LocalBinder();
     public static boolean isServiceRunning = false;
     private boolean mRun = false;
+    private String outMess;
 
     final static String ACTION = "ACTION";
     public final static String SERVER_RESPONSE = "com.ryanwedoff.senor.naoservercontroller.SocketService.MESSAGE";
@@ -54,7 +56,11 @@ public class SocketService extends Service {
         //Toast.makeText(this, "This is bindable", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Used for sending messages to the socket connection
+     */
     public void sendMessage(String message){
+        outMess = message;
         if(out!=null && !out.checkError()){
             System.out.println("in sendMessage "+ message);
             out.println(message);
@@ -62,7 +68,9 @@ public class SocketService extends Service {
         }
     }
 
-
+    /**
+     * This class is for receiving messages from the socket connection
+     */
    private class ReceiveMessage  {
         BufferedReader in;
         String incomingMessage;
@@ -81,12 +89,14 @@ public class SocketService extends Service {
                     e.printStackTrace();
                 }
                 if (incomingMessage != null) {
-                    Intent intent = new Intent();
-                    intent.setAction(ACTION);
-                    intent.putExtra(SERVER_RESPONSE, incomingMessage);
-                    sendBroadcast(intent);
-                    Log.i("Response", incomingMessage);
-                    incomingMessage = null;
+                    if (!outMess.contains(incomingMessage) && !incomingMessage.equals("")) {
+                        Intent intent = new Intent();
+                        intent.setAction(ACTION);
+                        intent.putExtra(SERVER_RESPONSE, incomingMessage);
+                        sendBroadcast(intent);
+                        Log.i("Response", incomingMessage);
+                        incomingMessage = null;
+                    }
                 }
             }
             mRun = false;
@@ -111,7 +121,7 @@ public class SocketService extends Service {
                 //Accesses settings for the ip address
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String ipAddress = preferences.getString(getString(R.string.pref_ipAddress_key), getString(R.string.pref_ipAddress_default));
-                serverAddr = InetAddress.getByName(ipAddress);
+                InetAddress serverAddr = InetAddress.getByName(ipAddress);
                 String serverPort = preferences.getString(getString(R.string.pref_port_key),getString(R.string.pref_port_default));
                 int serverPortInt = Integer.parseInt(serverPort);
                 Log.i("TCP Client", "C: Connecting...");
@@ -123,7 +133,7 @@ public class SocketService extends Service {
                 Log.i("TCP Client", "C: Done.");
                 isServiceRunning = true;
                 if(socket.getRemoteSocketAddress() != null){
-                    receiveMessage = new ReceiveMessage();
+                    ReceiveMessage receiveMessage = new ReceiveMessage();
                     receiveMessage.exe();
                 }
 

@@ -12,7 +12,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        >
         <activity
             android:name=".SocketSendActivity"
             android:label="@string/app_name"
@@ -39,18 +40,29 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="naoservercontroller.senor.ryanwedoff.com"
+                    android:pathPrefix="/main"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ControllerActivity"
             android:label="@string/title_activity_controller"
             android:parentActivityName=".RobotName"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ryanwedoff.senor.naoservercontroller.RobotName" />
@@ -81,11 +93,13 @@
             android:name=".FileActivity"
             android:label="Send A File"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ryanwedoff.senor.naoservercontroller.MainActivity" />
         </activity>
+
     </application>
 
 </manifest>

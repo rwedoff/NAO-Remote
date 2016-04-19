@@ -27,16 +27,18 @@
         android:id="@+id/textView"
         android:layout_above="@+id/addRobotEdit"
         android:layout_alignParentStart="true" />
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/AddName"
         android:id="@+id/AddRobotBut"
         android:layout_alignTop="@+id/addRobotEdit"
         android:layout_alignParentEnd="true"
         android:onClick="onAddRobot"
         android:background="@color/colorAccent"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_person_add_black_24dp"
+        android:contentDescription="@string/AddName"
+        android:padding="3dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/RobotNamesListView"
@@ -62,6 +64,7 @@
             android:onClick="onNextBut"
             android:layout_weight="1"
             android:textColor="@color/cardview_dark_background"
+            android:drawableTop="@drawable/ic_videogame_asset_black_24dp"
             />
         <Button
             android:layout_width="0dp"
@@ -72,7 +75,7 @@
             android:textColor="@color/cardview_dark_background"
             android:onClick="onGoToMood"
             android:layout_weight="1"
-
+            android:drawableTop="@drawable/ic_sentiment_very_satisfied_black_24dp"
             />
 
         <Button
@@ -83,7 +86,8 @@
             android:id="@+id/SendFile"
             android:textColor="@color/cardview_dark_background"
             android:onClick="onGoToFile"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_insert_drive_file_black_24dp"/>
     </LinearLayout>
 
 

@@ -45,6 +45,17 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
            />
+        <Button
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:text="@string/Sit"
+            android:id="@+id/sit_button"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarStyle"
+            android:background="@color/colorAccent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            />
 
     </LinearLayout>
 
@@ -64,7 +75,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/Send"
-            android:id="@+id/send_text_button"/>
+            android:background="@color/colorAccent"
+            android:id="@+id/send_text_button"
+            android:elegantTextHeight="false"
+            android:enabled="true"
+            android:layout_margin="2dp" />
         </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
