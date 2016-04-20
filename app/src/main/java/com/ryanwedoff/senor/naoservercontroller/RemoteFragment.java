@@ -156,7 +156,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
                     mListener.onSendMessage(robotName + "RightY=0;");
                 break;
             case R.id.sit_button:
-                    mListener.onSendMessage(robotName + "SitDown");
+                mListener.onSendMessage(robotName + "SitDown;");
                 break;
         }
     }
