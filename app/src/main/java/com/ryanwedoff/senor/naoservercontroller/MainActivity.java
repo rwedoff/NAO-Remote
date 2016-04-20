@@ -1,5 +1,7 @@
 package com.ryanwedoff.senor.naoservercontroller;
-
+/**
+ * MainActivity is the home screen of the application.  It contains basic info that is set in the settings.
+ */
 
 import android.content.Context;
 import android.content.Intent;
@@ -31,11 +33,10 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private String port;
-    private String ipAddress;
-    private ArrayList<String> robotNames;
     private final static String EXTRA_IP = "com.ryanwedoff.senor.naoServerController.IP";
     private final static String EXTRA_PORT = "com.ryanwedoff.senor.naoServerController.Port";
+    private String port;
+    private String ipAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
         Gson gson = new Gson();
         String [] rn =  gson.fromJson(namesObj, String[].class);
-        robotNames = new ArrayList<>(Arrays.asList(rn));
+        ArrayList<String> robotNames = new ArrayList<>(Arrays.asList(rn));
 
         TextView names = (TextView) findViewById(R.id.quickNames);
         assert names != null;
@@ -135,9 +136,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
-
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -194,7 +192,6 @@ public class MainActivity extends AppCompatActivity
         }
         Intent intent = new Intent(this, RobotName.class);
         startActivity(intent);
-
 
     }
 }

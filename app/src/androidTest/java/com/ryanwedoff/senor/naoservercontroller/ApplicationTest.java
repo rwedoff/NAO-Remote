@@ -4,7 +4,6 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.test.suitebuilder.annotation.LargeTest;
 
-
 import java.util.ArrayList;
 
 /**
@@ -19,7 +18,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     public void testFileParse(){
         /**
-         *Tests that check the NaoFileParsee
+         *Tests that check the NaoFileParse
          * @see NaoFileParse
          */
 

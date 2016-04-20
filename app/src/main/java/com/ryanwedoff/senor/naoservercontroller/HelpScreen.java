@@ -1,5 +1,7 @@
 package com.ryanwedoff.senor.naoservercontroller;
-
+/**
+ * HelpScreen is a help screen on how to run the file
+ */
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 

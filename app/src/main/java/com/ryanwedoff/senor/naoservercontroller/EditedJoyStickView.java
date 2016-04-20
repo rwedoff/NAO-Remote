@@ -49,7 +49,7 @@ public class EditedJoyStickView extends View implements Runnable {
         initJoystickView();
     }
 
-    protected void initJoystickView() {
+    private void initJoystickView() {
 
         mainCircle = new Paint(Paint.ANTI_ALIAS_FLAG);
         mainCircle.setColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
@@ -251,10 +251,6 @@ public class EditedJoyStickView extends View implements Runnable {
         this.loopInterval = repeatInterval;
     }
 
-    public interface OnJoystickMoveListener {
-        void onValueChanged(int angle, int power, int direction);
-    }
-
     @Override
     public void run() {
         while (!Thread.interrupted()) {
@@ -271,5 +267,9 @@ public class EditedJoyStickView extends View implements Runnable {
                 break;
             }
         }
+    }
+
+    public interface OnJoystickMoveListener {
+        void onValueChanged(int angle, int power, int direction);
     }
 }

@@ -1,3 +1,6 @@
+/**
+ * CustomViewPager is just like the default Android View Pager, but removes the swipe feature
+ */
 package com.ryanwedoff.senor.naoservercontroller;
 
 /**

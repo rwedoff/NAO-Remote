@@ -40,24 +40,38 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * FileActivity takes a series of Robot File Lines and runs the file
+ *
+ * @see NaoFileParse
+ */
 public class FileActivity extends AppCompatActivity  {
 
     private static final int READ_REQUEST_CODE = 1;
-    private FileTextAdapter mAdapter;
+    private static final String STATE_File_LINES = "file_lines";
     private static ArrayList<CharSequence> fileLines;
+    private static int runningPos = 0;
+    private static boolean canSend = true;
+    private static boolean isPaused = true;
+    private static TextView logTextView;
+    private final Handler mHandler = new Handler();
+    private FileTextAdapter mAdapter;
     private SocketService mBoundService;
+    private final ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBoundService = ((SocketService.LocalBinder) service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBoundService = null;
+        }
+
+    };
     private boolean mIsBound;
     private MyReceiver myReceiver;
     private NaoFileParse fileParse;
-
-
-    private static int runningPos = 0;
-    private static boolean canSend = true;
-    private Handler mHandler = new Handler();
-    private static boolean isPaused = true;
-
-    private static TextView logTextView;
-    private static final String STATE_File_LINES = "file_lines";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +150,6 @@ public class FileActivity extends AppCompatActivity  {
 
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
@@ -144,7 +157,6 @@ public class FileActivity extends AppCompatActivity  {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
-
 
     private void runFile(){
 
@@ -177,7 +189,7 @@ public class FileActivity extends AppCompatActivity  {
                 }
                 //Timer, if message doesn't get a response run next line
                 mHandler.postDelayed(new Runnable() {
-                    int oldPos = runningPos;
+                    final int oldPos = runningPos;
                     public void run() {
                         if (oldPos == runningPos && runningPos!=fileLines.size()-1) {
                             View view = findViewById(R.id.file_relative_view);
@@ -214,25 +226,10 @@ public class FileActivity extends AppCompatActivity  {
         logTextView.setText(R.string.LogInit);
     }
 
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBoundService = ((SocketService.LocalBinder)service).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBoundService = null;
-        }
-
-    };
-
     private void doBindService() {
         bindService(new Intent(FileActivity.this,SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
-        if(mBoundService!=null){
-            mBoundService.IsBoundable();
-        }
+
     }
     private void doUnbindService() {
         if (mIsBound) {
@@ -324,6 +321,30 @@ public class FileActivity extends AppCompatActivity  {
         }
     }
 
+    private void connectSocketService() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SocketService.ACTION);
+        registerReceiver(myReceiver, intentFilter);
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if (isConnected) {
+            startService(new Intent(FileActivity.this, SocketService.class));
+            doBindService();
+        } else {
+            View view = findViewById(R.id.file_relative_view);
+            assert view != null;
+            Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private Context getActivity() {
+        return this;
+    }
+
     private class GetRobotFile extends AsyncTask<Uri, Void, Void> {
         /**
          * This is done under async to ensure that network sources can pull in files
@@ -384,25 +405,6 @@ public class FileActivity extends AppCompatActivity  {
         }
 
     }
-    private void connectSocketService(){
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(SocketService.ACTION);
-        registerReceiver(myReceiver, intentFilter);
-        ConnectivityManager cm =
-                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if(isConnected){
-            startService(new Intent(FileActivity.this,SocketService.class));
-            doBindService();
-        } else {
-            View view = findViewById(R.id.file_relative_view);
-            assert view != null;
-            Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-        }
-        mAdapter.notifyDataSetChanged();
-    }
 
     private class MyReceiver extends BroadcastReceiver {
         @Override
@@ -426,10 +428,6 @@ public class FileActivity extends AppCompatActivity  {
                 }
             }
         }
-    }
-
-    private Context getActivity() {
-        return this;
     }
 
 }

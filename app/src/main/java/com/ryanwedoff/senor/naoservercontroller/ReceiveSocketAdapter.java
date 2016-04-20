@@ -10,28 +10,16 @@ import java.util.List;
 
 
 public class ReceiveSocketAdapter extends RecyclerView.Adapter<ReceiveSocketAdapter.ViewHolder> {
-    private  List<String> mDataset;
-
-    public void addMessage(String message) {
-        mDataset.add(message);
-        notifyDataSetChanged();
-    }
-
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView mTextView;
-        public ViewHolder(TextView v) {
-            super(v);
-            mTextView = v;
-        }
-    }
+    private final List<String> mDataset;
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public ReceiveSocketAdapter(List<String> myDataset) {
         mDataset = myDataset;
+    }
+
+    public void addMessage(String message) {
+        mDataset.add(message);
+        notifyDataSetChanged();
     }
 
     // Create new views (invoked by the layout manager)
@@ -45,7 +33,6 @@ public class ReceiveSocketAdapter extends RecyclerView.Adapter<ReceiveSocketAdap
         return new ViewHolder((TextView) v);
     }
 
-
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
@@ -58,5 +45,18 @@ public class ReceiveSocketAdapter extends RecyclerView.Adapter<ReceiveSocketAdap
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    // Provide a reference to the views for each data item
+    // Complex data items may need more than one view per item, and
+    // you provide access to all the views for a data item in a view holder
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        public final TextView mTextView;
+
+        public ViewHolder(TextView v) {
+            super(v);
+            mTextView = v;
+        }
     }
 }

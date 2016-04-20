@@ -12,14 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
-
- * to handle interaction events.
- * Use the {@link WalkFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * WalkFragment holds the Fragment that is used in Remote Fragment within ControllerActivity
+ * @see RemoteFragment
+ * @see ControllerActivity
  */
 public class WalkFragment extends Fragment {
 
@@ -210,7 +206,6 @@ public class WalkFragment extends Fragment {
             }
         });
 
-        // Inflate the layout for this fragment
         return rootLayout;
     }
 

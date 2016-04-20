@@ -1,5 +1,8 @@
 package com.ryanwedoff.senor.naoservercontroller;
-
+/**
+ * NAOFileParse is the file that parses the file input line by line and checks for errors.
+ * This class be used outside of Android.
+ */
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -7,10 +10,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 class NaoFileParse {
-        private final String[] SET_VALUES = new String[] {"Wave","Crouch","StandUp","Theta=","LeftY=","LeftX=","RightY=","RightX=","Speech","Mood"};
-        private HashSet<String> commands = new HashSet<>(Arrays.asList(SET_VALUES));
-        private HashSet<String> moods;
-        private HashSet<String> robotNames;
+    private final String[] SET_VALUES = new String[]{"Wave", "Crouch", "StandUp", "Theta=", "LeftY=", "LeftX=", "RightY=", "RightX=", "Speech", "Mood", "SitDown"};
+    private final HashSet<String> commands = new HashSet<>(Arrays.asList(SET_VALUES));
+    private final HashSet<String> moods;
+    private final HashSet<String> robotNames;
 
         public NaoFileParse(ArrayList<String> names, String [] moodFromArray){
             robotNames = new HashSet<>(names);

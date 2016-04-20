@@ -10,48 +10,45 @@
     tools:context="com.ryanwedoff.senor.naoservercontroller.MoodActivity">
 
     <Spinner
+        android:id="@+id/robot_name_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/robot_name_spinner"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:padding="12dp" />
 
     <Spinner
+        android:id="@+id/mood_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/mood_spinner"
-        android:padding="12dp"
         android:layout_below="@+id/robot_name_spinner"
         android:layout_centerHorizontal="true"
+        android:padding="12dp"
          />
 
     <EditText
+        android:id="@+id/sendMessageEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sendMessageEdit"
-        android:layout_below="@+id/mood_spinner"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:inputType="text"
-        android:hint="@string/MessageText"
+        android:layout_below="@+id/mood_spinner"
+        android:layout_toStartOf="@+id/SendButton"
         android:focusable="true"
+        android:hint="@string/MessageText"
         android:imeOptions="actionDone"
-        android:layout_toLeftOf="@+id/SendButton"
-        android:layout_toStartOf="@+id/SendButton" />
+        android:inputType="text" />
 
 
     <Button
+        android:id="@+id/SendButton"
         android:name="android:colorButtonNormal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/SendButton"
-        android:text="@string/Send"
-        android:onClick="onSend"
-        android:drawableEnd="@drawable/ic_menu_send"
-        android:layout_below="@id/mood_spinner"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="@color/colorAccent"/>
+        android:layout_below="@id/mood_spinner"
+        android:background="@color/colorAccent"
+        android:drawableEnd="@drawable/ic_menu_send"
+        android:onClick="onSend"
+        android:text="@string/Send" />
 
 </RelativeLayout>

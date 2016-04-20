@@ -22,22 +22,15 @@ import java.net.Socket;
 
 public class SocketService extends Service {
 
-    private PrintWriter out;
-    private Socket socket;
-    private final IBinder myBinder = new LocalBinder();
-    public static boolean isServiceRunning = false;
-    private boolean mRun = false;
-    private String outMess;
-
-    final static String ACTION = "ACTION";
     public final static String SERVER_RESPONSE = "com.ryanwedoff.senor.naoservercontroller.SocketService.MESSAGE";
     public final static String SERVER_CONNECTION = "com.ryanwedoff.senor.naoservercontroller.SocketService.CONNECTION";
-    public class LocalBinder extends Binder {
-        public SocketService getService(){
-            System.out.println("I am a local binder");
-            return SocketService.this;
-        }
-    }
+    final static String ACTION = "ACTION";
+    public static boolean isServiceRunning = false;
+    private final IBinder myBinder = new LocalBinder();
+    private PrintWriter out;
+    private Socket socket;
+    private boolean mRun = false;
+    private String outMess;
     public SocketService() {
     }
 
@@ -46,14 +39,11 @@ public class SocketService extends Service {
         System.out.println("This is the onBind Methond");
         return myBinder;
     }
+
     @Override
     public void onCreate(){
         super.onCreate();
         System.out.println("I am in onCreate in the service");
-    }
-
-    public void IsBoundable(){
-        //Toast.makeText(this, "This is bindable", Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -65,6 +55,42 @@ public class SocketService extends Service {
             System.out.println("in sendMessage "+ message);
             out.println(message);
             out.flush();
+        }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        System.out.println("I am in on start");
+        //  Toast.makeText(this,"Service created ...", Toast.LENGTH_LONG).show();
+        Runnable connect = new connectSocket();
+        new Thread(connect).start();
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            isServiceRunning = false;
+            socket.close();
+            Log.i("Socket has been closed", "Closed");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mRun = false;
+        if (out != null)
+            out.flush();
+        if (out != null) {
+            out.close();
+        }
+        socket = null;
+    }
+
+    public class LocalBinder extends Binder {
+        public SocketService getService() {
+            System.out.println("I am a local binder");
+            return SocketService.this;
         }
     }
 
@@ -103,17 +129,6 @@ public class SocketService extends Service {
         }
     }
 
-
-    @Override
-    public int onStartCommand(Intent intent,int flags, int startId){
-        super.onStartCommand(intent, flags, startId);
-        System.out.println("I am in on start");
-        //  Toast.makeText(this,"Service created ...", Toast.LENGTH_LONG).show();
-        Runnable connect = new connectSocket();
-        new Thread(connect).start();
-        return START_STICKY;
-    }
-
     private class connectSocket implements Runnable {
         @Override
         public void run() {
@@ -145,25 +160,6 @@ public class SocketService extends Service {
                 Log.e("TCP", "C: Error", e);
             }
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        try {
-            isServiceRunning = false;
-            socket.close();
-            Log.i("Socket has been closed", "Closed");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mRun = false;
-        if(out != null)
-            out.flush();
-        if (out != null) {
-            out.close();
-        }
-        socket = null;
     }
 
 

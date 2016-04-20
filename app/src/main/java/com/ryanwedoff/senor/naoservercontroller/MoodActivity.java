@@ -25,8 +25,19 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class MoodActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private static ArrayList robotNames;
     private SocketService mBoundService;
+    private final ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBoundService = ((SocketService.LocalBinder) service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBoundService = null;
+        }
+
+    };
     private boolean mIsBound;
     private String mood;
     private String currentName;
@@ -43,7 +54,7 @@ public class MoodActivity extends AppCompatActivity implements AdapterView.OnIte
         String defaultValue = getString(R.string.robot_names);
         String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
         Gson gson = new Gson();
-        robotNames = gson.fromJson(namesObj, ArrayList.class);
+        ArrayList robotNames = gson.fromJson(namesObj, ArrayList.class);
         if(robotNames == null){
             robotNames = new ArrayList<>();
         }
@@ -86,24 +97,11 @@ public class MoodActivity extends AppCompatActivity implements AdapterView.OnIte
         moodSpinner.setAdapter(adapter);
         moodSpinner.setOnItemSelectedListener(this);
     }
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBoundService = ((SocketService.LocalBinder)service).getService();
-        }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBoundService = null;
-        }
-
-    };
     private void doBindService() {
         bindService(new Intent(MoodActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
-        if(mBoundService!=null){
-            mBoundService.IsBoundable();
-        }
+
     }
     private void doUnbindService() {
         if (mIsBound) {

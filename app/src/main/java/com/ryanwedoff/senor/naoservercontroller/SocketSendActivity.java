@@ -6,34 +6,47 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
-
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SocketSendActivity is a general socket client that users can send custom messages to.
+ */
 
 public class SocketSendActivity extends AppCompatActivity {
 
     private SocketService mBoundService;
+    private final ServiceConnection mConnection = new ServiceConnection() {
+        //EDITED PART
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBoundService = ((SocketService.LocalBinder) service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBoundService = null;
+        }
+
+    };
     private boolean mIsBound;
     private MyReceiver myReceiver;
-
     private RecyclerView.Adapter mAdapter;
     private List<String> myDataset;
 
@@ -128,25 +141,10 @@ public class SocketSendActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private ServiceConnection mConnection = new ServiceConnection() {
-        //EDITED PART
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBoundService = ((SocketService.LocalBinder)service).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBoundService = null;
-        }
-
-    };
     private void doBindService() {
         bindService(new Intent(SocketSendActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
-        if(mBoundService!=null){
-            mBoundService.IsBoundable();
-        }
+
     }
     private void doUnbindService() {
         if (mIsBound) {
@@ -185,17 +183,6 @@ public class SocketSendActivity extends AppCompatActivity {
 
     }
 
-
-
-    private class MyReceiver extends BroadcastReceiver{
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String message = intent.getStringExtra(SocketService.SERVER_RESPONSE);
-            myDataset.add(0, message);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -211,6 +198,15 @@ public class SocketSendActivity extends AppCompatActivity {
         unregisterReceiver(myReceiver);
         stopService(new Intent(SocketSendActivity.this, SocketService.class));
 
+    }
+
+    private class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String message = intent.getStringExtra(SocketService.SERVER_RESPONSE);
+            myDataset.add(0, message);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
 }

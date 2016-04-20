@@ -1,5 +1,13 @@
 package com.ryanwedoff.senor.naoservercontroller;
-
+/**
+ * RemoteFragment is the Parent Fragment used in ControllerActivity.
+ * It holds the wrapper remote control for each robot in the view pager.
+ * RemoteFragment also contains WalkFragment and JoyStickFrag
+ *
+ * @see com.ryanwedoff.senor.naoservercontroller.WalkFragment
+ * @see layout.JoyStickFrag
+ * @see com.ryanwedoff.senor.naoservercontroller.ControllerActivity
+ */
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,26 +28,16 @@ import layout.JoyStickFrag;
 
 
 public class RemoteFragment extends Fragment implements View.OnClickListener {
+    private static final String ARG_ROBOT_NAME = "robot_name";
     /**
      * The fragment argument representing the robot name for this
      * fragment.
      */
     private OnSendMessageListener mListener;
-    private static final String ARG_ROBOT_NAME = "robot_name";
     private EditText editText;
     private TextView textView;
 
     public RemoteFragment() {
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mListener = (OnSendMessageListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnSendMessageListener");
-        }
     }
 
     /**
@@ -54,9 +52,21 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (OnSendMessageListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnSendMessageListener");
+        }
+    }
+
+    /**
+     * Many event listeners for the fragment are coded here.
+     */
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final Fragment thisFrag = this;
-
         FragmentManager controlFragMan = getChildFragmentManager();
         FragmentTransaction childFragTrans = controlFragMan.beginTransaction();
         Bundle bundle = thisFrag.getArguments();
@@ -112,6 +122,9 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
         return rootLayout;
     }
 
+    /**
+     * General on click listener for all buttons and interactions.
+     */
     @Override
     public void onClick(View v) {
         Bundle bundle = this.getArguments();

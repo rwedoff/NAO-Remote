@@ -1,3 +1,11 @@
+/**
+ * ControllerActivity is the parent activity to Remote Fragment, WalkFragment, and JoyStick Fragment
+ *
+ * @see com.ryanwedoff.senor.naoservercontroller.WalkFragment
+ * @see com.ryanwedoff.senor.naoservercontroller.RemoteFragment
+ * @see layout.JoyStickFrag
+ */
+
 package com.ryanwedoff.senor.naoservercontroller;
 
 import android.content.ComponentName;
@@ -28,12 +36,30 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class ControllerActivity extends AppCompatActivity implements RemoteFragment.OnSendMessageListener{
+public class ControllerActivity extends AppCompatActivity implements RemoteFragment.OnSendMessageListener {
 
-    public static ArrayList robotNames;
-    SocketService mBoundService;
+    private static ArrayList robotNames;
+    private SocketService mBoundService;
+    private final ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBoundService = ((SocketService.LocalBinder) service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBoundService = null;
+        }
+
+    };
     private boolean mIsBound;
 
+    private static String numToRobot(int position) {
+        if (position < robotNames.size())
+            return (String) robotNames.get(position);
+        else
+            return null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,25 +126,11 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
 
     }
 
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBoundService = ((SocketService.LocalBinder)service).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBoundService = null;
-        }
-
-    };
     private void doBindService() {
         bindService(new Intent(ControllerActivity.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
-        if(mBoundService!=null){
-            mBoundService.IsBoundable();
-        }
     }
+
     private void doUnbindService() {
         if (mIsBound) {
             // Detach our existing connection.
@@ -158,8 +170,6 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
         }
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -193,16 +203,12 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
         return super.onOptionsItemSelected(item);
     }
 
-
-    public Context getActivity() {
+    private Context getActivity() {
         return this;
     }
 
     @Override
     public void onSendMessage(String message) {
-        Log.i("SEND A MESSAGE: ", message);
-
-
         if(mBoundService != null){
             try{
                 mBoundService.sendMessage(message);
@@ -221,7 +227,6 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
         if(getCurrentFocus() != null)
             inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
-
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -254,11 +259,5 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
                 return null;
             }
         }
-    }
-    protected static String numToRobot(int position){
-        if(position < robotNames.size())
-            return (String) robotNames.get(position);
-        else
-            return null;
     }
 }

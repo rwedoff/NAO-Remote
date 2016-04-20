@@ -1,5 +1,7 @@
 package com.ryanwedoff.senor.naoservercontroller;
-
+/**
+ * RobotName uses a RecyclerView and is the portal to add Robots and get to each aspect of the app
+ */
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -32,6 +34,18 @@ public class RobotName extends AppCompatActivity {
     private RecyclerView.Adapter<RobotNameAdapter.ViewHolder> mAdapter;
     private ArrayList<String> robotNames;
     private SocketService mBoundService;
+    private final ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBoundService = ((SocketService.LocalBinder) service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBoundService = null;
+        }
+
+    };
     private boolean mIsBound;
     private MyReceiver myReceiver;
 
@@ -86,26 +100,11 @@ public class RobotName extends AppCompatActivity {
 
     }
 
-
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBoundService = ((SocketService.LocalBinder)service).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBoundService = null;
-        }
-
-    };
     private void doBindService() {
         //swipeContainer.setRefreshing(false);
         bindService(new Intent(RobotName.this, SocketService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
-        if(mBoundService!=null){
-            mBoundService.IsBoundable();
-        }
+
     }
     private void doUnbindService() {
         if (mIsBound) {

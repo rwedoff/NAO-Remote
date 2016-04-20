@@ -14,19 +14,16 @@ import com.ryanwedoff.senor.naoservercontroller.R;
 import com.ryanwedoff.senor.naoservercontroller.RemoteFragment;
 
 
-
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link JoyStickFrag#newInstance} factory method to
- * create an instance of this fragment.
+ * JoyStickFrag is the Fragment that holds EditedJoyStickView and is used for Robot Head Control.
+ * It is contained in RemoteFragment and ControllerActivity
+ * @see RemoteFragment
+ * @see com.ryanwedoff.senor.naoservercontroller.ControllerActivity
  */
 public class JoyStickFrag extends Fragment {
-    private int oldAngle = 0;
-
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ROBOT_NAME = "robot_name";
+    private int oldAngle = 0;
     private String robotName;
 
     private RemoteFragment.OnSendMessageListener mListener2;
