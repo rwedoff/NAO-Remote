@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 /**
  * WalkFragment holds the Fragment that is used in Remote Fragment within ControllerActivity
@@ -58,6 +59,15 @@ public class WalkFragment extends Fragment {
         /**
          * Event listeners for FABs in the WalkFragment
          */
+        ImageButton imageButton = (ImageButton) rootLayout.findViewById(R.id.imageView);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = thisFrag.getArguments();
+                String robotNameMess = bundle.getString(ARG_ROBOT_NAME, "Robot Name Error") + ";";
+                socketListener.onSendMessage(robotNameMess + "Speech;Excuse Me!;");
+            }
+        });
         FloatingActionButton forwardButton = (FloatingActionButton)rootLayout.findViewById(R.id.forwardWalkButton);
         forwardButton.setOnClickListener(new View.OnClickListener() {
             boolean click1 = true;
