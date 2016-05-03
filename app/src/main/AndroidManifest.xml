@@ -22,7 +22,8 @@
         <service
             android:name=".SocketService"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false"
+            android:stopWithTask="true">
             <intent-filter android:label="SocketLabel" >
                 <action android:name="it.unibz.bluedroid.bluetooth.service.MY_SERVICE"/>
             </intent-filter>
