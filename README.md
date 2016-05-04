@@ -51,11 +51,25 @@ This application was created for the University of Iowa, primarily to aid the pr
   * `LeftX=<#>`
   * `LeftY=<#>`
   
-####Socket Connection
+##### Socket Connection
   The socket connection is just a generic socket client to send messages to the socket chat.
   
-  
-####Sources
-JoystickView by AJ Alves is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License
-GSON: Licensed under the Apache License, Version 2.0 (the "License");
-Material Design Icons: https://design.google.com/icons/
+
+### Troubleshooting 
++ Check that the server is running.
++ Check that Choregraphe has the right IP Address and Port given by the server.
++ Check that the server, Choregraphe, and NAO Remote are all on the same network.
++ Check that NAO Remote has the right IP Address and Port given by the server.
++ Make sure robot names are added.
++ Make sure the robot name is spelled correctly, given by the connected robot.
++ Make sure AndroidTheater.crg is running on the robot.
++ Make sure the app is connected to the server.
+
+ 
+#### Sources / Acknowledgments
++ JoystickView by AJ Alves is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License
++ GSON: Licensed under the Apache License, Version 2.0 (the "License");
++ Material Design Icons: https://design.google.com/icons/
++ The University of Iowa
++ Denise Szecsei
++ Aldebaran's NAO Robots
