@@ -10,6 +10,7 @@
   To use this app you have to have completed all the installation requirements.  You will need a NAO Robot or a Virtual NAO using Choregraphe 2.1~.  (Note, the app will work
   with either firmware, but for a Virtual NAO you need to use the newest version of Choregraphe).
   This application combines three parts, the Android App, the socket chat, and the AndroidTheater.crg.  You can find links to all of these right here:
+        
         +  Android App (NAO Remote)
         +  [AndroidTheater.crg](https://github.com/szecsei/NAOAndroidTheater)
         +  [Server Chat](https://github.com/rwedoff/NAOServerChat/releases)
