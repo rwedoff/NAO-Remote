@@ -5,7 +5,7 @@ package com.ryanwedoff.senor.naoservercontroller;
  * RemoteFragment also contains WalkFragment and JoyStickFrag
  *
  * @see com.ryanwedoff.senor.naoservercontroller.WalkFragment
- * @see layout.JoyStickFrag
+ * @see com.ryanwedoff.senor.naoservercontroller.JoyStickFrag
  * @see com.ryanwedoff.senor.naoservercontroller.ControllerActivity
  */
 import android.content.Context;
@@ -22,9 +22,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-
-import layout.JoyStickFrag;
-
 
 
 public class RemoteFragment extends Fragment implements View.OnClickListener {

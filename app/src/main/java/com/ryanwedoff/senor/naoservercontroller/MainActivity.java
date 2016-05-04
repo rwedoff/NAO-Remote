@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        Intent intent = new Intent(this, WelcomeScreen.class);
+//        startActivity(intent);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -92,12 +94,20 @@ public class MainActivity extends AppCompatActivity
         String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
         Gson gson = new Gson();
         String [] rn =  gson.fromJson(namesObj, String[].class);
-        ArrayList<String> robotNames = new ArrayList<>(Arrays.asList(rn));
-
         TextView names = (TextView) findViewById(R.id.quickNames);
-        assert names != null;
-        String message = "Robot Names: " + robotNames.toString();
-        names.setText(message);
+        try {
+            ArrayList<String> robotNames = new ArrayList<>(Arrays.asList(rn));
+
+            assert names != null;
+            String message = "Robot Names: " + robotNames.toString();
+            names.setText(message);
+        } catch (Exception e) {
+            assert names != null;
+            names.setText(R.string.NoneAdded);
+        }
+
+
+
 
     }
 

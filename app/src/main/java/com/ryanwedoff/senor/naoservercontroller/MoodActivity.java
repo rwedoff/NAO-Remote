@@ -57,6 +57,8 @@ public class MoodActivity extends AppCompatActivity implements AdapterView.OnIte
         ArrayList robotNames = gson.fromJson(namesObj, ArrayList.class);
         if(robotNames == null){
             robotNames = new ArrayList<>();
+            Intent intent = new Intent(this, RobotName.class);
+            startActivity(intent);
         }
 
         ConnectivityManager cm =

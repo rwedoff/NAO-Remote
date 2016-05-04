@@ -72,12 +72,17 @@ public class RobotName extends AppCompatActivity {
         String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
         Gson gson = new Gson();
         String [] rn =  gson.fromJson(namesObj, String[].class);
-        robotNames = new ArrayList<>(Arrays.asList(rn));
-        //Log.e("Screen 1", robotNames.toString());
-        mAdapter = new RobotNameAdapter(robotNames);
-        if (mRecyclerView != null) {
-            mRecyclerView.setAdapter(mAdapter);
+        try {
+            robotNames = new ArrayList<>(Arrays.asList(rn));
+        } catch (Exception ignored) {
+            robotNames = new ArrayList<>();
+        } finally {
+            mAdapter = new RobotNameAdapter(robotNames);
+            if (mRecyclerView != null) {
+                mRecyclerView.setAdapter(mAdapter);
+            }
         }
+
 
         ConnectivityManager cm =
                 (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -208,7 +213,7 @@ public class RobotName extends AppCompatActivity {
     }
 
     public void onNextBut(View view) {
-        if(robotNames.isEmpty()){
+        if (robotNames == null || robotNames.isEmpty()) {
             Snackbar.make(view,"No Robots Added", Snackbar.LENGTH_LONG).show();
         } else{
             Intent intent = new Intent(this, ControllerActivity.class);
@@ -225,7 +230,7 @@ public class RobotName extends AppCompatActivity {
     }
 
     public void onGoToMood(View view) {
-        if(robotNames.isEmpty()){
+        if (robotNames == null || robotNames.isEmpty()) {
             Snackbar.make(view,"No Robots Added", Snackbar.LENGTH_LONG).show();
         } else{
             Intent intent = new Intent(this, MoodActivity.class);
@@ -235,7 +240,7 @@ public class RobotName extends AppCompatActivity {
 
 
     public void onGoToFile(View view) {
-        if(robotNames.isEmpty()){
+        if (robotNames == null || robotNames.isEmpty()) {
             Snackbar.make(view,"No Robots Added", Snackbar.LENGTH_LONG).show();
         } else{
             Intent intent = new Intent(this, FileActivity.class);

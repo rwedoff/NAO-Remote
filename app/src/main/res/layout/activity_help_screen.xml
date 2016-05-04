@@ -11,22 +11,37 @@
 
 
     <TextView
+        android:id="@+id/help_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/Help"
-        android:id="@+id/help_title"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/Help"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
-        android:textAppearance="?android:attr/textAppearanceSmall"
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/help_title"
-        android:layout_centerHorizontal="true"
+        android:layout_centerHorizontal="true">
+
+        <TextView
         android:id="@+id/help_text"
-        android:text="@string/HelpDirectionBlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/newHelpScreen"
+            android:textAppearance="?android:attr/textAppearanceSmall"
          />
+    </ScrollView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorAccent"
+        android:onClick="onFullHelp"
+        android:text="@string/MoreHelp" />
 
 </RelativeLayout>

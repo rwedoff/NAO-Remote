@@ -1,4 +1,4 @@
-package layout;
+package com.ryanwedoff.senor.naoservercontroller;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,10 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
-import com.ryanwedoff.senor.naoservercontroller.EditedJoyStickView;
-import com.ryanwedoff.senor.naoservercontroller.R;
-import com.ryanwedoff.senor.naoservercontroller.RemoteFragment;
 
 
 /**

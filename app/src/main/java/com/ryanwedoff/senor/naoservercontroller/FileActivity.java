@@ -118,9 +118,17 @@ public class FileActivity extends AppCompatActivity  {
         Gson gson = new Gson();
 
         String [] rn = gson.fromJson(namesObj, String[].class); //Pull in the robot names
-        ArrayList<String> robotNames = new ArrayList<>(Arrays.asList(rn));
-        String [] moods = getResources().getStringArray(R.array.mood_array);
-        fileParse = new NaoFileParse(robotNames,moods);
+        try {
+            ArrayList<String> robotNames = new ArrayList<>(Arrays.asList(rn));
+            String[] moods = getResources().getStringArray(R.array.mood_array);
+            fileParse = new NaoFileParse(robotNames, moods);
+        } catch (Exception e) {
+            Intent intent = new Intent(this, RobotName.class);
+            startActivity(intent);
+        }
+
+
+
 
         ToggleButton toggle = (ToggleButton) findViewById(R.id.run_pause_button);
         assert toggle != null;

@@ -15,7 +15,7 @@
     <string name="pref_ip_address">IP Address</string>
     <string name="pref_port">Port</string>
     <string name="pref_ipAddress_default">127.0.0.1</string>
-    <string name="pref_port_default">9559</string>
+    <string name="pref_port_default">8002</string>
     <string name="pref_ipAddress_key">ipAddress</string>
     <string name="pref_port_key">port</string>
     <string name="EnterText">Enter Text</string>
@@ -59,9 +59,6 @@
 
     <string name="pref_header_help">Help</string>
     <string name="Help">Help/Troubleshoot</string>
-    <string name="HelpDirectionBlock">To use this app, you to have all the steps completed\nFirst, you need to have a NAO Robot, or use a virtual NAO using Choregraph 2.1.~. This application combines three parts, the mobile app, a socket chat, and the Choregraph file. You can find all three things on the developer\'s GitHub. The Socket chat is written in Python2. Run the socket chat, and get the IP address of the chat. Then open Choregraphe and enter the IP address in the Server Script Block. Connect to a robot, the version of the firmware does not matter (1.14 is fine). The robot will now listen to the socket chat on Port 5000. In the app, type in the IP Address and Port 5000. Type in the Robot\'s name, spelling must be correct and then you are free to use the app anyway you want.\nTroubleshoot:\n 1. Make sure Choregraphe has the right IP Address\n 2. Make sure the app is on the same network as the socket chat\n 3. Make sure you are running or have saved the .crg file onto the robot\n 4. Make sure the robot\'s name is spelled correctly, upon adding the name the robot will say a check.\n\nSources:\nJoystickView by AJ Alves is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License
-GSON: Licensed under the Apache License, Version 2.0 (the "License");
-Material Design Icons: https://design.google.com/icons/</string>
 
     <string-array name="mood_array">
         <item>Neutral</item>
@@ -88,4 +85,20 @@ Material Design Icons: https://design.google.com/icons/</string>
     <string name="Port">Port</string>
     <string name="Sit">Sit</string>
     <string name="icon">icon</string>
+    <string name="NoneAdded">No robots added</string>
+    <string name="MoreHelp">More Help</string>
+    <string name="newHelpScreen">•Make sure everything is installed properly (See \'More Help\') \n•Check that the server is running. \n•Check that Choregraphe has the right IP Address and Port given by the server. \n•Check that the server, Choregraphe, and NAO Remote are all on the same network. \n•Check that NAO Remote has the right IP Address and Port given by the server. \n•Make sure robot names are added. \n•Make sure the robot name is spelled correctly, given by the connected robot. \n•Make sure AndroidTheater.crg is running on the robot. \n•Make sure the app is connected to the server.</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Next">Next</string>
+    <string name="Skip">Skip</string>
+    <string name="ICON2">Icon</string>
+    <string name="Welcome" />
+    <string name="Welcome2">Welcome to NAO Remote</string>
+    <string name="makesure">Let\'s make sure everything is setup…</string>
+    <string name="makesure1"><![CDATA[Make sure you downloaded NAO Server Chat & AndroidTheater.crg]]></string>
+    <string name="startServer">Start the server on your computer and let\'s begin!</string>
+    <string name="done">Done</string>
+    <string name="fun">That\'s it, let\'s have some fun!</string>
 </resources>

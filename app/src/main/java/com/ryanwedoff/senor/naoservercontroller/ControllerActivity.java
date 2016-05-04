@@ -3,7 +3,7 @@
  *
  * @see com.ryanwedoff.senor.naoservercontroller.WalkFragment
  * @see com.ryanwedoff.senor.naoservercontroller.RemoteFragment
- * @see layout.JoyStickFrag
+ * @see com.ryanwedoff.senor.naoservercontroller.JoyStickFrag
  */
 
 package com.ryanwedoff.senor.naoservercontroller;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 
 public class ControllerActivity extends AppCompatActivity implements RemoteFragment.OnSendMessageListener {
 
-    private static ArrayList robotNames;
+    private static ArrayList robotNamesField;
     private SocketService mBoundService;
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -55,8 +55,8 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
     private boolean mIsBound;
 
     private static String numToRobot(int position) {
-        if (position < robotNames.size())
-            return (String) robotNames.get(position);
+        if (position < robotNamesField.size())
+            return (String) robotNamesField.get(position);
         else
             return null;
     }
@@ -72,18 +72,19 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
         String defaultValue = getString(R.string.robot_names);
         String namesObj = sharedPref.getString(getString(R.string.robot_names), defaultValue);
         Gson gson = new Gson();
-        robotNames = gson.fromJson(namesObj, ArrayList.class);
+        ArrayList robotNames = gson.fromJson(namesObj, ArrayList.class);
         if(robotNames == null){
-            robotNames = new ArrayList<>();
-        }
+            Intent intent = new Intent(this, RobotName.class);
+            startActivity(intent);
+        } else {
+            robotNamesField = robotNames;
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            assert getSupportActionBar() != null;
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            // Create the adapter that will return a fragment for each of the three
+            // primary sections of the activity.
         /*
       The {@link android.support.v4.view.PagerAdapter} that will provide
       fragments for each of the sections. We use a
@@ -92,36 +93,40 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
       may be best to switch to a
       {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+            SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
+            // Set up the ViewPager with the sections adapter.
         /*
       The {@link ViewPager} that will host the section contents.
      */
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
-        assert  mViewPager!= null;
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+            ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
+            try {
+                assert mViewPager != null;
+                mViewPager.setAdapter(mSectionsPagerAdapter);
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+                assert tabLayout != null;
+                tabLayout.setupWithViewPager(mViewPager);
+            } catch (Exception ignore) {
+            }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        assert tabLayout != null;
-        tabLayout.setupWithViewPager(mViewPager);
 
-        ConnectivityManager cm =
-                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm =
+                    (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if(isConnected){
-            startService(new Intent(ControllerActivity.this, SocketService.class));
-            doBindService();
-        } else {
-            View view = findViewById(R.id.controller_root_view);
-            assert view != null;
-            Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            boolean isConnected = activeNetwork != null &&
+                    activeNetwork.isConnectedOrConnecting();
+            if (isConnected) {
+                startService(new Intent(ControllerActivity.this, SocketService.class));
+                doBindService();
+            } else {
+                View view = findViewById(R.id.controller_root_view);
+                assert view != null;
+                Snackbar.make(view, "No network connection", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
+            assert getSupportActionBar() != null;
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
     }
@@ -247,14 +252,14 @@ public class ControllerActivity extends AppCompatActivity implements RemoteFragm
 
         @Override
         public int getCount() {
-            return robotNames.size();
+            return robotNamesField.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
 
-            if(position < robotNames.size()){
-                return (CharSequence) robotNames.get(position);
+            if (position < robotNamesField.size()) {
+                return (CharSequence) robotNamesField.get(position);
             } else {
                 return null;
             }
