@@ -27,7 +27,7 @@
 ###App Uses
 This application was created for the University of Iowa, primarily to aid the production of Robot Theater.
 #####Remote
-  The remote funtion creates a screen for each robot.  You can make the robot stand, crouch, wave, sit, say text, move its head, walk, and turn.
+  The remote function creates a screen for each robot.  You can make the robot stand, crouch, wave, sit, say text, move its head, walk, and turn.
 #####Mood
   The mood remote takes a Robot Name, a Mood and then you can send text.  The robot will say the text and will do actions related to the mood.
 #####File
