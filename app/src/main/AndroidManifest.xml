@@ -72,6 +72,7 @@
         </activity>
         <activity
             android:name=".MoodActivity"
+            android:label="Mood Remote"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

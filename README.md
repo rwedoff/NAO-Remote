@@ -1,6 +1,6 @@
 # NAO Remote
 
-###Installation Instructions
+### Installation Instructions
   1.  Install the Android Application *NAO Remote* from Google Play 
   2.  Get Choregraphe Installed on a computer:  Found on [Aldebaran's Website](https://www.aldebaran.com/en)
   3.  Download  AndroidTheater.crg:  Found [Here](https://github.com/szecsei/NAOAndroidTheater)
@@ -19,7 +19,7 @@
   Run the socket and get the IP Address of the server.
   Next, open Choregraphe and enter the IP Address and Port in the Server Script Box.  
   Connect to a robot, virtual or real.  Robot firmware does not matter.
-  The robot will now listen to teh socket chat on the given port (Windows 8002 is recommended).
+  The robot will now listen to the socket chat on the given port (Windows 8002 is recommended).
   
   Next open the Android App.  Type in the IP Address and the Port from the server.  Make sure you are on the same network as the server.
   Tap connect, and type in the Robot's Name[s].  
