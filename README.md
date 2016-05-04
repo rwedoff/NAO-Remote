@@ -1,17 +1,24 @@
 # NAOControllerAndroidApp
 
 ###Installation Instructions
-  1.  Install the Android Application *NAO Remote* from Google Play
-  2.  Get Choregraphe Installed on a computer
-  3.  Start the Python Server Chat
+  1.  Install the Android Application *NAO Remote* from Google Play 
+  2.  Get Choregraphe Installed on a computer:  Found on [Aldebaran's Website](https://www.aldebaran.com/en)
+  3.  Download  AndroidTheater.crg:  Found [Here](https://github.com/szecsei/NAOAndroidTheater)
+  4.  Install NAO Server Chat or Python Server Chat Found [Here](https://github.com/rwedoff/NAOServerChat/releases) 
 
 ###Running the Application
-  To use this app you have to have completed all the installation requirements.  You will need a NAO Robot or a Virtual NAO using Choregraphe 2.1~.
-  This application combines three parts, the Android App, the socket chat, and the Choregraphe File.  You can find links to all of these right here:
-  
-  The Socket Chat is written in Python2.   Run the socket and get the IP Address of the server.
-  Next, open Choregraphe and enter the IP Address in the Server Script Box.  Connect to a robot, virtual or real.  Robot firmware does not matter.
-  The robot will now listen to teh socket chat on Port 5000.
+  To use this app you have to have completed all the installation requirements.  You will need a NAO Robot or a Virtual NAO using Choregraphe 2.1~.  (Note, the app will work
+  with either firmware, but for a Virtual NAO you need to use the newest version of Choregraphe).
+  This application combines three parts, the Android App, the socket chat, and the AndroidTheater.crg.  You can find links to all of these right here:
+        Android App (NAO Remote)
+        [AndroidTheater.crg](https://github.com/szecsei/NAOAndroidTheater)
+        [Server Chat](https://github.com/rwedoff/NAOServerChat/releases)
+    
+  For Windows users, you can use NAO Server Chat, a chat written in C# (Note, Windows Firewall by default doesn't open Port 5000.  Port 8002 is used instead). For Mac and Linux users, use PythonServerChat.py (Simply run it in terminal).
+  Run the socket and get the IP Address of the server.
+  Next, open Choregraphe and enter the IP Address and Port in the Server Script Box.  
+  Connect to a robot, virtual or real.  Robot firmware does not matter.
+  The robot will now listen to teh socket chat on the given port (Windows 8002 is recommended).
   
   Next open the Android App.  Type in the IP Address and the Port from the server.  Make sure you are on the same network as the server.
   Tap connect, and type in the Robot's Name[s].  
@@ -26,22 +33,22 @@ This application was created for the University of Iowa, primarily to aid the pr
   The file function takes in a file of robot commands and send the file line by line.  The application will give various error to see what went wrong.
   The file function also has a syntax checker.
 ######File Syntax:
-  `--NAOSTART  > This is needed at the begining of every NAO File`
-  `--NAOSTOP   > This is needed at the end of every NAO File`
-  `<Robot Name>;<Command>;`
+  *`--NAOSTART`  > This is needed at the beginning of every NAO File
+  *`--NAOSTOP`   > This is needed at the end of every NAO File
+  *`<Robot Name>;<Command>;`
   
   Possible Commands
-  `Speech;<text>`
-  `Mood;<Neutral, Happy, Sad, Angry>;<text>`
-  `Wave`
-  `SitDown`
-  `StandUp`
-  `Crouch`
-  `RightX=<#>`
-  `RightY=<#>`
-  `Theta=<#>`
-  `LeftX=<#>`
-  `LeftY=<#>`
+  *`Speech;<text>`
+  *`Mood;<Neutral, Happy, Sad, Angry>;<text>`
+  *`Wave`
+  *`SitDown`
+  *`StandUp`
+  *`Crouch`
+  *`RightX=<#>`
+  *`RightY=<#>`
+  *`Theta=<#>`
+  *`LeftX=<#>`
+  *`LeftY=<#>`
   
 ####Socket Connection
   The socket connection is just a generic socket client to send messages to the socket chat.
