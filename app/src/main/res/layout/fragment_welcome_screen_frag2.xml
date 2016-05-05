@@ -42,9 +42,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
             android:gravity="bottom"
-            android:text="You can find links in the Help Menu"
+            android:text="@string/moreLinks"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@color/colorAccent"
+            android:onClick="onFullHelp"
+            android:text="@string/MoreHelp" />
     </LinearLayout>
 
 </FrameLayout>

@@ -101,4 +101,8 @@
     <string name="startServer">Start the server on your computer and let\'s begin!</string>
     <string name="done">Done</string>
     <string name="fun">That\'s it, let\'s have some fun!</string>
+    <string name="rname">Robot name should match the robot name that is running AndroidTheater.crg</string>
+    <string name="addedRobots">Added Robots:</string>
+    <string name="quickInstruct">1.\t Start NAO Server Chat or a socket chat.\n2.\t Connect to a robot in Choregraphe and start AndroidTheater.crg. Type in the Port and IP of the server in the Server Script Box.\n3.\t Type in the server Port and IP right here. Make sure the server, phone, and robot are all on the same network.\n4.\t Press connect, add the Robot Names, the connected robots in Choregraphe.</string>
+    <string name="moreLinks">You can find links in the Help Menu</string>
 </resources>

@@ -84,4 +84,14 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/wifiState" />
 
+    <TextView
+        android:id="@+id/quickHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/quickNames"
+        android:text="@string/quickInstruct"
+        android:textAppearance="?android:attr/textAppearanceListItem" />
+
+
 </RelativeLayout>

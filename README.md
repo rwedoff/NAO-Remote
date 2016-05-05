@@ -11,9 +11,10 @@
   with either firmware, but for a Virtual NAO you need to use the newest version of Choregraphe).
   This application combines three parts, the Android App, the socket chat, and the AndroidTheater.crg.  You can find links to all of these right here:
         
-  +  Android App (NAO Remote)
-  +  [AndroidTheater.crg](https://github.com/szecsei/NAOAndroidTheater)
+  +  [Android App (NAO Remote)](https://play.google.com/store/apps/details?id=com.ryanwedoff.senor.naoservercontroller&hl=en)
   +  [Server Chat](https://github.com/rwedoff/NAOServerChat/releases)
+  +  [AndroidTheater.crg](https://github.com/szecsei/NAOAndroidTheater)
+  
     
   For Windows users, you can use NAO Server Chat, a chat written in C# (Note, Windows Firewall by default doesn't open Port 5000.  Port 8002 is used instead). For Mac and Linux users, use PythonServerChat.py (Simply run it in terminal).
   Run the socket and get the IP Address of the server.
@@ -21,8 +22,9 @@
   Connect to a robot, virtual or real.  Robot firmware does not matter.
   The robot will now listen to the socket chat on the given port (Windows 8002 is recommended).
   
-  Next open the Android App.  Type in the IP Address and the Port from the server.  Make sure you are on the same network as the server.
-  Tap connect, and type in the Robot's Name[s].  
+  Next open the Android App.  Type in the IP Address and the Port from the server.  Make the robot, server, and phone are on the same network as the server.
+  Tap connect, and type in the Robot's Name[s]. 
+  The Robot Name corresponds with the robot you connected to in Choregraphe.
   
 ###App Uses
 This application was created for the University of Iowa, primarily to aid the production of Robot Theater.

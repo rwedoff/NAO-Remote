@@ -2,6 +2,7 @@ package com.ryanwedoff.senor.naoservercontroller;
 /**
  * RobotName uses a RecyclerView and is the portal to add Robots and get to each aspect of the app
  */
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -18,7 +19,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -172,9 +172,9 @@ public class RobotName extends AppCompatActivity {
         if(mBoundService != null){
             try{
                 mBoundService.sendMessage(name + ";" + "Check;");
-                Log.i("Sent Check","Send Check");
+                // Log.i("Sent Check","Send Check");
             } catch (Exception e) {
-                Log.e("Socket Connection Error", "Socket Connection Error");
+                //Log.e("Socket Connection Error", "Socket Connection Error");
                 Snackbar.make(view, "Service Binding Error", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         } else{

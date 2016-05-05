@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/footer"
-        android:layout_below="@+id/AddRobotBut"
+        android:layout_below="@+id/nameTitle"
         android:layout_centerHorizontal="true"
         android:scrollbars="vertical" />
 
@@ -94,6 +94,24 @@
             android:text="@string/File"
             android:textColor="@color/cardview_dark_background" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/Help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/addRobotEdit"
+        android:text="@string/rname"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/nameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/Help"
+        android:text="@string/addedRobots"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
 </RelativeLayout>

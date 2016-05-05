@@ -1,6 +1,8 @@
 package com.ryanwedoff.senor.naoservercontroller;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +27,14 @@ public class WelcomeScreen extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences settings = getSharedPreferences("prefs", 0);
+        boolean firstRun = settings.getBoolean("firstRun", true);
+        if (!firstRun) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
+
+
         setContentView(R.layout.activity_welcome_screen);
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.welcomePager);
@@ -55,6 +65,20 @@ public class WelcomeScreen extends FragmentActivity {
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SharedPreferences settings = getSharedPreferences("prefs", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("firstRun", false);
+        editor.apply();
+    }
+
+    public void onFullHelp(View view) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://github.com/rwedoff/NAOControllerAndroidApp/blob/master/README.md"));
+        startActivity(intent);
+    }
     /**
      * A simple pager adapter that represents 3 ScreenSlidePageFragment objects, in
      * sequence.
@@ -78,7 +102,6 @@ public class WelcomeScreen extends FragmentActivity {
             }
 
         }
-
 
         @Override
         public int getCount() {
