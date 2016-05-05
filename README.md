@@ -18,16 +18,23 @@
     
   For Windows users, you can use NAO Server Chat, a chat written in C# (Note, Windows Firewall, by default, doesn't open Port 5000.  Port 8002 is used instead). For Mac and Linux users, use PythonServerChat.py (Simply run it in terminal).
 
-  Run the socket and get the IP Address of the server.
-  
+  Run the socket chat and get the IP Address of the server.
+  ######NAO Server Chat Windows
+  ![NAO Server Chat Windows](https://github.com/rwedoff/NAO-Remote/blob/master/Capture.PNG "NAO Server Chat Windows")
+
 
   Next, open Choregraphe and enter the IP Address and Port in the Server Script Box.  
   Connect to a robot, virtual or real.  Robot firmware does not matter.
   The robot will now listen to the socket chat on the given port (Windows 8002 is recommended).
+  ![Choregraphe + NAO Server Chat](https://github.com/rwedoff/NAO-Remote/blob/master/choregraphe2.PNG "Choregraphe + NAO Server Chat")
   
   Next open the Android App.  Type in the IP Address and the Port from the server.  Make the robot, server, and phone are on the same network as the server.
   Tap connect, and type in the Robot's Name[s]. 
   The Robot Name corresponds with the robot you connected to in Choregraphe.
+  ######NAO Remote Home
+  ![Android Home Screen](https://github.com/rwedoff/NAO-Remote/blob/master/Android%20App%20Home.jpg "Android Home Screen")
+  ######Robot Names
+  ![Robot Names](https://github.com/rwedoff/NAO-Remote/blob/master/Robot%20Names.jpg "Robot Names")
   
 ###App Uses
 This application was created for the University of Iowa, primarily to aid the production of Robot Theater.
