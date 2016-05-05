@@ -1,7 +1,7 @@
 # NAO Remote
 
 ### Installation Instructions
-  1.  Install the Android Application *NAO Remote* from Google Play 
+  1.  Install the Android Application *NAO Remote* from [Google Play](https://play.google.com/store/apps/details?id=com.ryanwedoff.senor.naoservercontroller&hl=en) 
   2.  Get Choregraphe Installed on a computer:  Found on [Aldebaran's Website](https://www.aldebaran.com/en)
   3.  Download  AndroidTheater.crg:  Found [Here](https://github.com/szecsei/NAOAndroidTheater)
   4.  Install NAO Server Chat or Python Server Chat Found [Here](https://github.com/rwedoff/NAOServerChat/releases) 
