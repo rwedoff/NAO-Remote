@@ -33,7 +33,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
     private OnSendMessageListener mListener;
     private EditText editText;
     private TextView textView;
-
+    private TextView sentTextView;
     public RemoteFragment() {
     }
 
@@ -87,6 +87,7 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
         sitButton.setOnClickListener(this);
         editText = (EditText) rootLayout.findViewById(R.id.say_text_edit);
         textView = (TextView) rootLayout.findViewById(R.id.prev_sent_text_view);
+        sentTextView = (TextView) rootLayout.findViewById(R.id.sendMessageText);
         Switch switchButton = (Switch) rootLayout.findViewById(R.id.head_walk_toggle);
         final TextView headWalkTextview = (TextView) rootLayout.findViewById(R.id.head_walk_text_view);
         headWalkTextview.setText(R.string.head_control);
@@ -130,32 +131,33 @@ public class RemoteFragment extends Fragment implements View.OnClickListener {
             case R.id.stand_button:
                 //Toast.makeText(getActivity(), robotName, Toast.LENGTH_LONG).show();
                 // Send message to the host activity(ConrollerActivity)
-                mListener.onSendMessage(robotName + "StandUp;");
+                mListener.onSendMessage(setSentText(robotName + "StandUp;"));
                 break;
             case R.id.crouch_button:
-                mListener.onSendMessage(robotName + "Crouch;");
+                mListener.onSendMessage(setSentText(robotName + "Crouch;"));
                 break;
             case R.id.wave_button:
-                mListener.onSendMessage(robotName + "Wave;");
+                mListener.onSendMessage(setSentText(robotName + "Wave;"));
                 break;
             case R.id.send_text_button:
                 if(editText!= null){
                     String text = editText.getText().toString();
                     String textMinusSemis = text.replace(';',':');
-                    mListener.onSendMessage(robotName + "Speech;" + textMinusSemis + ";");
+                    mListener.onSendMessage(setSentText(robotName + "Speech;" + textMinusSemis + ";"));
                     editText.setText("");
                     String prevMessage = robotName.substring(0,robotName.length()-1) + " said: " + textMinusSemis;
                     textView.setText(prevMessage);
                 }
                 break;
-            case R.id.stop_button:
-                    mListener.onSendMessage(robotName + "RightX=0;");
-                    mListener.onSendMessage(robotName + "RightY=0;");
-                break;
             case R.id.sit_button:
-                mListener.onSendMessage(robotName + "SitDown;");
+                mListener.onSendMessage(setSentText(robotName + "SitDown;"));
                 break;
         }
+    }
+
+    private String setSentText(String message) {
+        sentTextView.setText(message);
+        return message;
     }
 
     public interface OnSendMessageListener {

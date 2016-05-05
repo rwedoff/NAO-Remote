@@ -1,95 +1,95 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:id="@+id/remote_fragment"
     style="?android:attr/buttonBarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/buttonBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/buttonBar"
+        android:orientation="horizontal"
         >
         <Button
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:text="@string/Stand"
             android:id="@+id/stand_button"
             style="?android:attr/buttonBarStyle"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorAccent"
+            android:text="@string/Stand"
 
             />
 
         <Button
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:text="@string/Crouch"
             android:id="@+id/crouch_button"
             style="?android:attr/buttonBarStyle"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorAccent"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:text="@string/Crouch"
             />
 
         <Button
+            android:id="@+id/wave_button"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:text="@string/Wave"
-            android:id="@+id/wave_button"
             android:layout_weight="1"
-            style="?android:attr/buttonBarStyle"
             android:background="@color/colorAccent"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:text="@string/Wave"
            />
         <Button
+            android:id="@+id/sit_button"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:text="@string/Sit"
-            android:id="@+id/sit_button"
             android:layout_weight="1"
-            style="?android:attr/buttonBarStyle"
             android:background="@color/colorAccent"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
+            android:text="@string/Sit"
             />
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
         <EditText
+            android:id="@+id/say_text_edit"
             android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:hint="@string/SayText"
-            android:id="@+id/say_text_edit"
-            android:layout_weight="3"/>
+            android:layout_weight="3"
+            android:hint="@string/SayText" />
         <Button
+            android:id="@+id/send_text_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_weight="1"
-            android:text="@string/Send"
             android:background="@color/colorAccent"
-            android:id="@+id/send_text_button"
             android:elegantTextHeight="false"
             android:enabled="true"
-            android:layout_margin="2dp" />
+            android:text="@string/Send" />
         </LinearLayout>
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
         <TextView
+            android:id="@+id/prev_sent_text_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/prev_sent_text_view"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -97,15 +97,20 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/head_walk_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/head_walk_text_view"
             android:textStyle="bold|italic" />
         <Switch
+            android:id="@+id/head_walk_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/head_walk_toggle"
             />
+
+        <TextView
+            android:id="@+id/sendMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 <ScrollView
