@@ -16,8 +16,11 @@
   +  [AndroidTheater.crg](https://github.com/szecsei/NAOAndroidTheater)
   
     
-  For Windows users, you can use NAO Server Chat, a chat written in C# (Note, Windows Firewall by default doesn't open Port 5000.  Port 8002 is used instead). For Mac and Linux users, use PythonServerChat.py (Simply run it in terminal).
+  For Windows users, you can use NAO Server Chat, a chat written in C# (Note, Windows Firewall, by default, doesn't open Port 5000.  Port 8002 is used instead). For Mac and Linux users, use PythonServerChat.py (Simply run it in terminal).
+
   Run the socket and get the IP Address of the server.
+  
+
   Next, open Choregraphe and enter the IP Address and Port in the Server Script Box.  
   Connect to a robot, virtual or real.  Robot firmware does not matter.
   The robot will now listen to the socket chat on the given port (Windows 8002 is recommended).
